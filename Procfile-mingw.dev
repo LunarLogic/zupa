@@ -1,0 +1,4 @@
+web: rails server -p 4000
+js: yarn build --watch
+css: yarn build:css --watch
+types: yarn ts-check

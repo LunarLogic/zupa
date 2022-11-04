@@ -1,0 +1,21 @@
+.group-data-section {
+  display: grid;
+  gap: 0.5px;
+}
+
+.group-data-section__tags {
+  display: flex;
+  gap: $spacing-xs;
+}
+
+.group-data-section__heading {
+  margin-top: $spacing-xs;
+  font-size: $md-heading-size;
+  line-height: $md-line-height;
+}
+
+.group-data-section--skeleton {
+  span {
+    line-height: inherit;
+  }
+}

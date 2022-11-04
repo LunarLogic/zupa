@@ -1,0 +1,11 @@
+.page-header {
+  background-color: $color-background-dark;
+  border-radius: 0 0 40px 40px;
+  padding: $spacing-lg;
+  padding-top: $spacing-md;
+  height: fit-content;
+}
+
+.page-header__title {
+  margin-bottom: $spacing-xs;
+}

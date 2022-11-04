@@ -1,0 +1,51 @@
+.tag-with-needs {
+  @extend .tag;
+
+  display: flex;
+  gap: $spacing-xs;
+  padding: $spacing-xxs $spacing-xs;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.tag-with-needs__data {
+  display: flex;
+  gap: $spacing-xxs;
+}
+
+.tag-with-needs__icon {
+  @extend .tag__icon;
+  height: unset;
+  width: unset;
+  padding: 0;
+  flex: 0 0 auto;
+
+  @media screen and (max-width: 340px) {
+    svg {
+      width: 22px;
+      height: 22px;
+    }
+  }
+}
+
+.tag-with-needs__text {
+  @extend .tag__text;
+
+  font-weight: $font-weight-regular;
+  font-size: $md-font-size;
+  line-height: $md-body-line-height;
+}
+
+.tag-with-needs__need {
+  display: flex;
+  flex: 0 0 auto;
+  gap: 2px;
+  align-items: center;
+
+  @media screen and (max-width: 340px) {
+    svg {
+      width: 22px;
+      height: 22px;
+    }
+  }
+}

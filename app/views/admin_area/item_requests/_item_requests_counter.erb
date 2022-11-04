@@ -1,0 +1,3 @@
+<%= turbo_frame_tag 'item_requests_count' do %>
+  <%= ItemRequestsRepository.new.group_to_prepare_for_person.count %>
+<% end %>

@@ -1,0 +1,40 @@
+.group-needs-card__heading {
+  margin-bottom: $spacing-xs;
+}
+
+.group-needs-card__needs-container {
+  display: flex;
+  column-gap: $spacing-md;
+  row-gap: $spacing-sm;
+  flex-wrap: wrap;
+}
+
+.group-needs-card__icon {
+  svg {
+    fill: $grey-200;
+  }
+  path {
+    stroke: $grey-200;
+  }
+
+  &.bread,
+  &.paw {
+    path {
+      stroke: none;
+      fill: $grey-200;
+    }
+  }
+}
+
+.group-needs-card--skeleton {
+  .group-needs-card__heading {
+    span {
+      line-height: inherit;
+      font-size: inherit;
+    }
+  }
+
+  .group-needs-card__needs-container {
+    display: block;
+  }
+}

@@ -1,0 +1,30 @@
+.no-results-card {
+  background-color: #ffffff;
+  border-radius: 8px;
+  padding: $spacing-sm $spacing-md;
+  margin: 0 24px;
+  text-align: center;
+}
+
+.no-results-card-header {
+  margin-bottom: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.no-results-card-header .icon {
+  margin-right: 10px;
+}
+
+.no-results-card-header h2 {
+  font-size: 1.2rem;
+  font-weight: bold;
+  display: inline;
+}
+
+.no-results-card-text {
+  color: #191919;
+  margin-top: 5px;
+  font-size: 1rem;
+}

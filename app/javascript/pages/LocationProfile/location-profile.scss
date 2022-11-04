@@ -1,0 +1,40 @@
+.location-profile__name {
+  display: flex;
+  align-items: center;
+
+  span {
+    line-height: 0;
+  }
+}
+
+.location-profile__avatar {
+  margin-right: $spacing-md;
+  min-width: 48px;
+  display: block;
+}
+
+.location-profile__navigation-info {
+  padding: $spacing-lg $spacing-lg 0 $spacing-lg;
+}
+
+.location-profile__heading-skeleton {
+  width: 100%;
+  span {
+    line-height: inherit;
+    font-size: inherit;
+  }
+}
+
+.location-profile__navigation-info--skeleton {
+  .navigate-button {
+    pointer-events: none;
+    background-color: $white;
+    padding: 5px;
+  }
+}
+
+.location-profile__summary-card-skeleton {
+  @extend .location-additional-info;
+
+  margin: 0 $spacing-lg $spacing-sm $spacing-lg;
+}

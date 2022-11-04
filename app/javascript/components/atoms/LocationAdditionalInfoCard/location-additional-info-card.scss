@@ -1,0 +1,17 @@
+.location-additional-info {
+  padding: $spacing-xs $spacing-md;
+  margin-bottom: $spacing-md;
+  background-color: white;
+  border-radius: 8px;
+}
+
+.location-additional-info__heading {
+  font-size: $sm-font-size;
+  line-height: $sm-body-line-height;
+  font-weight: $font-weight-bold;
+}
+
+.location-additional-info__content {
+  font-size: $sm-font-size;
+  line-height: $sm-body-line-height;
+}

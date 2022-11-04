@@ -1,0 +1,2 @@
+<%= turbo_stream.update "item_requests_count", partial: "admin_area/item_requests/item_requests_counter"%>
+<%= turbo_stream.update 'grouped_item_requests', partial: 'admin_area/item_requests/grouped_item_requests', locals: { grouped_item_requests: grouped_item_requests } %>

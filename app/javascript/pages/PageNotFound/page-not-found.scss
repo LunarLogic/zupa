@@ -1,0 +1,26 @@
+.not-found {
+  padding: 0 $spacing-lg $spacing-xxl;
+  display: grid;
+  grid-template-rows: 1fr;
+  grid-template-areas:
+    "logo"
+    "heading"
+    "secondary-text";
+
+  gap: $spacing-lg;
+  justify-items: center;
+  align-items: center;
+  text-align: center;
+
+  &__heading {
+    grid-row: "heading";
+    font-size: $sm-heading-size;
+    line-height: $sm-line-height;
+  }
+
+  &__logo {
+    width: 100%;
+    max-height: calc(100vh * 0.2);
+    grid-row: "logo";
+  }
+}

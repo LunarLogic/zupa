@@ -1,0 +1,55 @@
+<% content_for(:title, I18n.t('admin.packing.titles.index') ) %>
+<%= render 'header' %>
+
+<div class="packages-area">
+  <div class="packages-container">
+    <%= turbo_frame_tag 'error' %>
+    
+    <div class="column">
+      <div class="to-pack__column-gradient"></div>
+        <div class="row">
+          <h4 class="column__header-title">Do spakowania</h4>
+          <div class="column__header-circle">
+            <%= turbo_frame_tag 'item_requests_count' do %>
+              <span> <%= grouped_item_requests.count %> </span>
+            <% end %>
+          </div>
+        </div>
+
+      <%= turbo_frame_tag 'grouped_item_requests' do %>
+        <%= render 'admin_area/item_requests/grouped_item_requests', grouped_item_requests: grouped_item_requests %>
+      <% end %>
+    </div>
+
+    <div class='column'>
+      <div class="packed__column-gradient"></div>
+      <div class="row">
+        <h4 class="column__header-title">Paczki</h4>
+        <div class="column__header-circle">
+          <%= turbo_frame_tag 'packing_count' do %>
+            <span><%= packing_packages.count %></span>
+          <% end %>
+        </div>
+      </div>
+
+      <%= turbo_frame_tag 'packages' do %>
+        <%= render 'admin_area/packages/packages_list', packages: packing_packages %>
+      <% end %>
+    </div>
+
+    <div class='column'>
+      <div class="delivered__column-gradient"></div>
+      <div class="row">
+        <h4 class="column__header-title">Dostarczone</h4>
+        <div class="column__header-circle">
+        <%= turbo_frame_tag 'delivered_count' do %>
+          <span><%= delivered_packages.count %></span>
+        <% end %>
+      </div>
+    </div>
+
+    <%= turbo_frame_tag 'delivered' do %>
+      <%= render 'admin_area/packages/delivered_list', delivered: delivered_packages %>
+    <% end %>
+  </div>
+</div>

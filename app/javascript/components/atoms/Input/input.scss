@@ -1,0 +1,112 @@
+.input-label {
+  @include font-styles;
+  font-weight: $font-weight-bold;
+  font-size: $md-font-size;
+  line-height: $md-body-line-height;
+}
+
+.input-field-wrapper {
+  position: relative;
+}
+
+.input-field {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+
+  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  padding: $spacing-md;
+  margin-top: $spacing-xxs;
+
+  width: 100%;
+  height: 58px;
+
+  background: $white;
+  border: 1px solid $beige-300;
+  border-radius: 8px;
+
+  order: 0;
+
+  &:focus {
+    outline-style: none;
+    border-color: $color-accent;
+  }
+
+  &:hover {
+    border-color: $color-accent;
+  }
+
+  &:disabled {
+    background: $disabled-background-color;
+    border-color: $disabled-border-color;
+  }
+}
+
+.input-field--error {
+  border-color: $color-error;
+}
+
+.input-field__error-message {
+  @include font-styles;
+  font-size: $sm-font-size;
+  line-height: $sm-body-line-height;
+  color: $color-error;
+  font-weight: $font-weight-bold;
+  padding-left: $spacing-xxs;
+}
+
+.input-field__dropdown-icon {
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 24px;
+  height: 24px;
+}
+
+/* clears the ‘X’ from Internet Explorer */
+input[type="search"]::-ms-clear,
+input[type="search"]::-ms-reveal {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+/* clears the ‘X’ from Chrome, Safari, Edge, Opera */
+input[type="search"]::-webkit-search-decoration,
+input[type="search"]::-webkit-search-cancel-button,
+input[type="search"]::-webkit-search-results-button,
+input[type="search"]::-webkit-search-results-decoration {
+  display: none;
+}
+
+/* clears the arrow dropdown from Chrome */
+.input-field::-webkit-calendar-picker-indicator {
+  display: none !important;
+}
+
+/* clears the arrow dropdown from Safari */
+.input-field::-webkit-outer-spin-button,
+.input-field::-webkit-inner-spin-button {
+  -webkit-appearance: none !important;
+  margin: 0;
+}
+/* Add the custom 'x' button */
+.input-field__clear-button {
+  background-color: $white;
+  position: absolute;
+  top: 50%;
+  width: 24px;
+  height: 24px;
+  right: $spacing-sm;
+  transform: translateY(-50%);
+}
+
+/* Show the x button when the input field has a value */
+.input-field:not(:empty) ~ .input-field__clear-button {
+  display: block;
+}

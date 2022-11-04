@@ -1,0 +1,16 @@
+.item-request-card--skeleton {
+  .item-request-card__edit-button {
+    display: flex;
+    justify-content: end;
+  }
+}
+
+.item-request-card--skeleton-header {
+  display: flex;
+  justify-content: space-between;
+
+  span {
+    font-size: inherit;
+    line-height: inherit;
+  }
+}

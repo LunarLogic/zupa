@@ -1,0 +1,24 @@
+<%= turbo_frame_tag item_request do %>
+  <div class="item__container space-between">
+    <div class="item__name-container">
+      <div class="item__wrapper">
+        <span class="item__category-name"><%= item_request.item_category_name %></span>
+        <span class="item__category-size"><%= item_request.size%></span>
+      </div>
+      <span class="item__comment"><%= item_request.comment%></span>
+    </div>
+    <div class="button__container">
+      <% if item_request.to_prepare? %>
+        <%= button_to main_app.pack_admin_area_item_request_path(item_request), method: :patch,  class: 'button__pack' do %>
+          Spakuj
+        <%= image_tag("package.svg", alt: "Package", class: "button__name") %>
+      <% end %>
+      <%= button_to 'Odrzuć', main_app.reject_admin_area_item_request_path(item_request, item_request: { status: :rejected }), method: :patch, class: 'button__no-frame' %>
+    <% elsif item_request.prepared? %>
+      <!-- Item Request can't be unpacked after package is packed -->
+    <% elsif item_request.packing? %>
+      <%= button_to 'Wypakuj', main_app.unpack_admin_area_item_request_path(item_request), method: :patch, class: 'button__no-frame' %>
+    <% end %>
+    </div>
+  </div>
+<% end %>

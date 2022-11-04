@@ -1,0 +1,15 @@
+export const endpoints = {
+  fetchLocations: "/locations",
+  fetchPeople: "/people",
+  fetchCategories: "/item_categories",
+  fetchInstitutions: "/help_institutions",
+  fetchMenuItems: "/menu_items",
+  authenticate: "/auth/login",
+  postItemRequest: (id: string | null) => `/people/${id}/item_requests`,
+  itemRequests: (id: string | null) => `/item_requests/${id}`,
+  setPackageStatus: (id: string | undefined) => `/packages/${id}/`,
+  fetchCurrentTrip: "/trips/current",
+  fetchHistoricalTrips: (page: number | undefined) => `/trips/historical?page=${page}`,
+  fetchActiveTrips: "/trips/active",
+  fetchSingleTrip: (id: string | null) => `/trips/${id}`,
+};

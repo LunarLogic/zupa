@@ -1,0 +1,34 @@
+.tag {
+  display: grid;
+  padding: 4px 8px;
+  border-radius: 9px;
+  background-color: $color-background-main;
+  grid-template-columns: auto auto;
+  width: fit-content;
+}
+
+.tag.with-icon {
+  gap: $spacing-xs;
+}
+
+.tag__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+}
+
+.tag__text {
+  display: flex;
+  align-items: center;
+  font-weight: $font-weight-bold;
+  font-size: $sm-font-size;
+  line-height: $sm-body-line-height;
+}
+
+.with-icon .tag__text {
+  font-weight: $font-weight-regular;
+  font-size: $md-font-size;
+  line-height: $md-body-line-height;
+}

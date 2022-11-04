@@ -1,0 +1,88 @@
+// Import the Manrope font
+@import url("https://fonts.googleapis.com/css?family=Manrope:300,400,500,600,700&display=swap");
+
+// Define sizes and line heights
+$xl-heading-size: 40px;
+$lg-heading-size: 31.25px;
+$md-heading-size: 24px;
+$sm-heading-size: 20px;
+
+$md-font-size: 16px;
+$sm-font-size: 14px;
+
+$xl-line-height: 48px;
+$lg-line-height: 44px;
+$md-line-height: 32px;
+$sm-line-height: 28px;
+
+$md-body-line-height: 26px;
+$sm-body-line-height: 22px;
+
+// Define font weights
+$font-weight-regular: 400;
+$font-weight-bold: 700;
+
+// Define mixins for font styles that are used consistently throughout the file
+@mixin font-styles {
+  font-family: "Manrope", sans-serif;
+  font-style: normal;
+}
+
+@mixin heading-styles {
+  @include font-styles;
+  font-weight: $font-weight-bold;
+}
+
+@mixin button-styles {
+  @include font-styles;
+  font-weight: $font-weight-bold;
+  font-size: $md-font-size;
+  line-height: $md-body-line-height;
+}
+
+// Define height of header and footer
+$header-height: 54px;
+$footer-height: 40px;
+
+// Headings
+h1 {
+  @include heading-styles;
+  font-size: $lg-heading-size;
+  line-height: $lg-line-height;
+}
+
+h2 {
+  @include heading-styles;
+  font-size: $sm-heading-size;
+  line-height: $sm-line-height;
+}
+
+h3 {
+  @include heading-styles;
+  font-size: $sm-font-size;
+  line-height: $sm-body-line-height;
+}
+
+// Links and anchors
+a,
+link {
+  @include font-styles;
+  text-decoration: underline;
+  font-weight: $font-weight-bold;
+  font-size: $md-font-size;
+  line-height: $md-body-line-height;
+  color: $color-text;
+}
+
+// Paragraphs
+p,
+span,
+datalist,
+option,
+input,
+label {
+  @include font-styles;
+  font-weight: $font-weight-regular;
+  font-size: $md-font-size;
+  line-height: $md-body-line-height;
+}

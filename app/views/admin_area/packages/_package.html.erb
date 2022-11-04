@@ -1,0 +1,36 @@
+<%= turbo_frame_tag package do %>
+  <div class="person__container">
+    <div class="person__details-container">
+      <%= image_tag("user.svg") %>
+      <h4 class="person__name"><%= package.receiver_name %></h4>
+      #<%= package.receiver_code %>
+      <span class="package-id__container">
+        <%= image_tag("package.svg", alt: "Package") %>
+        <span class="package-id__id">#<%= package.id %></span>
+      </span>
+    </div>
+
+    <% if package.packing? %>
+      <% package.item_requests.each do |item_request| %>
+        <%= render 'admin_area/item_requests/item_request', item_request: item_request %>
+      <% end %>
+    <% end %>
+
+    <% if package.packing? %>
+      <div class="packing__button-container">
+        <%= button_to 'Zakończ pakowanie',  main_app.pack_admin_area_package_path(package), method: :patch, class: 'button__finish-packing' %>
+      </div>
+    <% else %>
+      <div class="packed__button-container">
+        <%= button_to main_app.unpack_admin_area_package_path(package), method: :patch, class: 'button__without-background' do%>
+          Otwórz
+          <%= image_tag("package.svg", alt: "Package", class:"button__with-image") %>
+        <% end %>
+        <%= button_to main_app.deliver_admin_area_package_path(package), method: :patch, class: 'button__without-background' do%>
+          Dostarcz
+          <%= image_tag("delivery_truck.svg", alt: "Delivery truck", class: "button__with-image") %>
+      <% end %>
+      </div>
+    <% end %>
+  </div>
+<% end %>

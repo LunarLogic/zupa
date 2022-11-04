@@ -1,0 +1,148 @@
+.item__container {
+  display: flex;
+  align-items: center;
+  margin: 0;
+  padding: 1.5rem 1rem;
+  border-bottom: 1px solid #d9d9d9;
+  width: auto;
+  gap: 8px;
+}
+
+.item__name-container {
+  display: flex;
+  flex-direction: column;
+  max-width: 40%;
+}
+
+.item__wrapper {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+
+.item__category-name {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.item__comment {
+  font-family: Roboto;
+  font-size: 0.75rem;
+  font-weight: 400;
+  line-height: 14px;
+  letter-spacing: 0em;
+  text-align: left;
+  color: #939393;
+  display: flex;
+}
+
+.button__container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 1rem;
+}
+
+@mixin button {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+  height: 32px;
+  padding: 0 0.5rem;
+  width: 100%;
+  background-color: none;
+  border-radius: 8px;
+  border-color: transparent;
+  font-size: 14px;
+}
+
+.button__pack {
+  @include button;
+  background: #005142;
+  color: #ffffff;
+
+  &:hover,
+  &:active {
+    background-color: #006653;
+  }
+}
+
+.button__no-frame {
+  @include button;
+  background: none;
+  color: #005142;
+  min-width: 45px;
+  &:hover,
+  &:active {
+    color: #d9d9d9;
+  }
+}
+
+.button__name {
+  margin-left: 0.5rem;
+  filter: invert(95%) sepia(95%) saturate(0%) hue-rotate(217deg) brightness(105%) contrast(107%);
+}
+
+.button__finish-packing {
+  @include button;
+  background: #fdd051;
+  &:hover,
+  &:active {
+    color: #ffffff;
+  }
+}
+
+.button__marked-as-delivered {
+  @include button;
+  background: none;
+  color: #191919;
+  &:hover,
+  &:active {
+    filter: invert(100%) sepia(1%) saturate(704%) hue-rotate(93deg) brightness(88%) contrast(88%);
+  }
+}
+
+.button__without-background {
+  @include button;
+  background: none;
+  border: 1px solid #585858;
+  filter: invert(34%) sepia(0%) saturate(1%) hue-rotate(209deg) brightness(97%) contrast(90%);
+  &:hover,
+  &:active {
+    filter: invert(73%) sepia(0%) saturate(0%) hue-rotate(138deg) brightness(96%) contrast(88%);
+  }
+}
+
+button[disabled].button__without-background {
+  color: #585858;
+  filter: none;
+}
+
+.packed__button-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 1rem;
+}
+
+.packing__button-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  padding: 1rem;
+}
+
+.package-id__container {
+  display: flex;
+  margin-left: 1rem;
+}
+
+.package-id__id {
+  margin: 0 0.5rem;
+}
+
+.button__with-image {
+  margin-left: 0.5rem;
+}

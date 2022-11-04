@@ -1,0 +1,48 @@
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  animation: fadeIn 0.3s forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.modal {
+  background-color: #fff;
+  width: 100%;
+  max-height: 80%;
+  border-top-left-radius: $spacing-md;
+  border-top-right-radius: $spacing-md;
+  transform: translateY(100%);
+  animation: slideIn 0.3s forwards;
+  overflow: auto;
+}
+
+@keyframes slideIn {
+  to {
+    transform: translateY(0);
+  }
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  padding: $spacing-lg $spacing-lg $spacing-sm $spacing-lg;
+}
+
+.modal-content {
+  padding: 0 $spacing-lg $spacing-md $spacing-lg;
+}

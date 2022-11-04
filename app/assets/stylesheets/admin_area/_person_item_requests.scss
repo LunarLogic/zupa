@@ -1,0 +1,35 @@
+.person__container {
+  border: 1px solid #bdb5b5;
+  border-radius: 10px;
+  margin: 0 2rem 2rem 2rem;
+  box-shadow: 0px 4px 10px 0px #9393934d;
+  position: relative;
+}
+
+.person__details-container {
+  background-color: #f5f3ed;
+  border-radius: 10px 10px 0 0;
+  font-size: 1.125rem;
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+}
+
+.person__name {
+  font-weight: 600;
+  margin: 0 0.5rem;
+  line-height: 1.4rem;
+}
+
+.person__edit-info-container {
+  display: flex;
+}
+
+.person__info-container {
+  display: flex;
+  align-items: center;
+}
+
+.space-between {
+  justify-content: space-between;
+}

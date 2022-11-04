@@ -1,0 +1,15 @@
+.item-request {
+  min-height: calc(100% - ($header-height + $footer-height));
+  display: grid;
+  grid-template-rows: auto 1fr;
+
+  &__content {
+    align-self: start;
+    padding: $spacing-lg;
+    display: grid;
+    gap: $spacing-sm;
+  }
+  &__content-header {
+    font-weight: 700;
+  }
+}

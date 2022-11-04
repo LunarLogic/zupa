@@ -1,0 +1,17 @@
+.trip-location-card {
+  .card {
+    padding: $spacing-xs $spacing-sm;
+  }
+
+  .tag {
+    padding: $spacing-xxs;
+  }
+}
+
+.trip-location-card__info {
+  margin-top: $spacing-sm;
+}
+
+.trip-location-card__tag {
+  margin-top: $spacing-xs;
+}

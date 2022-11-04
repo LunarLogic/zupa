@@ -1,0 +1,16 @@
+.skeletons-list {
+  .group-trip__tag-container,
+  .trip-location-card__tag {
+    span {
+      line-height: unset;
+    }
+  }
+
+  .trip-summary--skeleton {
+    margin-top: $spacing-xs;
+
+    span {
+      line-height: unset;
+    }
+  }
+}

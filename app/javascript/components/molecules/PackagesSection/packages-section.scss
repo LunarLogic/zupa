@@ -1,0 +1,16 @@
+.packages-section {
+  padding: 0 $spacing-lg;
+}
+
+.packages-section__info {
+  color: $color-text-secondary-major;
+  margin-top: $spacing-xs;
+}
+
+.packages-section--skeleton {
+  .packages-section__checkbox-area {
+    span {
+      line-height: 0;
+    }
+  }
+}

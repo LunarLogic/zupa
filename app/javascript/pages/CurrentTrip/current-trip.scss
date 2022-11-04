@@ -1,0 +1,20 @@
+.current-trip {
+  display: grid;
+  grid-template-rows: auto 1fr;
+}
+
+.current-trip__network-error {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+  padding-top: $spacing-lg;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.current-trip-data-section__heading {
+  span {
+    font-size: $lg-heading-size;
+  }
+}

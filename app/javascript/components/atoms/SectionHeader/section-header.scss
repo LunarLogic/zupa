@@ -1,0 +1,26 @@
+.section-header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding-top: $spacing-lg;
+  margin-bottom: $spacing-lg;
+}
+
+.section-header__icon {
+  width: 62px;
+  height: 34px;
+  background-color: $color-accent-secondary;
+  border-radius: 0 200px 200px 0;
+  margin-right: $spacing-xs;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-bottom: 0;
+  padding-right: $spacing-xs;
+}
+
+.section-header__title {
+  margin-right: $spacing-xs;
+  margin-top: 0;
+  margin-bottom: 0;
+}

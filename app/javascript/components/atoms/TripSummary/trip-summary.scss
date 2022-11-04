@@ -1,0 +1,15 @@
+.trip-summary {
+  display: flex;
+  flex-wrap: wrap;
+  padding: $spacing-xxs;
+  margin-top: $spacing-xs;
+  border-radius: 9px;
+  background-color: $color-background-main;
+  column-gap: $spacing-sm;
+  row-gap: $spacing-xxs;
+  width: 100%;
+
+  .icon-with-text__icon {
+    padding-right: $spacing-xxs;
+  }
+}

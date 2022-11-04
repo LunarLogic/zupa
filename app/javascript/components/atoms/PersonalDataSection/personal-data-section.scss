@@ -1,0 +1,54 @@
+.personal-data-section {
+  display: flex;
+  justify-content: space-between;
+}
+
+.personal-data-section__container {
+  display: flex;
+}
+
+.personal-data-section__info {
+  margin-left: $spacing-xs;
+}
+
+.personal-data-section__name-container {
+  display: flex;
+  align-items: center;
+}
+
+.personal-data-section__name {
+  margin-right: $spacing-xs;
+}
+
+.personal-data-section__person-code {
+  color: $color-text-secondary-major;
+  line-height: 28px;
+}
+
+.personal-data-section__person-code--big {
+  line-height: 31px;
+}
+
+.personal-data-section-skeleton {
+  .personal-data-section__container {
+    width: 100%;
+    align-items: center;
+  }
+
+  .personal-data-section__avatar {
+    span {
+      line-height: 0;
+    }
+  }
+
+  .personal-data-section__info {
+    width: 100%;
+  }
+
+  .personal-data-section__name {
+    span {
+      font-size: inherit;
+      line-height: inherit;
+    }
+  }
+}

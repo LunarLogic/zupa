@@ -1,0 +1,31 @@
+.group-trip__card-container {
+  .card {
+    padding: $spacing-xs $spacing-sm;
+  }
+}
+
+.group-trip__tag-container {
+  padding-top: $spacing-xs;
+}
+
+.group-trip__icon {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 1px 10px;
+  gap: 10px;
+  font-weight: $font-weight-bold;
+
+  width: 24px;
+  height: 24px;
+
+  /* Yellow */
+  background: #fdd051;
+  border-radius: 40px;
+
+  /* Inside auto layout */
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+}

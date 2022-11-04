@@ -1,0 +1,23 @@
+.item-requests {
+  align-self: start;
+  padding-bottom: 120px;
+}
+
+.item_requests__button-container {
+  position: fixed;
+  bottom: $spacing-xxxl;
+  padding: 0 $spacing-lg;
+  align-self: end;
+  width: 100%;
+}
+
+.item_requests__button-icon {
+  margin-right: $spacing-xs;
+}
+
+.item-requests--skeleton {
+  .item_requests__button--loading {
+    pointer-events: none;
+    background-color: $white;
+  }
+}

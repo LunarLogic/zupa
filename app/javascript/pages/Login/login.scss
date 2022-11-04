@@ -1,0 +1,50 @@
+.login {
+  padding: 0 $spacing-lg $spacing-xxl;
+}
+
+.login__logo-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: $spacing-xxl;
+}
+
+.login__logo-icon {
+  max-width: 300px;
+  max-height: calc(100vh * 0.14);
+}
+
+.login__heading {
+  margin-bottom: $spacing-md;
+  font-size: $xl-heading-size;
+}
+
+.login__secondary-text {
+  margin-bottom: $spacing-xxl;
+}
+
+.login__form {
+  display: grid;
+  gap: $spacing-md;
+}
+
+.login__form-button {
+  @include button-styles;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  box-sizing: border-box;
+  padding: $spacing-md;
+  gap: $spacing-xxs;
+  width: 100%;
+  background-color: $color-accent;
+  color: $white;
+  border-radius: 8px;
+  border-color: transparent;
+
+  &:hover,
+  &:active {
+    background-color: $green-primary-darker;
+    color: $white;
+  }
+}

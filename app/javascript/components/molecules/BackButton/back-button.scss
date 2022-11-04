@@ -1,0 +1,11 @@
+.back-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.back-button__text {
+  font-weight: $font-weight-bold;
+  color: $color-accent;
+  margin-left: $spacing-xxs;
+}

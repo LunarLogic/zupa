@@ -1,0 +1,27 @@
+.call-modal {
+  display: grid;
+  grid-gap: $spacing-sm;
+}
+
+.call-modal__button {
+  display: flex;
+  gap: $spacing-sm;
+  height: $spacing-4xl;
+  padding: $spacing-sm;
+}
+
+.call-modal__hide-number {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xxs;
+  align-items: center;
+  p {
+    color: $grey-200;
+    text-align: center;
+  }
+}
+
+.number-visible {
+  color: $green-primary-darker;
+  background-color: $beige-200;
+}

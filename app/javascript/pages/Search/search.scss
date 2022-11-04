@@ -1,0 +1,42 @@
+.search__input-wrapper {
+  display: grid;
+  gap: $spacing-md;
+}
+
+.current-trip-button {
+  margin: $spacing-lg $spacing-lg 0 $spacing-lg;
+  width: stretch;
+  width: -webkit-fill-available;
+  width: -moz-available;
+}
+
+.current-trip-button--loading {
+  pointer-events: none;
+  background-color: $white;
+}
+
+.current-trip-button__content {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xxs;
+  align-items: center;
+}
+
+.current-trip-button__cta {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+}
+
+.current-trip-button__icon {
+  height: $spacing-lg;
+  width: $spacing-lg;
+  padding: 6px;
+  border-radius: 100%;
+  background-color: $yellow;
+  flex: 0 0 auto;
+
+  path {
+    stroke: $green-primary;
+  }
+}

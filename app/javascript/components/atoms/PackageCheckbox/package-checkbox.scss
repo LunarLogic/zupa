@@ -1,0 +1,49 @@
+.package-checkbox {
+  padding: $spacing-xs;
+  background-color: $color-background-dark;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  &:not(:last-of-type) {
+    margin-bottom: 8px;
+  }
+}
+
+.package-checkbox__input-wrapper {
+  position: relative;
+}
+
+.package-checkbox__input {
+  appearance: none;
+  background-color: $white;
+  border: 2px solid $color-accent;
+  width: 32px;
+  height: 32px;
+  border-radius: 3px;
+
+  &:before {
+    content: "";
+    width: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &:checked:before {
+    background-color: $color-accent;
+  }
+}
+
+.package-checkbox__label {
+  font-weight: $font-weight-bold;
+  margin-left: $spacing-xs;
+}
+
+.checkmark {
+  pointer-events: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}

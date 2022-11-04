@@ -1,0 +1,13 @@
+.card__item {
+  display: grid;
+  grid-template-columns: 60px auto;
+  grid-template-areas: "property value";
+  width: 100%;
+  grid-gap: 8px;
+}
+
+.card__item-name {
+  font-weight: $font-weight-bold;
+  font-size: $sm-font-size;
+  color: $color-text-secondary-major;
+}

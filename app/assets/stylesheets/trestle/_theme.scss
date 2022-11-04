@@ -1,0 +1,40 @@
+// This file may be used to override the Sass variables used within the Trestle
+// admin. It will be automatically included within all admin pages.
+//
+// A subset of Bootstrap and Trestle defaults can be set here.
+// For a detailed overview of the customizable variables, see the file
+// `frontend/theme/trestle/theme/_defaults.scss` within the Trestle source.
+
+// Customize admin theme colors:
+//
+$theme-colors: (
+  "primary": #00392d,
+  "secondary": #006653,
+
+  // person requests statuses
+  "yellow": #ffe770,
+  "green": #7dc67d,
+  "red": #e17572,
+
+  // package statuses
+  "void": #bbbbbb,
+  "delivered": #7dc67d,
+  "prepared": #fcad03,
+  "packed": #fcad03,
+  "packing": #fcee03,
+
+  // item request statuses
+  "ir_to_prepare": #e17572,
+  "ir_packing": #fcee03,
+  "ir_prepared": #fcad03,
+  "ir_delivered": #7dc76d,
+  "ir_rejected": #bbbbbb,
+  "ir_during_consultation": #87ceeb,
+
+  // animal species
+  "dog": #ffe770,
+  "cat": #7dc67d,
+  "rat": #e17572,
+  "bird": #e17572,
+  "other": #bbbbbb,
+);

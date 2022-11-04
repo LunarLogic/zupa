@@ -1,0 +1,9 @@
+Dockerfile
+docker-compose.yml
+.dockerignore
+.github
+.aws
+spec
+log
+tmp
+.git

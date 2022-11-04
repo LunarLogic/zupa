@@ -1,0 +1,4 @@
+<%= turbo_stream.update 'packages', partial: 'admin_area/packages/packages_list', locals: { packages: packing_packages } %>
+<%= turbo_stream.update 'grouped_item_requests', partial: 'admin_area/item_requests/grouped_item_requests', locals: { grouped_item_requests: grouped_item_requests } %>
+<%= turbo_stream.update 'packing_count', partial: 'admin_area/item_requests/packages_counter'%>
+<%= turbo_stream.update 'item_requests_count', partial: 'admin_area/item_requests/item_requests_counter'%>

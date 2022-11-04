@@ -1,0 +1,1167 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://www.googleapis.com/oauth2/v4/token
+    body:
+      encoding: ASCII-8BIT
+      string: grant_type=urn%3Aietf%3Aparams%3Aoauth%3Agrant-type%3A<OAUTH_ASSERTION>
+    headers:
+      User-Agent:
+      - Faraday v1.10.3
+      Content-Type:
+      - application/x-www-form-urlencoded
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - application/json; charset=UTF-8
+      Vary:
+      - Origin
+      - Referer
+      - X-Origin
+      Date:
+      - Thu, 16 Oct 2025 13:46:06 GMT
+      Server:
+      - scaffolding on HTTPServer2
+      X-Xss-Protection:
+      - '0'
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Content-Type-Options:
+      - nosniff
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: ASCII-8BIT
+      string: '{"access_token":"<ACCESS_TOKEN>","expires_in":3599,"token_type":"Bearer"}'
+  recorded_at: Thu, 16 Oct 2025 13:46:06 GMT
+- request:
+    method: get
+    uri: https://www.googleapis.com/drive/v3/files/10HruPjeSsZX2-IYSkpTxPd-Jfnc9jTDRXcTFHWymlZw?fields=*&supportsAllDrives=true
+    body:
+      encoding: UTF-8
+      string: ''
+    headers:
+      User-Agent:
+      - unknown/0.0.0 google-apis-drive_v3/0.46.0 Mac OS X/14.6.1 (gzip)
+      Accept:
+      - "*/*"
+      Accept-Encoding:
+      - gzip,deflate
+      Date:
+      - Thu, 16 Oct 2025 13:46:06 GMT
+      X-Goog-Api-Client:
+      - gl-ruby/3.1.2 gdcl/1.46.0
+      Authorization:
+      - "<AUTHORIZATION>"
+      Content-Type:
+      - application/x-www-form-urlencoded
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Vary:
+      - Origin, X-Origin
+      Date:
+      - Thu, 16 Oct 2025 13:46:07 GMT
+      Pragma:
+      - no-cache
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Content-Type:
+      - application/json; charset=UTF-8
+      Content-Encoding:
+      - gzip
+      Server:
+      - ESF
+      X-Xss-Protection:
+      - '0'
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Content-Type-Options:
+      - nosniff
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: |
+        {
+          "kind": "drive#file",
+          "id": "10HruPjeSsZX2-IYSkpTxPd-Jfnc9jTDRXcTFHWymlZw",
+          "name": "Wyjazd 25.01.2024 (test purposes, VCR uses it)",
+          "mimeType": "application/vnd.google-apps.spreadsheet",
+          "starred": false,
+          "trashed": false,
+          "explicitlyTrashed": false,
+          "spaces": [
+            "drive"
+          ],
+          "version": "214",
+          "webViewLink": "https://docs.google.com/spreadsheets/d/10HruPjeSsZX2-IYSkpTxPd-Jfnc9jTDRXcTFHWymlZw/edit?usp=drivesdk",
+          "iconLink": "https://drive-thirdparty.googleusercontent.com/16/type/application/vnd.google-apps.spreadsheet",
+          "hasThumbnail": true,
+          "thumbnailLink": "https://lh3.googleusercontent.com/drive-storage/AJQWtBMjHELUiLi2T7pWju2SDue0epX8bx04UaK-CgR5P-u-0XGtYXDQzq6EX1cMxJkl2__yi3_Xl3TX_ixIuZrftkN-w9yv3unSLCBwZYCGsbbwpt7nq3k_TjObDHQZ=s220",
+          "thumbnailVersion": "63",
+          "viewedByMe": false,
+          "createdTime": "2024-02-07T13:18:01.095Z",
+          "modifiedTime": "2025-10-16T13:40:34.111Z",
+          "modifiedByMe": false,
+          "owners": [
+            {
+              "kind": "drive#user",
+              "displayName": "arkadiusz.kita",
+              "photoLink": "https://lh3.googleusercontent.com/a-/ALV-UjUK4krJSTbV4IgZkYRygbRUD_7ptUWBVQYjrqNMXlI5hrpVfg=s64",
+              "me": false,
+              "permissionId": "02169972844207666508",
+              "emailAddress": "arkadiusz.kita@lunarlogic.io"
+            }
+          ],
+          "lastModifyingUser": {
+            "kind": "drive#user",
+            "displayName": "hanna.seweryn",
+            "photoLink": "https://lh3.googleusercontent.com/a-/ALV-UjWQS3DMWsgg6Qy9VFU9XVlMLHnqWbRTftsbozdnORXq6_It6s9j=s64",
+            "me": false,
+            "permissionId": "10364483808612044514"
+          },
+          "shared": true,
+          "ownedByMe": false,
+          "downloadRestrictions": {
+            "itemDownloadRestriction": {
+              "restrictedForReaders": false,
+              "restrictedForWriters": false
+            },
+            "effectiveDownloadRestrictionWithContext": {
+              "restrictedForReaders": false,
+              "restrictedForWriters": false
+            }
+          },
+          "capabilities": {
+            "canAcceptOwnership": false,
+            "canAddChildren": false,
+            "canAddMyDriveParent": false,
+            "canChangeCopyRequiresWriterPermission": false,
+            "canChangeItemDownloadRestriction": false,
+            "canChangeSecurityUpdateEnabled": false,
+            "canChangeViewersCanCopyContent": false,
+            "canComment": false,
+            "canCopy": true,
+            "canDelete": false,
+            "canDisableInheritedPermissions": false,
+            "canDownload": true,
+            "canEdit": false,
+            "canEnableInheritedPermissions": false,
+            "canListChildren": false,
+            "canModifyContent": false,
+            "canModifyContentRestriction": false,
+            "canModifyEditorContentRestriction": false,
+            "canModifyOwnerContentRestriction": false,
+            "canModifyLabels": false,
+            "canMoveChildrenWithinDrive": false,
+            "canMoveItemIntoTeamDrive": false,
+            "canMoveItemOutOfDrive": false,
+            "canMoveItemWithinDrive": false,
+            "canReadLabels": false,
+            "canReadRevisions": false,
+            "canRemoveChildren": false,
+            "canRemoveContentRestriction": false,
+            "canRemoveMyDriveParent": true,
+            "canRename": false,
+            "canShare": false,
+            "canTrash": false,
+            "canUntrash": false
+          },
+          "viewersCanCopyContent": true,
+          "copyRequiresWriterPermission": false,
+          "writersCanShare": true,
+          "size": "3709",
+          "quotaBytesUsed": "3709",
+          "isAppAuthorized": false,
+          "exportLinks": {
+            "application/x-vnd.oasis.opendocument.spreadsheet": "https://docs.google.com/spreadsheets/export?id=10HruPjeSsZX2-IYSkpTxPd-Jfnc9jTDRXcTFHWymlZw&exportFormat=ods",
+            "text/tab-separated-values": "https://docs.google.com/spreadsheets/export?id=10HruPjeSsZX2-IYSkpTxPd-Jfnc9jTDRXcTFHWymlZw&exportFormat=tsv",
+            "application/pdf": "https://docs.google.com/spreadsheets/export?id=10HruPjeSsZX2-IYSkpTxPd-Jfnc9jTDRXcTFHWymlZw&exportFormat=pdf",
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": "https://docs.google.com/spreadsheets/export?id=10HruPjeSsZX2-IYSkpTxPd-Jfnc9jTDRXcTFHWymlZw&exportFormat=xlsx",
+            "text/csv": "https://docs.google.com/spreadsheets/export?id=10HruPjeSsZX2-IYSkpTxPd-Jfnc9jTDRXcTFHWymlZw&exportFormat=csv",
+            "application/zip": "https://docs.google.com/spreadsheets/export?id=10HruPjeSsZX2-IYSkpTxPd-Jfnc9jTDRXcTFHWymlZw&exportFormat=zip",
+            "application/vnd.oasis.opendocument.spreadsheet": "https://docs.google.com/spreadsheets/export?id=10HruPjeSsZX2-IYSkpTxPd-Jfnc9jTDRXcTFHWymlZw&exportFormat=ods"
+          },
+          "linkShareMetadata": {
+            "securityUpdateEligible": false,
+            "securityUpdateEnabled": true
+          },
+          "inheritedPermissionsDisabled": false
+        }
+  recorded_at: Thu, 16 Oct 2025 13:46:07 GMT
+- request:
+    method: get
+    uri: https://sheets.googleapis.com/v4/spreadsheets/10HruPjeSsZX2-IYSkpTxPd-Jfnc9jTDRXcTFHWymlZw?fields=sheets.properties
+    body:
+      encoding: UTF-8
+      string: ''
+    headers:
+      User-Agent:
+      - unknown/0.0.0 google-apis-sheets_v4/0.26.0 Mac OS X/14.6.1 (gzip)
+      Accept:
+      - "*/*"
+      Accept-Encoding:
+      - gzip,deflate
+      Date:
+      - Thu, 16 Oct 2025 13:46:07 GMT
+      X-Goog-Api-Client:
+      - gl-ruby/3.1.2 gdcl/1.26.0
+      Authorization:
+      - "<AUTHORIZATION>"
+      Content-Type:
+      - application/x-www-form-urlencoded
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - application/json; charset=UTF-8
+      Vary:
+      - Origin
+      - Referer
+      - X-Origin
+      Content-Encoding:
+      - gzip
+      Date:
+      - Thu, 16 Oct 2025 13:46:07 GMT
+      Server:
+      - ESF
+      X-Xss-Protection:
+      - '0'
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Content-Type-Options:
+      - nosniff
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      X-L2-Request-Path:
+      - l2-managed-6
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: |
+        {
+          "sheets": [
+            {
+              "properties": {
+                "sheetId": 0,
+                "title": "Arkusz1",
+                "index": 0,
+                "sheetType": "GRID",
+                "gridProperties": {
+                  "rowCount": 786,
+                  "columnCount": 9,
+                  "frozenRowCount": 1
+                }
+              }
+            }
+          ]
+        }
+  recorded_at: Thu, 16 Oct 2025 13:46:08 GMT
+- request:
+    method: get
+    uri: https://sheets.googleapis.com/v4/spreadsheets/10HruPjeSsZX2-IYSkpTxPd-Jfnc9jTDRXcTFHWymlZw?fields=sheets.data.rowData.values(formattedValue,userEnteredValue,effectiveValue)&ranges=%27Arkusz1%27
+    body:
+      encoding: UTF-8
+      string: ''
+    headers:
+      User-Agent:
+      - unknown/0.0.0 google-apis-sheets_v4/0.26.0 Mac OS X/14.6.1 (gzip)
+      Accept:
+      - "*/*"
+      Accept-Encoding:
+      - gzip,deflate
+      Date:
+      - Thu, 16 Oct 2025 13:46:08 GMT
+      X-Goog-Api-Client:
+      - gl-ruby/3.1.2 gdcl/1.26.0
+      Authorization:
+      - "<AUTHORIZATION>"
+      Content-Type:
+      - application/x-www-form-urlencoded
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - application/json; charset=UTF-8
+      Vary:
+      - Origin
+      - Referer
+      - X-Origin
+      Content-Encoding:
+      - gzip
+      Date:
+      - Thu, 16 Oct 2025 13:46:08 GMT
+      Server:
+      - ESF
+      X-Xss-Protection:
+      - '0'
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Content-Type-Options:
+      - nosniff
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      X-L2-Request-Path:
+      - l2-managed-6
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: |
+        {
+          "sheets": [
+            {
+              "data": [
+                {
+                  "rowData": [
+                    {
+                      "values": [
+                        {
+                          "userEnteredValue": {
+                            "stringValue": "GRUPA / MIEJSCA"
+                          },
+                          "effectiveValue": {
+                            "stringValue": "GRUPA / MIEJSCA"
+                          },
+                          "formattedValue": "GRUPA / MIEJSCA"
+                        },
+                        {
+                          "userEnteredValue": {
+                            "stringValue": "OSOBY"
+                          },
+                          "effectiveValue": {
+                            "stringValue": "OSOBY"
+                          },
+                          "formattedValue": "OSOBY"
+                        },
+                        {
+                          "userEnteredValue": {
+                            "stringValue": "LICZBA OSÓB "
+                          },
+                          "effectiveValue": {
+                            "stringValue": "LICZBA OSÓB "
+                          },
+                          "formattedValue": "LICZBA OSÓB "
+                        },
+                        {
+                          "userEnteredValue": {
+                            "stringValue": "KANAPKI"
+                          },
+                          "effectiveValue": {
+                            "stringValue": "KANAPKI"
+                          },
+                          "formattedValue": "KANAPKI"
+                        },
+                        {
+                          "userEnteredValue": {
+                            "stringValue": "ZUPY"
+                          },
+                          "effectiveValue": {
+                            "stringValue": "ZUPY"
+                          },
+                          "formattedValue": "ZUPY"
+                        },
+                        {
+                          "userEnteredValue": {
+                            "stringValue": "PACZKA Z PROW. DŁ."
+                          },
+                          "effectiveValue": {
+                            "stringValue": "PACZKA Z PROW. DŁ."
+                          },
+                          "formattedValue": "PACZKA Z PROW. DŁ."
+                        },
+                        {
+                          "userEnteredValue": {
+                            "stringValue": "DOD. WODA MINERALNA"
+                          },
+                          "effectiveValue": {
+                            "stringValue": "DOD. WODA MINERALNA"
+                          },
+                          "formattedValue": "DOD. WODA MINERALNA"
+                        },
+                        {
+                          "userEnteredValue": {
+                            "stringValue": "KSIĄŻKI"
+                          },
+                          "effectiveValue": {
+                            "stringValue": "KSIĄŻKI"
+                          },
+                          "formattedValue": "KSIĄŻKI"
+                        },
+                        {
+                          "userEnteredValue": {
+                            "stringValue": "UWAGI DOD."
+                          },
+                          "effectiveValue": {
+                            "stringValue": "UWAGI DOD."
+                          },
+                          "formattedValue": "UWAGI DOD."
+                        }
+                      ]
+                    },
+                    {
+                      "values": [
+                        {
+                          "userEnteredValue": {
+                            "stringValue": "GR 1: Jan Kowalski*, Polimeria Gnat, Wyszeniega Zanussi"
+                          },
+                          "effectiveValue": {
+                            "stringValue": "GR 1: Jan Kowalski*, Polimeria Gnat, Wyszeniega Zanussi"
+                          },
+                          "formattedValue": "GR 1: Jan Kowalski*, Polimeria Gnat, Wyszeniega Zanussi"
+                        }
+                      ]
+                    },
+                    {
+                      "values": [
+                        {
+                          "userEnteredValue": {
+                            "stringValue": "Location 13 - parking (to verify)"
+                          },
+                          "effectiveValue": {
+                            "stringValue": "Location 13 - parking (to verify)"
+                          },
+                          "formattedValue": "Location 13 - parking (to verify)"
+                        },
+                        {
+                          "userEnteredValue": {
+                            "stringValue": "Tomiła"
+                          },
+                          "effectiveValue": {
+                            "stringValue": "Tomiła"
+                          },
+                          "formattedValue": "Tomiła"
+                        },
+                        {
+                          "userEnteredValue": {
+                            "numberValue": 1
+                          },
+                          "effectiveValue": {
+                            "numberValue": 1
+                          },
+                          "formattedValue": "1"
+                        },
+                        {
+                          "userEnteredValue": {
+                            "numberValue": 2
+                          },
+                          "effectiveValue": {
+                            "numberValue": 2
+                          },
+                          "formattedValue": "2"
+                        },
+                        {
+                          "userEnteredValue": {
+                            "numberValue": 1
+                          },
+                          "effectiveValue": {
+                            "numberValue": 1
+                          },
+                          "formattedValue": "1"
+                        },
+                        {},
+                        {},
+                        {
+                          "userEnteredValue": {
+                            "stringValue": "Tomiła // coś Jo Nesbo, coś Katarzyny Bondy"
+                          },
+                          "effectiveValue": {
+                            "stringValue": "Tomiła // coś Jo Nesbo, coś Katarzyny Bondy"
+                          },
+                          "formattedValue": "Tomiła // coś Jo Nesbo, coś Katarzyny Bondy"
+                        }
+                      ]
+                    },
+                    {
+                      "values": [
+                        {
+                          "userEnteredValue": {
+                            "stringValue": "Location 7 - trailer"
+                          },
+                          "effectiveValue": {
+                            "stringValue": "Location 7 - trailer"
+                          },
+                          "formattedValue": "Location 7 - trailer"
+                        },
+                        {
+                          "userEnteredValue": {
+                            "stringValue": "Jaromira i Radek + pies Sara"
+                          },
+                          "effectiveValue": {
+                            "stringValue": "Jaromira i Radek + pies Sara"
+                          },
+                          "formattedValue": "Jaromira i Radek + pies Sara"
+                        },
+                        {
+                          "userEnteredValue": {
+                            "numberValue": 2
+                          },
+                          "effectiveValue": {
+                            "numberValue": 2
+                          },
+                          "formattedValue": "2"
+                        },
+                        {
+                          "userEnteredValue": {
+                            "numberValue": 4
+                          },
+                          "effectiveValue": {
+                            "numberValue": 4
+                          },
+                          "formattedValue": "4"
+                        },
+                        {
+                          "userEnteredValue": {
+                            "numberValue": 2
+                          },
+                          "effectiveValue": {
+                            "numberValue": 2
+                          },
+                          "formattedValue": "2"
+                        },
+                        {
+                          "userEnteredValue": {
+                            "stringValue": "tak"
+                          },
+                          "effectiveValue": {
+                            "stringValue": "tak"
+                          },
+                          "formattedValue": "tak"
+                        },
+                        {
+                          "userEnteredValue": {
+                            "stringValue": "2; gazowana dla Jaromiry"
+                          },
+                          "effectiveValue": {
+                            "stringValue": "2; gazowana dla Jaromiry"
+                          },
+                          "formattedValue": "2; gazowana dla Jaromiry"
+                        },
+                        {},
+                        {
+                          "userEnteredValue": {
+                            "stringValue": "Lorem ipsum dolor sit amet, consectetur adipiscing elit"
+                          },
+                          "effectiveValue": {
+                            "stringValue": "Lorem ipsum dolor sit amet, consectetur adipiscing elit"
+                          },
+                          "formattedValue": "Lorem ipsum dolor sit amet, consectetur adipiscing elit"
+                        }
+                      ]
+                    },
+                    {
+                      "values": [
+                        {
+                          "userEnteredValue": {
+                            "stringValue": "Location 4 - garage"
+                          },
+                          "effectiveValue": {
+                            "stringValue": "Location 4 - garage"
+                          },
+                          "formattedValue": "Location 4 - garage"
+                        },
+                        {
+                          "userEnteredValue": {
+                            "stringValue": "Miłowit"
+                          },
+                          "effectiveValue": {
+                            "stringValue": "Miłowit"
+                          },
+                          "formattedValue": "Miłowit"
+                        },
+                        {
+                          "userEnteredValue": {
+                            "numberValue": 1
+                          },
+                          "effectiveValue": {
+                            "numberValue": 1
+                          },
+                          "formattedValue": "1"
+                        },
+                        {
+                          "userEnteredValue": {
+                            "numberValue": 2
+                          },
+                          "effectiveValue": {
+                            "numberValue": 2
+                          },
+                          "formattedValue": "2"
+                        },
+                        {
+                          "userEnteredValue": {
+                            "numberValue": 1
+                          },
+                          "effectiveValue": {
+                            "numberValue": 1
+                          },
+                          "formattedValue": "1"
+                        },
+                        {},
+                        {},
+                        {
+                          "userEnteredValue": {
+                            "stringValue": "Miłowit - // kryminały, sensacja"
+                          },
+                          "effectiveValue": {
+                            "stringValue": "Miłowit - // kryminały, sensacja"
+                          },
+                          "formattedValue": "Miłowit - // kryminały, sensacja"
+                        },
+                        {
+                          "userEnteredValue": {
+                            "stringValue": "Lorem ipsum dolor sit amet, consectetur adipiscing elit"
+                          },
+                          "effectiveValue": {
+                            "stringValue": "Lorem ipsum dolor sit amet, consectetur adipiscing elit"
+                          },
+                          "formattedValue": "Lorem ipsum dolor sit amet, consectetur adipiscing elit"
+                        }
+                      ]
+                    },
+                    {
+                      "values": [
+                        {},
+                        {
+                          "userEnteredValue": {
+                            "stringValue": "Kanapki"
+                          },
+                          "effectiveValue": {
+                            "stringValue": "Kanapki"
+                          },
+                          "formattedValue": "Kanapki"
+                        },
+                        {
+                          "userEnteredValue": {
+                            "numberValue": 8
+                          },
+                          "effectiveValue": {
+                            "numberValue": 8
+                          },
+                          "formattedValue": "8"
+                        },
+                        {
+                          "userEnteredValue": {
+                            "numberValue": 8
+                          },
+                          "effectiveValue": {
+                            "numberValue": 8
+                          },
+                          "formattedValue": "8"
+                        },
+                        {
+                          "userEnteredValue": {
+                            "numberValue": 4
+                          },
+                          "effectiveValue": {
+                            "numberValue": 4
+                          },
+                          "formattedValue": "4"
+                        }
+                      ]
+                    },
+                    {},
+                    {
+                      "values": [
+                        {
+                          "userEnteredValue": {
+                            "stringValue": "GR 2: Elżbieta Łinsdor*, Miłorad Jackiewicz, Trzebiesława Drewniakowska"
+                          },
+                          "effectiveValue": {
+                            "stringValue": "GR 2: Elżbieta Łinsdor*, Miłorad Jackiewicz, Trzebiesława Drewniakowska"
+                          },
+                          "formattedValue": "GR 2: Elżbieta Łinsdor*, Miłorad Jackiewicz, Trzebiesława Drewniakowska"
+                        }
+                      ]
+                    },
+                    {
+                      "values": [
+                        {
+                          "userEnteredValue": {
+                            "stringValue": "Location 10 - tunnel"
+                          },
+                          "effectiveValue": {
+                            "stringValue": "Location 10 - tunnel"
+                          },
+                          "formattedValue": "Location 10 - tunnel"
+                        },
+                        {
+                          "userEnteredValue": {
+                            "stringValue": "Skarbimira + 2 piesy"
+                          },
+                          "effectiveValue": {
+                            "stringValue": "Skarbimira + 2 piesy"
+                          },
+                          "formattedValue": "Skarbimira + 2 piesy"
+                        },
+                        {
+                          "userEnteredValue": {
+                            "numberValue": 1
+                          },
+                          "effectiveValue": {
+                            "numberValue": 1
+                          },
+                          "formattedValue": "1"
+                        },
+                        {},
+                        {
+                          "userEnteredValue": {
+                            "numberValue": 1
+                          },
+                          "effectiveValue": {
+                            "numberValue": 1
+                          },
+                          "formattedValue": "1"
+                        },
+                        {},
+                        {},
+                        {},
+                        {
+                          "userEnteredValue": {
+                            "stringValue": "Lorem ipsum dolor sit amet, consectetur adipiscing elit"
+                          },
+                          "effectiveValue": {
+                            "stringValue": "Lorem ipsum dolor sit amet, consectetur adipiscing elit"
+                          },
+                          "formattedValue": "Lorem ipsum dolor sit amet, consectetur adipiscing elit"
+                        }
+                      ]
+                    },
+                    {
+                      "values": [
+                        {
+                          "userEnteredValue": {
+                            "stringValue": "Location 14 - clinic"
+                          },
+                          "effectiveValue": {
+                            "stringValue": "Location 14 - clinic"
+                          },
+                          "formattedValue": "Location 14 - clinic"
+                        },
+                        {
+                          "userEnteredValue": {
+                            "stringValue": "Mysław, Godzimira, Mirogniewa + pies Puszek"
+                          },
+                          "effectiveValue": {
+                            "stringValue": "Mysław, Godzimira, Mirogniewa + pies Puszek"
+                          },
+                          "formattedValue": "Mysław, Godzimira, Mirogniewa + pies Puszek"
+                        },
+                        {
+                          "userEnteredValue": {
+                            "numberValue": 3
+                          },
+                          "effectiveValue": {
+                            "numberValue": 3
+                          },
+                          "formattedValue": "3"
+                        },
+                        {},
+                        {
+                          "userEnteredValue": {
+                            "numberValue": 3
+                          },
+                          "effectiveValue": {
+                            "numberValue": 3
+                          },
+                          "formattedValue": "3"
+                        },
+                        {},
+                        {},
+                        {},
+                        {
+                          "userEnteredValue": {
+                            "stringValue": "Lorem ipsum dolor sit amet, consectetur adipiscing elit"
+                          },
+                          "effectiveValue": {
+                            "stringValue": "Lorem ipsum dolor sit amet, consectetur adipiscing elit"
+                          },
+                          "formattedValue": "Lorem ipsum dolor sit amet, consectetur adipiscing elit"
+                        }
+                      ]
+                    },
+                    {
+                      "values": [
+                        {
+                          "userEnteredValue": {
+                            "stringValue": "Location 9 - new location"
+                          },
+                          "effectiveValue": {
+                            "stringValue": "Location 9 - new location"
+                          },
+                          "formattedValue": "Location 9 - new location"
+                        },
+                        {
+                          "userEnteredValue": {
+                            "stringValue": "Jarostryj, drugi Pan"
+                          },
+                          "effectiveValue": {
+                            "stringValue": "Jarostryj, drugi Pan"
+                          },
+                          "formattedValue": "Jarostryj, drugi Pan"
+                        },
+                        {
+                          "userEnteredValue": {
+                            "numberValue": 2
+                          },
+                          "effectiveValue": {
+                            "numberValue": 2
+                          },
+                          "formattedValue": "2"
+                        },
+                        {},
+                        {
+                          "userEnteredValue": {
+                            "numberValue": 0
+                          },
+                          "effectiveValue": {
+                            "numberValue": 0
+                          },
+                          "formattedValue": "0"
+                        },
+                        {},
+                        {},
+                        {},
+                        {
+                          "userEnteredValue": {
+                            "stringValue": "Lorem ipsum dolor sit amet, consectetur adipiscing elit"
+                          },
+                          "effectiveValue": {
+                            "stringValue": "Lorem ipsum dolor sit amet, consectetur adipiscing elit"
+                          },
+                          "formattedValue": "Lorem ipsum dolor sit amet, consectetur adipiscing elit"
+                        }
+                      ]
+                    },
+                    {
+                      "values": [
+                        {},
+                        {
+                          "userEnteredValue": {
+                            "stringValue": "Kanapki"
+                          },
+                          "effectiveValue": {
+                            "stringValue": "Kanapki"
+                          },
+                          "formattedValue": "Kanapki"
+                        },
+                        {
+                          "userEnteredValue": {
+                            "numberValue": 12
+                          },
+                          "effectiveValue": {
+                            "numberValue": 12
+                          },
+                          "formattedValue": "12"
+                        },
+                        {},
+                        {
+                          "userEnteredValue": {
+                            "numberValue": 4
+                          },
+                          "effectiveValue": {
+                            "numberValue": 4
+                          },
+                          "formattedValue": "4"
+                        }
+                      ]
+                    },
+                    {},
+                    {
+                      "values": [
+                        {
+                          "userEnteredValue": {
+                            "stringValue": "GR 3: Alan Wake*, Książe Persii, Bezimienny"
+                          },
+                          "effectiveValue": {
+                            "stringValue": "GR 3: Alan Wake*, Książe Persii, Bezimienny"
+                          },
+                          "formattedValue": "GR 3: Alan Wake*, Książe Persii, Bezimienny"
+                        }
+                      ]
+                    },
+                    {
+                      "values": [
+                        {
+                          "userEnteredValue": {
+                            "stringValue": "Location 1"
+                          },
+                          "effectiveValue": {
+                            "stringValue": "Location 1"
+                          },
+                          "formattedValue": "Location 1"
+                        },
+                        {
+                          "userEnteredValue": {
+                            "stringValue": "przybudówka: Jutrowoj, Lesława, Trzebor; blok 2: Miestwin, Wielimir; blok 3: Przemęt, Małomir,  Milan"
+                          },
+                          "effectiveValue": {
+                            "stringValue": "przybudówka: Jutrowoj, Lesława, Trzebor; blok 2: Miestwin, Wielimir; blok 3: Przemęt, Małomir,  Milan"
+                          },
+                          "formattedValue": "przybudówka: Jutrowoj, Lesława, Trzebor; blok 2: Miestwin, Wielimir; blok 3: Przemęt, Małomir,  Milan"
+                        },
+                        {
+                          "userEnteredValue": {
+                            "numberValue": 8
+                          },
+                          "effectiveValue": {
+                            "numberValue": 8
+                          },
+                          "formattedValue": "8"
+                        },
+                        {
+                          "userEnteredValue": {
+                            "numberValue": 16
+                          },
+                          "effectiveValue": {
+                            "numberValue": 16
+                          },
+                          "formattedValue": "16"
+                        },
+                        {
+                          "userEnteredValue": {
+                            "numberValue": 8
+                          },
+                          "effectiveValue": {
+                            "numberValue": 8
+                          },
+                          "formattedValue": "8"
+                        },
+                        {
+                          "userEnteredValue": {
+                            "stringValue": "tak"
+                          },
+                          "effectiveValue": {
+                            "stringValue": "tak"
+                          },
+                          "formattedValue": "tak"
+                        },
+                        {
+                          "userEnteredValue": {
+                            "numberValue": 3
+                          },
+                          "effectiveValue": {
+                            "numberValue": 3
+                          },
+                          "formattedValue": "3"
+                        },
+                        {
+                          "userEnteredValue": {
+                            "stringValue": "Trzebor - filozofia, historia"
+                          },
+                          "effectiveValue": {
+                            "stringValue": "Trzebor - filozofia, historia"
+                          },
+                          "formattedValue": "Trzebor - filozofia, historia"
+                        },
+                        {
+                          "userEnteredValue": {
+                            "stringValue": "Lorem ipsum dolor sit amet, consectetur adipiscing elit"
+                          },
+                          "effectiveValue": {
+                            "stringValue": "Lorem ipsum dolor sit amet, consectetur adipiscing elit"
+                          },
+                          "formattedValue": "Lorem ipsum dolor sit amet, consectetur adipiscing elit"
+                        }
+                      ]
+                    },
+                    {
+                      "values": [
+                        {
+                          "userEnteredValue": {
+                            "stringValue": "Location 12 - vacant developer space"
+                          },
+                          "effectiveValue": {
+                            "stringValue": "Location 12 - vacant developer space"
+                          },
+                          "formattedValue": "Location 12 - vacant developer space"
+                        },
+                        {
+                          "userEnteredValue": {
+                            "stringValue": "Jarostryj, Beatrice"
+                          },
+                          "effectiveValue": {
+                            "stringValue": "Jarostryj, Beatrice"
+                          },
+                          "formattedValue": "Jarostryj, Beatrice"
+                        },
+                        {
+                          "userEnteredValue": {
+                            "numberValue": 2
+                          },
+                          "effectiveValue": {
+                            "numberValue": 2
+                          },
+                          "formattedValue": "2"
+                        },
+                        {
+                          "userEnteredValue": {
+                            "numberValue": 4
+                          },
+                          "effectiveValue": {
+                            "numberValue": 4
+                          },
+                          "formattedValue": "4"
+                        },
+                        {
+                          "userEnteredValue": {
+                            "numberValue": 2
+                          },
+                          "effectiveValue": {
+                            "numberValue": 2
+                          },
+                          "formattedValue": "2"
+                        },
+                        {
+                          "userEnteredValue": {
+                            "numberValue": 2
+                          },
+                          "effectiveValue": {
+                            "numberValue": 2
+                          },
+                          "formattedValue": "2"
+                        },
+                        {
+                          "userEnteredValue": {
+                            "stringValue": "tak"
+                          },
+                          "effectiveValue": {
+                            "stringValue": "tak"
+                          },
+                          "formattedValue": "tak"
+                        },
+                        {},
+                        {
+                          "userEnteredValue": {
+                            "stringValue": "Lorem ipsum dolor sit amet, consectetur adipiscing elit"
+                          },
+                          "effectiveValue": {
+                            "stringValue": "Lorem ipsum dolor sit amet, consectetur adipiscing elit"
+                          },
+                          "formattedValue": "Lorem ipsum dolor sit amet, consectetur adipiscing elit"
+                        }
+                      ]
+                    },
+                    {
+                      "values": [
+                        {
+                          "userEnteredValue": {
+                            "stringValue": "Location 2"
+                          },
+                          "effectiveValue": {
+                            "stringValue": "Location 2"
+                          },
+                          "formattedValue": "Location 2"
+                        },
+                        {
+                          "userEnteredValue": {
+                            "stringValue": "??"
+                          },
+                          "effectiveValue": {
+                            "stringValue": "??"
+                          },
+                          "formattedValue": "??"
+                        },
+                        {
+                          "userEnteredValue": {
+                            "numberValue": 2
+                          },
+                          "effectiveValue": {
+                            "numberValue": 2
+                          },
+                          "formattedValue": "2"
+                        },
+                        {
+                          "userEnteredValue": {
+                            "numberValue": 4
+                          },
+                          "effectiveValue": {
+                            "numberValue": 4
+                          },
+                          "formattedValue": "4"
+                        },
+                        {
+                          "userEnteredValue": {
+                            "numberValue": 0
+                          },
+                          "effectiveValue": {
+                            "numberValue": 0
+                          },
+                          "formattedValue": "0"
+                        },
+                        {},
+                        {},
+                        {},
+                        {
+                          "userEnteredValue": {
+                            "stringValue": "To moga być Zbysława i Gosław "
+                          },
+                          "effectiveValue": {
+                            "stringValue": "To moga być Zbysława i Gosław "
+                          },
+                          "formattedValue": "To moga być Zbysława i Gosław "
+                        }
+                      ]
+                    },
+                    {
+                      "values": [
+                        {},
+                        {
+                          "userEnteredValue": {
+                            "stringValue": "Kanapki"
+                          },
+                          "effectiveValue": {
+                            "stringValue": "Kanapki"
+                          },
+                          "formattedValue": "Kanapki"
+                        },
+                        {
+                          "userEnteredValue": {
+                            "numberValue": 24
+                          },
+                          "effectiveValue": {
+                            "numberValue": 24
+                          },
+                          "formattedValue": "24"
+                        },
+                        {},
+                        {
+                          "userEnteredValue": {
+                            "numberValue": 10
+                          },
+                          "effectiveValue": {
+                            "numberValue": 10
+                          },
+                          "formattedValue": "10"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+  recorded_at: Thu, 16 Oct 2025 13:46:09 GMT
+recorded_with: VCR 6.2.0

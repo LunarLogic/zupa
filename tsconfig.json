@@ -1,0 +1,30 @@
+{
+  "compilerOptions": {
+    "target": "ES6",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+    "module": "esnext",
+    "composite": true,
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "downlevelIteration": true,
+    "rootDir": "../",
+    "baseUrl": "./src",
+    "noImplicitAny": true
+  },
+  "include": [
+    "app/**/*.ts",
+    "app/**/*.tsx",
+    "app/javascript/data/**/*.json",
+    "app/javascript/components/molecules/Toast/toastMessages.js"
+  ]
+}

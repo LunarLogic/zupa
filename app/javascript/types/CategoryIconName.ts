@@ -1,0 +1,16 @@
+export type CategoryIconName =
+  | "shoe"
+  | "pants"
+  | "jacket"
+  | "hat"
+  | "scarf"
+  | "gloves"
+  | "shirt"
+  | "sweater"
+  | "underpants"
+  | "underwear"
+  | "socks"
+  | "sleepingbag"
+  | "cosmetics"
+  | "tent"
+  | "other";

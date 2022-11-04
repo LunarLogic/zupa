@@ -1,0 +1,23 @@
+# This docker-compose file let's you run production docker image (because this is what Dockerimage builds)
+# with development environment variables.
+#
+# Useful for developing and testing docker images locally as the feedback loop is much shorter than on the servers.
+# Alternatively, see Dockerfile top comments for info on how to build them yourself
+
+services:
+  app:
+    container_name: zupa-compose
+    image: zupa-docker-compose
+    pull_policy: build
+    env_file:
+      - .env
+    environment:
+      - DATABASE_URL=postgresql://postgres@host.docker.internal/zupa_development
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        REACT_API_BASE_URL: http://localhost:3000/api/v1
+        REACT_GTM_ID: "GTM-NPS4DSK"
+    ports:
+      - "3000:3000"

@@ -1,0 +1,98 @@
+.button {
+  @include button-styles;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+  padding: $spacing-md;
+  gap: $spacing-xxs;
+  width: 100%;
+  background-color: none;
+  color: $white;
+  border-radius: 8px;
+  border-color: transparent;
+}
+
+.button--primary {
+  background-color: $color-accent;
+  box-shadow: 0px 2px 16px rgba(0, 0, 0, 0.18);
+
+  &:hover,
+  &:active {
+    background-color: $green-primary-darker;
+  }
+}
+
+.button--secondary {
+  background-color: $beige-300;
+  color: $color-text;
+
+  &:hover,
+  &:active {
+    background-color: $beige-400;
+  }
+}
+
+.button--rounded {
+  background-color: $yellow;
+  border-radius: 50%;
+  padding: 0;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.button--icon {
+  background: none;
+  width: fit-content;
+  padding: $spacing-xxs;
+}
+
+.button--category-tile {
+  display: grid;
+  grid-template-rows: 1fr auto;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background-color: $white;
+  color: $dark;
+  border-radius: 8px;
+  box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease-in-out;
+  cursor: pointer;
+}
+
+.button--navigate {
+  @include button-styles;
+  background-color: $color-accent;
+  color: $white;
+  border-radius: 8px;
+  padding: $spacing-md;
+  width: 100%;
+  height: $spacing-xxl;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: $spacing-xxs;
+  box-shadow: 0px 2px 16px rgba(0, 0, 0, 0.18);
+  transition: all 0.3s ease-in-out;
+
+  &:hover,
+  &:active {
+    background-color: $green-primary-darker;
+  }
+}
+
+.button--text {
+  background-color: transparent;
+  color: $green-primary-darker;
+  padding: 0;
+  height: $spacing-xxl;
+  text-align: center;
+  border-radius: 0;
+  box-shadow: none;
+}

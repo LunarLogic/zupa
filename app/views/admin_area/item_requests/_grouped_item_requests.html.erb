@@ -1,0 +1,3 @@
+<% grouped_item_requests.each do |person, item_requests| %>
+  <%= render 'admin_area/item_requests/person_item_requests', person: person, item_requests: item_requests %>
+<% end %>

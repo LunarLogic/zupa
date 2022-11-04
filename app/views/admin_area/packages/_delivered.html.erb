@@ -1,0 +1,33 @@
+<%= turbo_frame_tag package do %>
+  <div class="person__container">
+    <div class="person__details-container space-between">
+      <div class="person__info-container">
+        <%= image_tag("user.svg") %>
+        <h4 class="person__name"><%= package.receiver_name %></h4>
+        #<%= package.receiver_code %>
+        <span class="package-id__container">
+        <%= image_tag("package.svg", alt: "Package") %>
+        <span class="package-id__id">#<%= package.id %></span>
+        </span>
+      </div>
+      <div class='person__edit-info-container'>
+        <%= button_to main_app.pack_admin_area_package_path(package), method: :patch, class: 'button__without-background' do%>
+          Edytuj
+          <%= image_tag("package.svg", alt: "Package", class:'button__with-image') %>
+        <% end %>
+      </div>
+    </div>
+    <div class="item__container">
+      <span class="delivery__date-container">
+        <%= image_tag("delivery_truck.svg", alt: "Delivery truck", class:'button__with-image') %>
+        <div class="delivery__date"> <%= package.delivered_at.strftime("%d / %m / %Y")%> </div>
+      </span>
+      <span>
+        <%= image_tag("rectangle.svg", alt: "Rectangle shape", class:'button__with-image') %>
+      </span>
+      <span class="delivery__user-name">
+        <%= package.delivered_by %>
+      </span>
+    </div>
+  </div>
+<% end %>

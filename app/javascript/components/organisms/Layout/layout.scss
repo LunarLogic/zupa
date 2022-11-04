@@ -1,0 +1,14 @@
+.layout {
+  display: grid;
+  height: 100vh;
+  grid-template-areas: "header" "content" "footer";
+  grid-template-rows: min-content 1fr auto;
+}
+
+.layout__header {
+  height: $header-height;
+}
+
+.layout__main-content {
+  grid-area: content;
+}

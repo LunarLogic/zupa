@@ -1,0 +1,4 @@
+<%= turbo_stream.remove dom_id(package) %>
+<%= turbo_stream.update 'packages', partial: 'admin_area/packages/packages_list', locals: { packages: packing_packages } %>
+<%= turbo_stream.update 'delivered_count', partial: 'admin_area/packages/delivered_counter'%>
+<%= turbo_stream.update 'packing_count', partial: 'admin_area/item_requests/packages_counter'%>

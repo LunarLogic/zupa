@@ -1,0 +1,8 @@
+#!/bin/bash -e
+
+if [ "$1" = 'bundle' ] && [ "$2" = 'exec' ] && [ "$3" = 'rails' ] && [ "$4" = 'server' ]; then
+  echo "Running database migrations..."
+  bundle exec rake db:migrate
+fi
+
+exec "${@}"

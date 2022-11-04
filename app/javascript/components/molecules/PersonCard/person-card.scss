@@ -1,0 +1,14 @@
+.person-card__icon-container {
+  background-color: $yellow;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.person-card__icon {
+  width: 18px;
+  height: 15px;
+}

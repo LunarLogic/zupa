@@ -1,0 +1,21 @@
+.icon-with-text {
+  display: grid;
+  grid-template-columns: auto auto;
+  width: fit-content;
+}
+
+.icon-with-text__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-right: $spacing-xs;
+
+  svg {
+    height: $spacing-lg;
+    width: $spacing-lg;
+  }
+}
+
+.icon-with-text__text {
+  width: max-content;
+}

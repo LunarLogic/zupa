@@ -1,0 +1,506 @@
+---
+pl:
+  package_statuses:
+    packed: Przygotowana
+    packing: W trakcie pakowania
+    delivered: Dostarczona
+  requests_statuses:
+    green: Zielony
+    yellow: Żółty
+    red: Czerwony
+  location_statuses:
+    active: Aktywne
+    pending_verification: Oczekuje na weryfikację
+    inactive: Nieaktywne
+  species:
+    cat: Kot
+    dog: Pies
+    rat: Szczur
+    bird: Ptak
+    other: Inny
+  item_request_statuses:
+    to_prepare: Zgłoszone
+    prepared: Przygotowane
+    delivered: Dostarczone
+    rejected: Odrzucone
+    during_consultation: W trakcie konsultacji
+    packing: W trakcie pakowania
+  menu_item:
+    item_types:
+      internal: Wewnętrzny
+      external: Zewnętrzny
+  views:
+    pagination:
+      truncate: "..."
+  admin:
+    buttons:
+      save: "Zapisz %{model_name}"
+    navigation:
+      items:
+        people: Osoby
+        animals: Zwierzaki
+        item_requests: Zgłoszenia
+        locations: Miejsca
+        regions: Regiony
+        packages: Paczki
+        packing: Pakowanie
+        item_categories: Kategorie
+        auth_codes: Kody Dostępu
+        admin_users: Administratorzy
+        help_institutions: Punkty Pomocy
+        menu_items: Menu
+        reports: Raporty
+        visit_summaries: Relacje
+        trips: Wyjazdy
+      groups:
+        configuration: ⚙️ Konfiguracja
+        trips: 🚙 Wyjazdy
+        content: 📰 Treści
+        wardrobe: 🧥 Magazyn Ciepła
+    error_messages:
+      phone_length_error: Numer telefonu musi mieć 9 cyfr
+      empty_package: "Paczka nie może być pusta"
+      package_not_delivered: "Paczka nie została dostarczona"
+      package_not_packed: "Paczka nie została spakowana"
+      package_not_unpacked: "Paczka nie została otwarta"
+      item_not_rejected: "Zgłoszenie nie zostało odrzucone"
+      item_not_unpacked: "Zgłoszenie nie zostało wypakowane"
+      item_not_packed: "Zgłoszenie nie zostało spakowane"
+      items_not_packed: "Zgłoszenia nie zostały spakowane"
+      package_already_packed: "Paczka została już spakowana"
+    trip_preview:
+      tab: Podgląd
+      load: Załaduj podgląd
+      loading: Ładowanie...
+      reload: Odśwież podgląd
+      reloading: Odświeżanie...
+      placeholder: Kliknij przycisk powyżej, aby załadować podgląd wyjazdu.
+      error: Nie udało się załadować podglądu. Spróbuj ponownie.
+      expires_note: Podgląd wygasa po 15 minutach.
+    tabs:
+      data: Dane
+      item_requests: Zgłoszenia
+      person_sizes: Rozmiary
+      people: Osoby
+      help_institutions: Punkty Pomocy
+      visit_summaries: Relacje
+      trip: Wyjazd
+      groups: Grupy
+    people:
+      breadcrumbs:
+        index: Osoby
+      titles:
+        index: Osoby
+    menu_items:
+      breadcrumbs:
+        index: Menu
+      titles:
+        index: Menu
+    locations:
+      titles:
+        index: Miejsca
+    item_requests:
+      titles:
+        index: Zgłoszenia
+    person_sizes:
+      titles:
+        index: Rozmiary
+    item_categories:
+      titles:
+        index: Kategorie
+    regions:
+      titles:
+        index: Regiony
+    help_institutions:
+      breadcrumbs:
+        index: Punkty Pomocy
+      titles:
+        index: Punkty Pomocy
+    admin_users:
+      titles:
+        index: Administratorzy
+    auth_codes:
+      titles:
+        index: Kody dostępu
+    visit_summaries:
+      titles:
+        index: Relacje
+    packages:
+      titles:
+        index: Paczki
+      breadcrumbs:
+        index: Paczki
+    packing:
+      titles:
+        index: Pakowanie
+      breadcrumbs:
+        index: Pakowanie
+    format:
+      blank: "Brak"
+    datepicker:
+      formats:
+        date: "d-m-Y"
+        datetime: "d-m-Y H:i"
+        time: "H:i"
+  activerecord:
+    errors:
+      messages:
+        record_invalid: "Znaleziono błędy: %{errors}"
+        restrict_dependent_destroy:
+          has_one: Nie można usunąć, gdyż istnieje zależny od niego %{record}
+          has_many: Nie można usunąć, gdyż istnieją zależne od niego %{record}
+    attributes:
+      person:
+        first_name: Imię
+        last_name: Nazwisko
+        code: Kod
+        location: Miejsce
+        location_id: Miejsce
+        requests_status: Status
+        phone_number: Numer telefonu
+        active: Obecna
+      animal:
+        name: Imię
+        active: Obecny
+      item_request:
+        person: Osoba
+        person_id: Osoba
+        item_category: Kategoria
+        item_category_id: Kategoria
+        size: Rozmiar
+        comment: Komentarz
+        status: Status
+        requested_by: Zgłoszone przez
+        created_at: Zgłoszone
+        person_full_name_with_code: Osoba
+      menu_item:
+        name: Nazwa
+        url: Adres URL
+        priority_order: Kolejność
+        item_type: Typ
+        is_active: Aktywny
+      person_size:
+        item_category: Kategoria
+        size: Rozmiar
+      location:
+        name: Nazwa
+        region: Region
+        info: Informacje
+        latitude: szerokość geograficzna
+        longitude: długość geograficzna
+        status: Status
+      item_category:
+        name: Nazwa
+        available_sizes: Rozmiary
+      region:
+        name: Nazwa
+      help_institution:
+        name: Nazwa
+        address: Adres
+        conditions: Warunki
+        timings: Kiedy?
+        items_offered: Co?
+      admin_user:
+        first_name: Imię
+        last_name: Nazwisko
+        password: Hasło
+        password_confirmation: Potwierdź Hasło
+      auth_code:
+        value: Kod
+        expires_at: Ważny do
+        created_at: Stworzony
+      visit_summary:
+        content: Relacja
+        visit_date: Data wizyty
+        author: Autor
+        location: Miejsce
+        location_id: Miejsce
+      package:
+        id: Numer
+        number: Numer
+        receiver: Osoba
+        delivered_by: Dostarczona przez
+        delivered_at: Dostarczona
+      trip:
+        date: Data
+        source_spreadsheet_url: Adres Tabelki Wyjazdowej
+        admin_user_id: Osoba Organizująca
+        active: Aktywny
+      trip_group:
+        volunteers: Wolontariusze
+        locations: Miejsca
+    models:
+      person:
+        one: Osoba
+        other: Osoby
+      animal:
+        one: Zwierzak
+        other: Zwierzaki
+      region:
+        one: Region
+        other: Regiony
+      location:
+        one: Miejsce
+        other: Miejsca
+      item_request:
+        one: Zgłoszenie
+        other: Zgłoszenia
+      item_category:
+        one: Kategoria
+        other: Kategorie
+      person_size:
+        one: Rozmiar
+        other: Rozmiary
+      admin_user:
+        one: Administrator
+        other: Administratorzy
+      help_institution:
+        one: Punkt Pomocy
+        other: Punkty Pomocy
+      auth_code:
+        one: Kod dostępu
+        other: Kody dostępu
+      menu_item:
+        one: Pozycja menu
+        other: Pozycje menu
+      visit_summary:
+        one: Relacja
+        other: Relacje
+      package:
+        one: Paczka
+        other: Paczki
+      trip:
+        one: Wyjazd
+        other: Wyjazdy
+  date:
+    abbr_day_names:
+      - nie
+      - pon
+      - wto
+      - śro
+      - czw
+      - pią
+      - sob
+    abbr_month_names:
+      -
+      - sty
+      - lut
+      - mar
+      - kwi
+      - maj
+      - cze
+      - lip
+      - sie
+      - wrz
+      - paź
+      - lis
+      - gru
+    day_names:
+      - niedziela
+      - poniedziałek
+      - wtorek
+      - środa
+      - czwartek
+      - piątek
+      - sobota
+    formats:
+      default: "%d-%m-%Y"
+      long: "%-d %B %Y"
+      short: "%-d %b"
+    month_names:
+      -
+      - stycznia
+      - lutego
+      - marca
+      - kwietnia
+      - maja
+      - czerwca
+      - lipca
+      - sierpnia
+      - września
+      - października
+      - listopada
+      - grudnia
+    order:
+      - :day
+      - :month
+      - :year
+  datetime:
+    distance_in_words:
+      about_x_hours:
+        one: około godziny
+        few: około %{count} godziny
+        many: około %{count} godzin
+        other: około %{count} godzin
+      about_x_months:
+        one: około miesiąca
+        few: około %{count} miesiące
+        many: około %{count} miesięcy
+        other: około %{count} miesięcy
+      about_x_years:
+        one: około rok
+        few: około %{count} lata
+        many: około %{count} lat
+        other: około %{count} lat
+      almost_x_years:
+        one: prawie rok
+        few: prawie %{count} lata
+        many: prawie %{count} lat
+        other: prawie %{count} lat
+      half_a_minute: pół minuty
+      less_than_x_seconds:
+        one: mniej niż sekundę
+        few: mniej niż %{count} sekundy
+        many: mniej niż %{count} sekund
+        other: mniej niż %{count} sekund
+      less_than_x_minutes:
+        one: mniej niż minutę
+        few: mniej niż %{count} minuty
+        many: mniej niż %{count} minut
+        other: mniej niż %{count} minut
+      over_x_years:
+        one: ponad rok
+        few: ponad %{count} lata
+        many: ponad %{count} lat
+        other: ponad %{count} lat
+      x_seconds:
+        one: "%{count} sekunda"
+        few: "%{count} sekundy"
+        many: "%{count} sekund"
+        other: "%{count} sekund"
+      x_minutes:
+        one: "%{count} minuta"
+        few: "%{count} minuty"
+        many: "%{count} minut"
+        other: "%{count} minut"
+      x_days:
+        one: "%{count} dzień"
+        few: "%{count} dni"
+        many: "%{count} dni"
+        other: "%{count} dni"
+      x_months:
+        one: "%{count} miesiąc"
+        few: "%{count} miesiące"
+        many: "%{count} miesięcy"
+        other: "%{count} miesięcy"
+    prompts:
+      second: Sekundy
+      minute: Minuta
+      hour: Godzina
+      day: Dzień
+      month: Miesiąc
+      year: Rok
+  errors:
+    format: "%{attribute} %{message}"
+    messages:
+      accepted: musi zostać zaakceptowane
+      blank: nie może być puste
+      confirmation: musi być taki sam jak w %{attribute}
+      empty: nie może być puste
+      equal_to: musi być równe %{count}
+      even: musi być parzyste
+      exclusion: jest zarezerwowane
+      greater_than: musi być większe od %{count}
+      greater_than_or_equal_to: musi być większe lub równe %{count}
+      inclusion: nie znajduje się na liście dopuszczalnych wartości
+      invalid: jest nieprawidłowe
+      less_than: musi być mniejsze od %{count}
+      less_than_or_equal_to: musi być mniejsze lub równe %{count}
+      not_a_number: nie jest liczbą
+      not_an_integer: musi być liczbą całkowitą
+      odd: musi być nieparzyste
+      other_than: musi być inne niż %{count}
+      present: musi być puste
+      required: musi istnieć
+      taken: zostało już zajęte
+      too_long:
+        one: jest za długie (maksymalnie jeden znak)
+        few: jest za długie (maksymalnie %{count} znaki)
+        many: jest za długie (maksymalnie %{count} znaków)
+        other: jest za długie (maksymalnie %{count} znaków)
+      too_short:
+        one: jest za krótkie (przynajmniej jeden znak)
+        few: jest za krótkie (przynajmniej %{count} znaki)
+        many: jest za krótkie (przynajmniej %{count} znaków)
+        other: jest za krótkie (przynajmniej %{count} znaków)
+      wrong_length:
+        one: ma nieprawidłową długość (powinna wynosić jeden znak)
+        few: ma nieprawidłową długość (powinna wynosić %{count} znaki)
+        many: ma nieprawidłową długość (powinna wynosić %{count} znaków)
+        other: ma nieprawidłową długość (powinna wynosić %{count} znaków)
+    template:
+      body: "Błędy dotyczą następujących pól:"
+      header:
+        one: "%{model} nie został zachowany z powodu jednego błędu"
+        few: "%{model} nie został zachowany z powodu %{count} błędów"
+        many: "%{model} nie został zachowany z powodu %{count} błędów"
+        other: "%{model} nie został zachowany z powodu %{count} błędów"
+  helpers:
+    select:
+      prompt: Proszę wybrać
+    submit:
+      create: Utwórz %{model}
+      submit: Wyślij %{model}
+      update: Aktualizuj %{model}
+  number:
+    currency:
+      format:
+        delimiter: " "
+        format: "%n %u"
+        precision: 2
+        separator: ","
+        significant: false
+        strip_insignificant_zeros: true
+        unit: zł
+    format:
+      delimiter: " "
+      precision: 3
+      separator: ","
+      significant: false
+      strip_insignificant_zeros: false
+    human:
+      decimal_units:
+        format: "%n %u"
+        units:
+          billion: Miliard
+          million: Milion
+          quadrillion: Biliard
+          thousand: Tysiąc
+          trillion: Bilion
+          unit: ""
+      format:
+        delimiter: ""
+        precision: 3
+        significant: true
+        strip_insignificant_zeros: true
+      storage_units:
+        format: "%n %u"
+        units:
+          byte:
+            one: bajt
+            few: bajty
+            many: bajtów
+            other: bajty
+          gb: GB
+          kb: KB
+          mb: MB
+          tb: TB
+    percentage:
+      format:
+        delimiter: ""
+        format: "%n%"
+    precision:
+      format:
+        delimiter: ""
+  support:
+    array:
+      last_word_connector: " oraz "
+      two_words_connector: " i "
+      words_connector: ", "
+  time:
+    am: przed południem
+    formats:
+      default: "%a, %-d %b %Y %H:%M:%S %z"
+      long: "%-d %B %Y %H:%M"
+      short: "%-d %b %H:%M"
+    pm: po południu

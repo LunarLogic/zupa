@@ -1,0 +1,21 @@
+<%= turbo_frame_tag dom_id(person, :requests) do %>
+  <div class="person__container">
+
+    <div class="person__details-container">
+      <%= image_tag("user.svg") %>
+      <h4 class="person__name"><%= person.full_name %></h4>
+      #<%= person.code %>
+    </div>
+
+    <% item_requests.each do |item_request| %>
+      <%= render "admin_area/item_requests/item_request" , item_request: item_request %>
+    <% end %>
+
+    <div class="packing__button-container">     
+      <%= button_to main_app.pack_all_admin_area_item_requests_path(person_id: person.id), method: :patch, class: "button__without-background" do%>
+        Spakuj wszystko
+        <%= image_tag("package.svg", alt: "Package", class:"button__with-image") %>
+      <% end %>
+    </div>
+  </div>
+<% end %>

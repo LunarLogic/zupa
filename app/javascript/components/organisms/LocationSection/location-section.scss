@@ -1,0 +1,66 @@
+.location-section {
+  margin: $spacing-xl $spacing-sm 0 $spacing-sm;
+  padding: $spacing-md $spacing-sm;
+  background-color: $beige-200;
+  border-radius: 12px;
+}
+
+.location-section__info {
+  width: 100%;
+}
+
+.location-section__name-container {
+  display: flex;
+  align-items: center;
+  margin-bottom: $spacing-sm;
+}
+
+.location-section__pin-image {
+  height: 32px;
+  flex: 0 0 auto;
+}
+
+.location-section__name {
+  font-size: $md-font-size;
+  line-height: $sm-body-line-height;
+}
+
+.location-section__location-card-button {
+  height: $spacing-xxl;
+  font-size: $sm-font-size;
+  margin-top: $spacing-sm;
+}
+
+.location-section__location-card-button-icon {
+  width: 15px;
+  height: 14px;
+}
+
+.location-section--skeleton {
+  .location-section__pin-image {
+    width: 48px;
+    display: flex;
+    justify-content: center;
+
+    span {
+      line-height: unset;
+    }
+  }
+
+  .location-section__name {
+    width: 100%;
+  }
+
+  .location-section__info {
+    .card {
+      margin-left: 0;
+      margin-right: 0;
+    }
+  }
+
+  .navigate-button {
+    pointer-events: none;
+    background-color: $white;
+    padding: 5px;
+  }
+}
