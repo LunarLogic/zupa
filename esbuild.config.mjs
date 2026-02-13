@@ -1,6 +1,9 @@
 import { build } from "esbuild";
+import dotenv from "dotenv";
 import path from "path";
 import process from "process";
+
+dotenv.config({ path: `.env.${process.env.NODE_ENV || "development"}` });
 
 const nodeEnv = process.env.NODE_ENV ? JSON.stringify(process.env.NODE_ENV) : '"development"';
 const isProduction = nodeEnv === '"production"';
