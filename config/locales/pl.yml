@@ -86,6 +86,25 @@ pl:
       visit_summaries: Relacje
       trip: Wyjazd
       groups: Grupy
+      preparations: Przygotowania
+    preparation_templates:
+      label: Szablony przygotowań
+      columns:
+        template: Szablon
+        name: Nazwa
+        default: Domyślny
+        trips_count: Wyjazdy
+      labels:
+        template_selector: Szablon
+        no_template: "— brak szablonu —"
+        default_suffix: "(domyślny)"
+        preview: Podgląd
+        print: Drukuj przygotowania
+        editor: Edytor
+        edit_button: Edytuj
+        save_button: Zapisz
+        cancel: Anuluj
+        no_default_template: "Brak domyślnego szablonu"
     people:
       breadcrumbs:
         index: Osoby
@@ -229,6 +248,9 @@ pl:
       trip_group:
         volunteers: Wolontariusze
         locations: Miejsca
+      preparation_template:
+        name: Nazwa
+        default: Domyślny
     models:
       person:
         one: Osoba
@@ -272,6 +294,9 @@ pl:
       trip:
         one: Wyjazd
         other: Wyjazdy
+      preparation_template:
+        one: Szablon
+        other: Szablony
   date:
     abbr_day_names:
       - nie

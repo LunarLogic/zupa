@@ -13,6 +13,7 @@ gem "pg", "~> 1.1"
 gem "rswag-api", "~> 2.8.0"
 gem "rswag-ui", "~> 2.8.0"
 gem "dry-monads", "~> 1.3"
+gem "mustache", "~> 1.1"
 
 gem "stimulus-rails", "~> 1.3"
 gem "turbo-rails"
