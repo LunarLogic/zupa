@@ -58,6 +58,8 @@ group :development, :test do
   gem "standardrb"
   gem "vcr"
   gem "webmock"
+  gem "capybara", "~> 3.40"
+  gem "cuprite", "~> 0.15"
 end
 
 group :development do
