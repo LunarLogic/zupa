@@ -1,0 +1,204 @@
+.bubble-menu {
+  display: flex;
+  gap: 0.3rem;
+  padding: 0.2rem 0.4rem;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+  user-select: none;
+}
+.bubble-menu button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.3rem 0.5rem;
+  border-radius: 3px;
+}
+.bubble-menu button:hover {
+  background-color: #eee;
+}
+
+.floating-menu {
+  position: fixed;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  padding: 0.4rem 0.8rem;
+  display: flex;
+  gap: 0.5rem;
+  z-index: 1000;
+}
+
+.floating-menu button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.3rem 0.6rem;
+  border-radius: 4px;
+}
+
+.floating-menu button:hover {
+  background-color: #eee;
+}
+
+// .table-toolbar {
+//   display: flex;
+//   gap: 0.5rem;
+//   flex-wrap: wrap;
+//
+//   padding: 1rem;
+//   background-color: #f9f9f9;
+//   border: 1px solid #ddd;
+//   border-radius: 6px;
+//
+//   position: sticky;
+//   top: 0;
+//   z-index: 10;
+//
+//   /* Optional: center horizontally */
+//   margin-bottom: 1rem;
+// }
+.table-toolbar {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background-color: #f9f9f9;
+  border-bottom: 1px solid #ddd;
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+}
+
+.table-toolbar button {
+  background: #eee;
+  border: none;
+  border-radius: 4px;
+  padding: 0.4rem 0.75rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.table-toolbar button:hover {
+  background-color: #ddd;
+}
+
+.ProseMirror table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1em 0;
+}
+
+.ProseMirror th,
+.ProseMirror td {
+  border: 1px solid #ccc;
+  padding: 0.5em;
+  vertical-align: top;
+  min-width: 40px;
+}
+
+.ProseMirror th {
+  background-color: #f7f7f7;
+  font-weight: bold;
+}
+
+#rendered-preview table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1em 0;
+}
+
+#rendered-preview th,
+#rendered-preview td {
+  border: 1px solid #ccc;
+  padding: 0.5em;
+  vertical-align: top;
+  min-width: 40px;
+}
+
+#rendered-preview th {
+  background-color: #f7f7f7;
+  font-weight: bold;
+}
+
+.ProseMirror {
+  padding: 1rem;
+  border: none;
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
+  background-color: #fff;
+  min-height: 200px;
+  white-space: pre-wrap;
+}
+
+.ProseMirror:focus {
+  outline: none;
+  box-shadow: inset 0 0 0 1px #cce5ff;
+}
+
+.group-table-footer {
+  background-color: #f5f5f5;
+}
+
+@media print {
+  @page {
+    size: A4 landscape;
+    margin: 1cm; // or 0 for no margin
+  }
+
+  body * {
+    visibility: hidden;
+  }
+
+  #rendered-preview, #rendered-preview * {
+    visibility: visible;
+  }
+
+  #rendered-preview {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    background: white !important;
+    overflow: visible !important;
+    max-height: none !important;
+    height: auto !important;
+  }
+
+  /* Optional: remove page controls, nav etc. */
+  .no-print, nav, .editor-toolbar, button {
+    display: none !important;
+  }
+
+  /* Optional: force page breaks between group tables */
+  table {
+    page-break-inside: avoid;
+  }
+}
+
+#editor-status {
+  text-align: right;
+  font-size: 0.85rem;
+  color: #666;
+  margin-top: 0.25rem;
+}
+
+.print-button {
+  float: right;
+  margin-top: 1rem;
+}
+
+.element {
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  overflow: hidden;
+  background-color: #fff;
+}

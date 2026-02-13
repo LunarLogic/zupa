@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_07_23_144845) do
+ActiveRecord::Schema[7.0].define(version: 2026_02_12_201241) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -168,6 +168,14 @@ ActiveRecord::Schema[7.0].define(version: 2025_07_23_144845) do
     t.index ["person_id"], name: "index_person_sizes_on_person_id"
   end
 
+  create_table "preparation_templates", force: :cascade do |t|
+    t.string "name", null: false
+    t.text "content_html", null: false
+    t.boolean "default", default: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "regions", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
@@ -209,7 +217,10 @@ ActiveRecord::Schema[7.0].define(version: 2025_07_23_144845) do
     t.datetime "updated_at", null: false
     t.bigint "admin_user_id", null: false
     t.boolean "active", default: false
+    t.text "preparations_html"
+    t.bigint "preparation_template_id"
     t.index ["admin_user_id"], name: "index_trips_on_admin_user_id"
+    t.index ["preparation_template_id"], name: "index_trips_on_preparation_template_id"
   end
 
   create_table "visit_summaries", force: :cascade do |t|
@@ -237,4 +248,5 @@ ActiveRecord::Schema[7.0].define(version: 2025_07_23_144845) do
   add_foreign_key "trip_destinations", "trip_groups"
   add_foreign_key "trip_groups", "trips"
   add_foreign_key "trips", "admin_users"
+  add_foreign_key "trips", "preparation_templates"
 end
