@@ -148,6 +148,29 @@ RSpec.describe "Admin preparation templates", type: :system do
     end
   end
 
+  describe "Variable reference" do
+    before do
+      visit "/admin/preparation_templates/new"
+    end
+
+    it "shows variable reference only after entering edit mode" do
+      expect(page).not_to have_css("details#variable-reference", visible: true)
+
+      click_button "Edytuj"
+      expect(page).to have_css("details#variable-reference", visible: true)
+
+      find("details#variable-reference summary").click
+
+      within("details#variable-reference") do
+        expect(page).to have_content("{{date}}")
+        expect(page).to have_content("{{organiser}}")
+        expect(page).to have_content("{{#groups}}...{{/groups}}")
+        expect(page).to have_content("{{name}}")
+        expect(page).to have_content("{{sandwich_count}}")
+      end
+    end
+  end
+
   describe "Editing an existing template" do
     let!(:existing_template) do
       create(:preparation_template,

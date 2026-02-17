@@ -103,6 +103,9 @@ window.closeTemplateEditor = function() {
 
   const btnEdit = document.getElementById('btn-edit-template')
   if (btnEdit) btnEdit.style.display = ''
+
+  const varRef = document.getElementById('variable-reference')
+  if (varRef) varRef.style.display = 'none'
 }
 
 function createBubbleMenuElement() {

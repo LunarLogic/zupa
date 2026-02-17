@@ -87,6 +87,42 @@ Trestle.resource(:preparation_templates) do
       </div>
     HTML
 
+    # Edit button + variable reference (both above preview, reference only visible in edit mode)
+    render inline: <<~HTML
+      <div style="margin-top: 2rem;">
+        <button type="button" id="btn-edit-template" class="btn btn-primary"
+                onclick="event.preventDefault(); document.getElementById('editor-section').style.display = 'block'; document.getElementById('variable-reference').style.display = 'block'; this.style.display = 'none'; window.initializeTemplateEditor && window.initializeTemplateEditor();">
+          #{I18n.t("admin.preparation_templates.labels.edit_button")}
+        </button>
+      </div>
+
+      <details id="variable-reference" style="margin-top: 1rem; display: none;">
+        <summary><strong>#{I18n.t("admin.preparation_templates.labels.variable_reference")}</strong></summary>
+        <div style="margin-top: 0.5rem; padding: 0.5rem 1rem;">
+          <p><strong>Ogólne:</strong></p>
+          <ul>
+            <li><code>{{date}}</code> — data wyjazdu</li>
+            <li><code>{{organiser}}</code> — organizator</li>
+          </ul>
+          <p><strong>Grupy</strong> (wewnątrz <code>{{#groups}}...{{/groups}}</code>):</p>
+          <ul>
+            <li><code>{{name}}</code> — nazwa grupy</li>
+            <li><code>{{sandwich_count}}</code> — kanapki</li>
+            <li><code>{{provision_count}}</code> — prowianty</li>
+            <li><code>{{soup_count}}</code> — zupy</li>
+            <li><code>{{water}}</code> — woda</li>
+            <li><code>{{tea}}</code> — herbata</li>
+            <li><code>{{books}}</code> — książki</li>
+            <li><code>{{extras}}</code> — dodatki</li>
+            <li><code>{{chocolate_count}}</code> — czekolady</li>
+            <li><code>{{has_cat_food}}</code> / <code>{{cat_food_count}}</code> — karma dla kotów</li>
+            <li><code>{{has_dog_food}}</code> / <code>{{dog_food_count}}</code> — karma dla psów</li>
+            <li><code>{{has_packages}}</code> / <code>{{package_count}}</code> — paczki</li>
+          </ul>
+        </div>
+      </details>
+    HTML
+
     # Render preview server-side with Mustache
     rendered_preview = begin
       Mustache.render(content_for_preview, trip_json)
@@ -100,13 +136,6 @@ Trestle.resource(:preparation_templates) do
         <p><strong>#{I18n.t("admin.preparation_templates.labels.preview")}:</strong></p>
         <div id="rendered-preview" style="margin-top: 1rem; border: 1px solid #ccc; padding: 1rem; max-height: 400px; overflow: auto;">#{rendered_preview}</div>
         <script id="trip-json" type="application/json">#{trip_json.to_json.html_safe}</script>
-
-        <div style="margin-top: 1rem;">
-          <button type="button" id="btn-edit-template" class="btn btn-primary"
-                  onclick="event.preventDefault(); document.getElementById('editor-section').style.display = 'block'; this.style.display = 'none'; window.initializeTemplateEditor && window.initializeTemplateEditor();">
-            #{I18n.t("admin.preparation_templates.labels.edit_button")}
-          </button>
-        </div>
       </div>
     HTML
   end
