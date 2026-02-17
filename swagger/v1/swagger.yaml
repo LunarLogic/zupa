@@ -859,5 +859,3 @@ paths:
                   groups: []
 servers:
 - url: http://localhost:4000
-- url: https://zupa.staging.lunarlogic.io
-- url: https://zupa.lunarlogic.io

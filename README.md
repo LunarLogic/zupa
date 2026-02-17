@@ -1,166 +1,124 @@
-# README
+# Zupa na Plantach
 
-### About
+A web application for managing food distribution and support services, built for the [Zupa na Plantach](https://zupanaplantach.pl/) organization.
 
-This is a a project for Zupa na Plantach organization.
-You can find more info about ZnP here: [Zupa na Plantach](https://zupanaplantach.pl/)
+Rails 7 backend with a React/TypeScript frontend, using a hybrid architecture where Rails serves API endpoints and React handles the user interface.
 
-### License
+## Tech Stack
 
-This project is licensed under the GNU Affero General Public License v3.0 (AGPL-3.0) - see the [LICENSE](LICENSE) file for details.
+- **Backend:** Ruby on Rails 7, PostgreSQL
+- **Frontend:** React, TypeScript, SCSS (Atomic Design + BEM)
+- **Testing:** RSpec, FactoryBot, Jest, React Testing Library
+- **Auth:** JWT-based authentication
+- **Docs:** Swagger/rswag auto-generated API documentation
+- **Feature Flags:** Flipper
 
-### Versions & dependencies
+## Getting Started
 
-- ruby 3.1.2
-- nodejs 18.20.8
-- yarn 1.22.22
-- rails 7.0.4
-- postgres 13.8
+### Prerequisites
 
-**Version Management:** This project uses [asdf](https://asdf-vm.com/) for managing runtime versions. All required versions are specified in `.tool-versions`.
+This project uses [asdf](https://asdf-vm.com/) for managing runtime versions:
 
-### System dependencies
-
-- We're running latest and greatest rails 7 on ruby 3.1.2.
-- For frontend js we're using React and Typescript.
-- For testing we're using RSpec & FactoryBot.
-- For unit testing in frontend we're using [Jest](https://jestjs.io/) and [RTL](https://testing-library.com/).
-- For configuration we're using dotenv.
-- We're using feature flipping with the flipper gem.
-
-### Configuration
-
-1. Clone the repo
-2. Install runtime versions with asdf:
-   - Install asdf plugins (if not already installed):
-     ```bash
-     asdf plugin add ruby
-     asdf plugin add nodejs
-     asdf plugin add yarn
-     ```
-   - Install all required versions: `asdf install`
-3. `bundle install`
-    - if you encounter an error while installing gen nio4r (on MacOS Sonoma or higher), run `bundle config build.nio4r --with-cflags="-Wno-incompatible-pointer-types"` and then retry
-4. `cp .env.development.sample .env.development`
-5. `cp .env.test.sample .env.test`
-6. `bin/rails db:create`
-7. `bin/rails db:migrate`
-8. `bin/rails db:seed`
-9. `yarn install` (or `yarn install --production=false` if you want dev dependecies installed too)
-10. Run server: `bin/dev` || Alternative for Windows OS: run `foreman start -f Procfile-mingw.dev`
-If you encounter problems with env vars try: `set -a && source .env.development && set +a && bin/dev`
-
-🛖 Home: [http://localhost:4000](http://localhost:4000)
-
-👩🏻‍💼 Admin: [http://localhost:4000/admin](http://localhost:4000/admin)
-
-### Development
-
-- System design according to the Atomic Design methodology [https://atomicdesign.bradfrost.com/chapter-2/](https://atomicdesign.bradfrost.com/chapter-2/)
-- BEM methodology in class names [https://getbem.com/](https://getbem.com/)
-- Prettier of JS code ([https://prettier.io/]())
-- Standardrb for Ruby code ([https://github.com/testdouble/standard]())
-- We are using React Google Maps library to display map snapshots. Documentation: [https://react-google-maps-api-docs.netlify.app/]()
-
-#### Google Integrations
-
-For Google Drive and Google Maps setup, see [docs/google-integration.md](docs/google-integration.md)
-
-### How to run the test suite
-
-- `bin/rspec` to run entire suite
-- `yarn test` to run all unit frontend tests
-
-**Note:** Make sure your `.env.test` includes the Google Drive dummy values from `.env.test.sample`. See [docs/google-integration.md](docs/google-integration.md) for details on generating test keys.
-
-#### E2E tests - TO BE UPDATED
-
-We have a basic setup for E2E tests, to run them - clone the [zupa tests repository](https://github.com/LunarLogic/zupa-tests) and follow the instructions in the readme.
-
-### Frontend functional test requirements
-
-Here you will find a list of functionalities that should be tested - [Functional requirements](https://docs.google.com/spreadsheets/d/16m1VCjcVug0GNjXV-dQM1ahSrdHaZ_Np4QA0EW9MQb4/edit#gid=0)
-
-### Api documentation
-
-- We're using Swagger and rswag gem to generate api docs
-- Api documentation is available at: /api-docs/index.html on every server, including localhost.
-- use `RAILS_ENV=test SWAGGER_DRY_RUN=0 rails rswag` to regenarate docs
-
-### Feature Flipper
-
-- Flipper config panel is available at /admin/flipper
-- To set a flip in your conde use eg. `if Flipper.enabled?(:packages); YOUR CODE; end`
-- Note: for flipping in Trestle Admin you mind need to restart the server after enabling/disabling a feature in UI.
-- [Flipper docs](https://github.com/flippercloud/flipper)
-
-
----- IRRELEVANT ---- TO BE CLEANED UP
-
-### Deployment instructions
-
-To deploy a specific branch, run appropriate workflow from GitHub Actions: https://github.com/LunarLogic/zupa/actions/workflows/aws-staging.yml
-
-#### Production
-
-[zupa.lunarlogic.com](https://zupa.lunarlogic.com)
-
-GitHub Actions deploy automatically from `production`.
-
-Rebase (not merge) `main` to `production`:
-```Shell
-git checkout main
-git pull
-git checkout production
-git rebase main
-git push origin production
+```bash
+asdf plugin add ruby
+asdf plugin add nodejs
+asdf plugin add yarn
+asdf install
 ```
 
--------
+You also need **PostgreSQL 13.8+** running locally.
 
-### Links and Resources - TO BE UPDATED
+### Setup
 
-[🗒 Project Board](https://trello.com/b/czRAmEef/zupa-na-plantach)
+```bash
+bundle install
+yarn install
+cp .env.development.sample .env.development
+cp .env.test.sample .env.test
+bin/rails db:create db:migrate db:seed
+```
 
-[💬 Slack - official](https://lunarlogic.slack.com/archives/C044D5JKFDJ)
+> **macOS note:** If `bundle install` fails on the `nio4r` gem (Sonoma or newer), run:
+> ```bash
+> bundle config build.nio4r --with-cflags="-Wno-incompatible-pointer-types"
+> ```
 
-[💬 Slack - internal](https://lunarlogic.slack.com/archives/C0474UB5SF8)
+### Running
 
-[🎨 Designs &amp; Wireframes](https://www.figma.com/file/HfvUpLdKSwQekI5LGcT8ka/Wireframes)
+```bash
+bin/dev
+```
 
-[⚙️ PRODUCTION](https://zupa.lunarlogic.io/)
+The app will be available at [http://localhost:4000](http://localhost:4000).
 
-[🔧STAGING](https://zupa.staging.lunarlogic.io/)
+Admin panel: [http://localhost:4000/admin](http://localhost:4000/admin)
 
-[🗂API DOCS](https://zupa.lunarlogic.io/api-docs)
+### Google Integrations
 
+The app integrates with Google Drive and Google Maps. See [docs/google-integration.md](docs/google-integration.md) for setup instructions.
 
-#### Staging
+## Testing
 
-[zupa.staging.lunarlogic.com](https://zupa.staging.lunarlogic.com)
+```bash
+bundle exec rspec                          # Run all Ruby tests
+bundle exec rspec spec/path/to/spec.rb     # Run a specific test file
+yarn test                                  # Run frontend unit tests
+```
 
-GitHub Actions deploy automatically from `main`.
+Make sure your `.env.test` includes the Google Drive dummy values from `.env.test.sample`. See [docs/google-integration.md](docs/google-integration.md) for details.
 
-#### AWS
-Infrastructure for the app is defined as code in https://github.com/LunarLogic/aws-infrastructure.
+### Regenerate API Docs
 
-App's components are deployed to different AWS services:
+```bash
+RAILS_ENV=test SWAGGER_DRY_RUN=0 rails rswag
+```
 
-- Docker image: ECR
-- container and logs: ECS
-- env vars and secrets: Secrets Manager
-- database: RDS
+API documentation is served at `/api-docs/index.html`.
 
-You need an account on Lunar's AWS Console (web UI) to access them.
+## Code Quality
 
-#### Servers and Databases
+```bash
+bundle exec standardrb          # Lint Ruby code (Standard Ruby)
+bundle exec standardrb --fix    # Auto-fix Ruby issues
+yarn build                      # Build frontend assets
+yarn ts-check                   # TypeScript type checking
+```
 
-To access a server or database, you need to login to the AWS ECS container with `aws` command line client. Refer to the [instructions in aws-infastructure repository](https://github.com/LunarLogic/aws-infrastructure/blob/main/applications/README.md#access-and-debugging).
+## Architecture
 
-#### Secrets
+### Backend
 
-Do not store any secret keys in the repository!
+- **API Controllers:** `app/controllers/api/v1/` — REST endpoints for the frontend
+- **Admin Controllers:** `app/controllers/admin_area/` — Admin-specific functionality
+- **Admin Interface:** [Trestle](https://github.com/TrestleAdmin/trestle) gem at `/admin`
+- **Models:** `app/models/`
+- **Feature Flags:** Flipper, configurable at `/admin/flipper`
 
-Secrets are stored in AWS Secrets Manager and task-definition files for each environment defines which one are available in the container.
+### Frontend
 
-See [docs/google-integration.md](docs/google-integration.md) for details on managing Google API secrets.
+- **Entry Point:** `app/javascript/App.tsx`
+- **Component Structure:** [Atomic Design](https://atomicdesign.bradfrost.com/chapter-2/)
+  - `app/javascript/components/atoms/` — Basic UI elements
+  - `app/javascript/components/molecules/` — Component combinations
+  - `app/javascript/components/organisms/` — Complex components
+- **Routing:** React Router with protected routes
+- **State Management:** React Query (server state) + Context API (app state)
+- **Styling:** SCSS with [BEM](https://getbem.com/) methodology
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Make sure tests pass (`bundle exec rspec && yarn test`)
+4. Make sure code style is correct (`bundle exec standardrb`)
+5. Commit your changes
+6. Push to the branch
+7. Open a Pull Request
+
+## License
+
+This project is licensed under the [GNU Affero General Public License v3.0 (AGPL-3.0)](LICENSE).
+
+Copyright (C) 2022-2025 [Lunar Logic Sp. z o.o.](https://www.lunarlogic.com/)

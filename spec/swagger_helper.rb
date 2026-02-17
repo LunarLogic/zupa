@@ -23,9 +23,7 @@ RSpec.configure do |config|
       },
       paths: {},
       servers: [
-        {url: "http://localhost:4000"},
-        {url: "https://zupa.staging.lunarlogic.io"},
-        {url: "https://zupa.lunarlogic.io"}
+        {url: "http://localhost:4000"}
       ]
     }
   }
