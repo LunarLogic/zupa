@@ -119,7 +119,21 @@ Trestle.resource(:trips) do
                   style: "margin-top: 1rem; border: 1px solid #ccc; padding: 1rem; max-height: 400px; overflow: auto;") +
                 content_tag(:div, class: "btn-group", style: "margin-top: 1rem;") {
                   content_tag(:button, I18n.t("admin.preparation_templates.labels.print"),
-                    onclick: "event.preventDefault(); window.print()",
+                    onclick: "event.preventDefault(); (function() {
+                      var content = document.getElementById('rendered-preview').innerHTML;
+                      var w = window.open('', '_blank');
+                      w.document.write('<html><head><title>Przygotowania</title><style>' +
+                        '@page { size: A4 landscape; margin: 1cm; }' +
+                        'body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; margin: 0; padding: 1cm; }' +
+                        'table { width: 100%; border-collapse: collapse; margin: 1em 0; page-break-inside: avoid; }' +
+                        'th, td { border: 1px solid #ccc; padding: 0.5em; vertical-align: top; }' +
+                        'th { background-color: #f7f7f7; font-weight: bold; }' +
+                        '.group-table-footer { background-color: #f5f5f5; }' +
+                        '</style></head><body>' + content + '</body></html>');
+                      w.document.close();
+                      w.focus();
+                      w.print();
+                    })()",
                     class: "btn btn-success print-button no-print")
                 }
             end
