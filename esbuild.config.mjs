@@ -1,9 +1,14 @@
 import { build } from "esbuild";
-import dotenv from "dotenv";
 import path from "path";
 import process from "process";
 
-dotenv.config({ path: `.env.${process.env.NODE_ENV || "development"}` });
+try {
+  const dotenv = await import("dotenv");
+  dotenv.config({ path: `.env.${process.env.NODE_ENV || "development"}` });
+} catch {
+  // dotenv is a devDependency - not available in production Docker builds
+  // where env vars are set directly via Dockerfile ENV/ARG directives
+}
 
 const nodeEnv = process.env.NODE_ENV ? JSON.stringify(process.env.NODE_ENV) : '"development"';
 const isProduction = nodeEnv === '"production"';
