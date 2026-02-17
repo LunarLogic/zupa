@@ -12,6 +12,7 @@ try {
 
 const nodeEnv = process.env.NODE_ENV ? JSON.stringify(process.env.NODE_ENV) : '"development"';
 const isProduction = nodeEnv === '"production"';
+const isDevelopment = nodeEnv === '"development"';
 
 let define = {};
 for (const k in process.env) {
@@ -36,7 +37,7 @@ const bundleConfig = {
     ".png": "dataurl",
     ".svg": "dataurl",
   },
-  watch: !isProduction,
+  watch: isDevelopment,
   define,
 };
 
@@ -51,7 +52,7 @@ const adminBundleConfig = {
     ".png": "dataurl",
     ".svg": "dataurl",
   },
-  watch: !isProduction,
+  watch: isDevelopment,
   define,
 };
 
