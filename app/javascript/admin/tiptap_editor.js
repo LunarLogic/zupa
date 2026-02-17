@@ -11,42 +11,6 @@ import {
   mustachify, demustachify, addGroupRowId, markGroupTable
 } from './groups_table'
 
-function save(content, saveUrl) {
-  updateStatus("💾 Saving...");
-
-  fetch(saveUrl, {
-    method: 'PATCH',
-    headers: {
-      'Content-Type': 'application/json',
-      'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content,
-    },
-    body: JSON.stringify({
-      preparation_template: { content_html: content }
-    }),
-  }).then(() => {
-    updateStatus("✅ Saved just now");
-  }).catch(() => {
-    updateStatus("❌ Error saving");
-  });
-}
-
-function createDebouncedSave(saveUrl) {
-  return debounce((html) => {
-    const mustachified = mustachify(html);
-    save(mustachified, saveUrl);
-
-    const trip = getTripData();
-    if (trip) {
-      updatePreview(mustachified, trip);
-    }
-  }, 1000);
-}
-
-function updateStatus(text) {
-  const status = document.getElementById("editor-status");
-  if (status) status.textContent = text;
-}
-
 function getTripData() {
   const el = document.getElementById("trip-json");
   if (!el) return null;
@@ -72,62 +36,7 @@ function updatePreview(templateString, data) {
   }
 }
 
-function setupEditor(element, content, saveUrl) {
-  const bubbleMenuElement = createBubbleMenuElement()
-  const debouncedSave = createDebouncedSave(saveUrl)
-
-  const editor = new Editor({
-    element: element,
-    extensions: [
-      StarterKit.configure({
-        history: false,
-      }),
-      BubbleMenu.configure({
-        element: bubbleMenuElement,
-        tippyOptions: {
-          placement: 'top',
-        },
-      }),
-      TableWithClass.configure({ resizable: true }),
-      TableRowWithIdAndClass,
-      TableHeader,
-      TableCell,
-    ],
-    content: content,
-    autofocus: true,
-    editable: true,
-    injectCSS: false,
-    onUpdate: ({ editor }) => {
-      debouncedSave(editor.getHTML());
-    }
-  })
-
-  attachBubbleMenuListeners(bubbleMenuElement, editor)
-  createTableToolbar(editor)
-
-  return editor
-}
-
-function initializeEditor() {
-  const element = document.querySelector('.element')
-  if (!element) return
-
-  const saveUrl = element.dataset.saveUrl
-  const templateId = element.dataset.templateId
-
-  // Template editor mode (PreparationTemplate admin)
-  if (templateId && saveUrl) {
-    const contentInput = document.querySelector('input[name="preparation_template[content_html]"]')
-    if (!contentInput) return
-
-    const raw = contentInput.value
-    const content = demustachify(raw)
-    setupEditor(element, content, saveUrl)
-    return
-  }
-}
-
-// Expose for lazy initialization of template editor (NEW templates without autosave)
+// Expose for lazy initialization of template editor
 window.initializeTemplateEditor = function() {
   const element = document.querySelector('.element')
   if (!element || element.dataset.editorInitialized) return
@@ -140,7 +49,6 @@ window.initializeTemplateEditor = function() {
   const raw = contentInput.value
   const content = demustachify(raw)
 
-  // Setup editor without save URL (no autosave for new templates)
   const debouncedPreviewUpdate = debounce((html) => {
     const mustachified = mustachify(html)
     contentInput.value = mustachified
@@ -311,39 +219,12 @@ function initializePreparationControls() {
   })
 }
 
-function tryInitializeTemplateEditor() {
-  const templateElement = document.querySelector('.element[data-template-id]')
-  if (!templateElement || templateElement.dataset.editorInitialized) return false
-  // Only auto-initialize if the element has a save URL (old autosave flow).
-  // New templates without saveUrl are initialized lazily via "Edytuj" button.
-  if (!templateElement.dataset.saveUrl) return false
-  templateElement.dataset.editorInitialized = 'true'
-  initializeEditor()
-  return true
-}
-
 function initializeOnPageLoad() {
   setTimeout(() => {
-    // Auto-initialize for template editor if the edytor tab is already visible
-    tryInitializeTemplateEditor()
-
-    // Wire up trip preparations template selector
     initializePreparationControls()
   }, 50)
 }
 
 document.addEventListener("DOMContentLoaded", () => {
   initializeOnPageLoad()
-
-  // Listen for Bootstrap tab switches (Trestle uses Bootstrap tabs)
-  // The edytor tab content exists in DOM but may not be active on load
-  document.addEventListener('shown.bs.tab', () => {
-    setTimeout(() => tryInitializeTemplateEditor(), 50)
-  })
-  // Bootstrap 3 / jQuery event (Trestle may use either)
-  if (window.jQuery) {
-    window.jQuery(document).on('shown.bs.tab', () => {
-      setTimeout(() => tryInitializeTemplateEditor(), 50)
-    })
-  }
 })
