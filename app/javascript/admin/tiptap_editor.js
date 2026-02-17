@@ -47,6 +47,7 @@ window.initializeTemplateEditor = function() {
   if (!contentInput) return
 
   const raw = contentInput.value
+  window._originalTemplateContent = raw
   const content = demustachify(raw)
 
   const debouncedPreviewUpdate = debounce((html) => {
@@ -96,7 +97,8 @@ window.initializeTemplateEditor = function() {
   }
 }
 
-// Close the template editor, hide the editor section, show the Edytuj button
+// Close the template editor, hide the editor section, show the Edytuj button,
+// and revert any unsaved changes to the content and preview.
 window.closeTemplateEditor = function() {
   const editorSection = document.getElementById('editor-section')
   if (editorSection) editorSection.style.display = 'none'
@@ -106,6 +108,16 @@ window.closeTemplateEditor = function() {
 
   const varRef = document.getElementById('variable-reference')
   if (varRef) varRef.style.display = 'none'
+
+  if (window._originalTemplateContent != null) {
+    const contentInput = document.querySelector('input[name="preparation_template[content_html]"]')
+    if (contentInput) contentInput.value = window._originalTemplateContent
+
+    const trip = getTripData()
+    if (trip) {
+      updatePreview(window._originalTemplateContent, trip)
+    }
+  }
 }
 
 function createBubbleMenuElement() {

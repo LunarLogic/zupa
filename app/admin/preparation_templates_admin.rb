@@ -24,39 +24,10 @@ Trestle.resource(:preparation_templates) do
     default_template = PreparationTemplate.default_template.first
 
     # Prepare trip data for preview
-    if last_trip
-      groups = last_trip.groups.map do |group|
-        g = TripGroupDecorator.new(group)
-        {
-          name: g.name,
-          sandwich_count: g.sandwich_count,
-          provision_count: g.provision_count,
-          soup_count: g.soup_count,
-          water: g.water,
-          tea: g.tea,
-          books: g.books,
-          extras: g.extras,
-          chocolate_count: g.chocolate_count,
-          has_cat_food: g.has_cat_food,
-          has_dog_food: g.has_dog_food,
-          cat_food_count: g.cat_food_count,
-          dog_food_count: g.dog_food_count,
-          has_packages: g.has_packages,
-          package_count: g.package_count
-        }
-      end
-
-      trip_json = {
-        date: last_trip.date.strftime("%d / %m / %Y"),
-        organiser: last_trip.organiser_name,
-        groups: groups
-      }.as_json
+    trip_json = if last_trip
+      TripJsonBuilder.build(last_trip)
     else
-      trip_json = {
-        date: Date.today.strftime("%d / %m / %Y"),
-        organiser: "Organizator",
-        groups: []
-      }.as_json
+      TripJsonBuilder.default_json
     end
 
     # Determine content for preview
@@ -98,6 +69,7 @@ Trestle.resource(:preparation_templates) do
 
       <details id="variable-reference" style="margin-top: 1rem; display: none;">
         <summary><strong>#{I18n.t("admin.preparation_templates.labels.variable_reference")}</strong></summary>
+        <style>#variable-reference code { color: black; }</style>
         <div style="margin-top: 0.5rem; padding: 0.5rem 1rem;">
           <p><strong>Ogólne:</strong></p>
           <ul>
@@ -118,6 +90,16 @@ Trestle.resource(:preparation_templates) do
             <li><code>{{has_cat_food}}</code> / <code>{{cat_food_count}}</code> — karma dla kotów</li>
             <li><code>{{has_dog_food}}</code> / <code>{{dog_food_count}}</code> — karma dla psów</li>
             <li><code>{{has_packages}}</code> / <code>{{package_count}}</code> — paczki</li>
+          </ul>
+          <p><strong>Podsumowanie</strong> (sumy ze wszystkich grup):</p>
+          <ul>
+            <li><code>{{total_sandwich_count}}</code> — kanapki łącznie</li>
+            <li><code>{{total_provision_count}}</code> — prowianty łącznie</li>
+            <li><code>{{total_soup_count}}</code> — zupy łącznie</li>
+            <li><code>{{total_chocolate_count}}</code> — czekolady łącznie</li>
+            <li><code>{{total_cat_food_count}}</code> — karma dla kotów łącznie</li>
+            <li><code>{{total_dog_food_count}}</code> — karma dla psów łącznie</li>
+            <li><code>{{total_package_count}}</code> — paczki łącznie</li>
           </ul>
         </div>
       </details>

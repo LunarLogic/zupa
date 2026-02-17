@@ -146,6 +146,29 @@ RSpec.describe "Admin preparation templates", type: :system do
       expect(page).to have_button("Edytuj")
       expect(page).to have_css("#rendered-preview")
     end
+
+    it "reverts content changes in the preview" do
+      visit "/admin/preparation_templates/new"
+
+      within("#rendered-preview") do
+        expect(page).to have_content("Przygotowania na wyjazd")
+      end
+
+      click_button "Edytuj"
+      editor = find(".ProseMirror", wait: 5)
+      editor.set("<p>Zmieniona treść</p>")
+
+      within("#rendered-preview") do
+        expect(page).to have_content("Zmieniona treść", wait: 5)
+      end
+
+      click_button "Anuluj"
+
+      within("#rendered-preview") do
+        expect(page).to have_content("Przygotowania na wyjazd")
+        expect(page).not_to have_content("Zmieniona treść")
+      end
+    end
   end
 
   describe "Variable reference" do
@@ -167,6 +190,13 @@ RSpec.describe "Admin preparation templates", type: :system do
         expect(page).to have_content("{{#groups}}...{{/groups}}")
         expect(page).to have_content("{{name}}")
         expect(page).to have_content("{{sandwich_count}}")
+        expect(page).to have_content("{{total_sandwich_count}}")
+        expect(page).to have_content("{{total_provision_count}}")
+        expect(page).to have_content("{{total_soup_count}}")
+        expect(page).to have_content("{{total_chocolate_count}}")
+        expect(page).to have_content("{{total_cat_food_count}}")
+        expect(page).to have_content("{{total_dog_food_count}}")
+        expect(page).to have_content("{{total_package_count}}")
       end
     end
   end
@@ -209,7 +239,7 @@ RSpec.describe "Admin preparation templates", type: :system do
 
   describe "Preview renders with last trip data" do
     it "displays trip group data in the preview" do
-      group_template = create(:preparation_template, :default,
+      create(:preparation_template, :default,
         name: "Szablon z grupami",
         content_html: <<~HTML)
           <h1>Przygotowania</h1>
@@ -225,6 +255,42 @@ RSpec.describe "Admin preparation templates", type: :system do
       within("#rendered-preview") do
         expect(page).to have_content("01 / 12 / 2025")
         expect(page).to have_content(admin_user.full_name)
+      end
+    end
+  end
+
+  describe "Preview renders totals across groups" do
+    let(:trip_with_data) do
+      create(:trip, date: "2025-12-15", organiser: admin_user).tap do |t|
+        g1 = create(:trip_group, trip: t, number: 1, volunteers: ["Anna"])
+        g2 = create(:trip_group, trip: t, number: 2, volunteers: ["Bartek"])
+        create(:trip_destination, trip_group: g1, location: create(:location, name: "Lokacja A"), sandwiches: 3, soups: 2, provisions: 1)
+        create(:trip_destination, trip_group: g2, location: create(:location, name: "Lokacja B"), sandwiches: 5, soups: 4, provisions: 2)
+      end
+    end
+
+    let(:totals_template) do
+      create(:preparation_template,
+        name: "Szablon z sumami",
+        content_html: <<~HTML)
+          <p>Kanapki: {{total_sandwich_count}}</p>
+          <p>Zupy: {{total_soup_count}}</p>
+          <p>Prowianty: {{total_provision_count}}</p>
+        HTML
+    end
+
+    before do
+      trip_with_data
+      totals_template
+    end
+
+    it "renders summed totals from all groups in the preview" do
+      visit "/admin/preparation_templates/#{totals_template.id}"
+
+      within("#rendered-preview") do
+        expect(page).to have_content("Kanapki: 8")
+        expect(page).to have_content("Zupy: 6")
+        expect(page).to have_content("Prowianty: 3")
       end
     end
   end

@@ -75,32 +75,7 @@ Trestle.resource(:trips) do
       tab :przygotowania do
         unless trip.new_record?
           container do |c|
-            groups = trip.groups.map do |group|
-              g = TripGroupDecorator.new(group)
-              {
-                name: g.name,
-                sandwich_count: g.sandwich_count,
-                provision_count: g.provision_count,
-                soup_count: g.soup_count,
-                water: g.water,
-                tea: g.tea,
-                books: g.books,
-                extras: g.extras,
-                chocolate_count: g.chocolate_count,
-                has_cat_food: g.has_cat_food,
-                has_dog_food: g.has_dog_food,
-                cat_food_count: g.cat_food_count,
-                dog_food_count: g.dog_food_count,
-                has_packages: g.has_packages,
-                package_count: g.package_count
-              }
-            end
-
-            trip_json = {
-              date: trip.date.strftime("%d / %m / %Y"),
-              organiser: trip.organiser_name,
-              groups: groups
-            }.as_json
+            trip_json = TripJsonBuilder.build(trip)
 
             templates = PreparationTemplate.order(:name)
             current_template = trip.preparation_template
@@ -215,32 +190,7 @@ Trestle.resource(:trips) do
       end
 
       def build_trip_json(trip)
-        groups = trip.groups.map do |group|
-          g = TripGroupDecorator.new(group)
-          {
-            name: g.name,
-            sandwich_count: g.sandwich_count,
-            provision_count: g.provision_count,
-            soup_count: g.soup_count,
-            water: g.water,
-            tea: g.tea,
-            books: g.books,
-            extras: g.extras,
-            chocolate_count: g.chocolate_count,
-            has_cat_food: g.has_cat_food,
-            has_dog_food: g.has_dog_food,
-            cat_food_count: g.cat_food_count,
-            dog_food_count: g.dog_food_count,
-            has_packages: g.has_packages,
-            package_count: g.package_count
-          }
-        end
-
-        {
-          date: trip.date.strftime("%d / %m / %Y"),
-          organiser: trip.organiser_name,
-          groups: groups
-        }.as_json
+        TripJsonBuilder.build(trip)
       end
 
       def error_message(missing_locations)
