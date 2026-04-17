@@ -50,6 +50,7 @@ class TripRepository
       )
 
       Trips::SnapshotPeople.new.call(destination: destination, location: location)
+      Trips::SnapshotAnimals.new.call(destination: destination, location: location)
 
       destination.reload
       destination.update!(

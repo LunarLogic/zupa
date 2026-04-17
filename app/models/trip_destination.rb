@@ -2,14 +2,31 @@ class TripDestination < ApplicationRecord
   belongs_to :trip_group
   belongs_to :location
   has_many :trip_destination_people, dependent: :destroy
-
-  delegate :name,
-    :longitude, :latitude, :animal_count, :active_animals, to: :location
-  delegate :id, to: :location, prefix: true
+  has_many :trip_destination_animals, dependent: :destroy
 
   alias_attribute :sandwich_count, :sandwiches
   alias_attribute :soup_count, :soups
   alias_attribute :chocolate_count, :chocolates
+
+  def name
+    location_snapshot&.dig("name") || location.name
+  end
+
+  def longitude
+    location_snapshot&.dig("longitude") || location.longitude
+  end
+
+  def latitude
+    location_snapshot&.dig("latitude") || location.latitude
+  end
+
+  def active_animals
+    trip_destination_animals
+  end
+
+  def animal_count
+    trip_destination_animals.size
+  end
 
   def sandwiches?
     sandwich_count > 0
