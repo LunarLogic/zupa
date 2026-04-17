@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2026_04_18_100001) do
+ActiveRecord::Schema[7.0].define(version: 2026_04_18_110000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -229,6 +229,8 @@ ActiveRecord::Schema[7.0].define(version: 2026_04_18_100001) do
     t.integer "sandwiches", default: 0
     t.jsonb "location_snapshot"
     t.integer "order"
+    t.integer "chocolates", default: 0, null: false
+    t.integer "person_count", default: 0, null: false
     t.index ["location_id"], name: "index_trip_destinations_on_location_id"
     t.index ["trip_group_id", "location_id"], name: "index_trip_destinations_on_trip_group_id_and_location_id", unique: true
     t.index ["trip_group_id", "order"], name: "index_trip_destinations_on_trip_group_id_and_order", unique: true

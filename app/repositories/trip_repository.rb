@@ -33,11 +33,14 @@ class TripRepository
         includes: [:active_people, :active_animals]
       )
 
+      frozen_person_count = location.person_count
       destination = TripDestination.create!(
         trip_group: group,
         location: location,
-        sandwiches: location.person_count * app_settings.sandwiches_per_person,
-        soups: location.person_count * app_settings.soups_per_person,
+        person_count: frozen_person_count,
+        chocolates: location.chocolate_count,
+        sandwiches: frozen_person_count * app_settings.sandwiches_per_person,
+        soups: frozen_person_count * app_settings.soups_per_person,
         provisions: 0,
         waters: 0,
         books: 0,

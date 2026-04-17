@@ -77,7 +77,7 @@ Trestle.resource(:trips) do
           container do |c|
             rows = trip.groups.flat_map do |group|
               group.trip_destinations.flat_map do |td|
-                td.location.active_people
+                td.trip_destination_people
                   .select { |p| p.book_preferences.present? }
                   .map { |p| {location: td.location.name, person: p, preferences: p.book_preferences} }
               end
@@ -99,10 +99,16 @@ Trestle.resource(:trips) do
 
                 body = content_tag(:tbody) do
                   safe_join(rows.map { |r|
+                    snapshot = r[:person]
+                    person_cell = if snapshot.person
+                      admin_link_to(snapshot.full_name, snapshot.person, admin: :people)
+                    else
+                      snapshot.full_name
+                    end
                     content_tag(:tr) do
                       safe_join([
                         content_tag(:td, r[:location]),
-                        content_tag(:td, admin_link_to(r[:person].full_name, r[:person], admin: :people)),
+                        content_tag(:td, person_cell),
                         content_tag(:td, simple_format(r[:preferences]))
                       ])
                     end

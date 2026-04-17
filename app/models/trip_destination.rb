@@ -3,12 +3,13 @@ class TripDestination < ApplicationRecord
   belongs_to :location
   has_many :trip_destination_people, dependent: :destroy
 
-  delegate :name, :person_count, :active_people,
-    :longitude, :latitude, :animal_count, :active_animals, :chocolate_count, to: :location
+  delegate :name,
+    :longitude, :latitude, :animal_count, :active_animals, to: :location
   delegate :id, to: :location, prefix: true
 
   alias_attribute :sandwich_count, :sandwiches
   alias_attribute :soup_count, :soups
+  alias_attribute :chocolate_count, :chocolates
 
   def sandwiches?
     sandwich_count > 0

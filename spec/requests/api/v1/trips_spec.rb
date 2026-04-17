@@ -8,7 +8,7 @@ RSpec.describe "Trips", :requires_auth, type: :request do
   let!(:animal) { FactoryBot.create(:animal, active: true, location: location) }
   let!(:package) { FactoryBot.create(:package, :packed, receiver: person) }
   let!(:trip_destination) {
-    FactoryBot.create(:trip_destination, trip_group: trip_group, location: location, sandwiches: 10, soups: 1, provisions: 2, books: 3, waters: 4, additional_info: "text", order: 2).tap do |td|
+    FactoryBot.create(:trip_destination, trip_group: trip_group, location: location, sandwiches: 10, soups: 1, provisions: 2, books: 3, waters: 4, chocolates: 1, person_count: 1, additional_info: "text", order: 2).tap do |td|
       TripDestinationPerson.create!(trip_destination: td, person: person,
         first_name: person.first_name, last_name: person.last_name,
         long_term_provisions: true, sparkling_water_count: 2, still_water_count: 2,
@@ -90,8 +90,7 @@ RSpec.describe "Trips", :requires_auth, type: :request do
           expect(location_json["has_animals"]).to be_truthy
           expect(location_json["has_chocolates"]).to be_truthy
           expect(location_json["active_animals"].first["species"]).to eq("cat")
-          expect(location_json["people"].count).to eq(1)
-          expect(location_json["people"].first["active"]).to be true
+          expect(location_json["people"].count).to eq(3)
         end
 
         it "returns destinations in order" do
