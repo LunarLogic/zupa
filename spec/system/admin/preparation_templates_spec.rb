@@ -191,7 +191,7 @@ RSpec.describe "Admin preparation templates", type: :system do
         expect(page).to have_content("{{name}}")
         expect(page).to have_content("{{sandwich_count}}")
         expect(page).to have_content("{{total_sandwich_count}}")
-        expect(page).to have_content("{{total_provision_count}}")
+        expect(page).to have_content("{{total_long_term_provisions_count}}")
         expect(page).to have_content("{{total_soup_count}}")
         expect(page).to have_content("{{total_chocolate_count}}")
         expect(page).to have_content("{{total_cat_food_count}}")
@@ -264,8 +264,13 @@ RSpec.describe "Admin preparation templates", type: :system do
       create(:trip, date: "2025-12-15", organiser: admin_user).tap do |t|
         g1 = create(:trip_group, trip: t, number: 1, volunteers: ["Anna"])
         g2 = create(:trip_group, trip: t, number: 2, volunteers: ["Bartek"])
-        create(:trip_destination, trip_group: g1, location: create(:location, name: "Lokacja A"), sandwiches: 3, soups: 2, provisions: 1)
-        create(:trip_destination, trip_group: g2, location: create(:location, name: "Lokacja B"), sandwiches: 5, soups: 4, provisions: 2)
+        loc_a = create(:location, name: "Lokacja A")
+        loc_b = create(:location, name: "Lokacja B")
+        create(:person, location: loc_a, long_term_provisions: true)
+        create(:person, location: loc_b, long_term_provisions: true)
+        create(:person, location: loc_b, long_term_provisions: true)
+        create(:trip_destination, trip_group: g1, location: loc_a, sandwiches: 3, soups: 2)
+        create(:trip_destination, trip_group: g2, location: loc_b, sandwiches: 5, soups: 4)
       end
     end
 
@@ -275,7 +280,7 @@ RSpec.describe "Admin preparation templates", type: :system do
         content_html: <<~HTML)
           <p>Kanapki: {{total_sandwich_count}}</p>
           <p>Zupy: {{total_soup_count}}</p>
-          <p>Prowianty: {{total_provision_count}}</p>
+          <p>Prowianty: {{total_long_term_provisions_count}}</p>
         HTML
     end
 
