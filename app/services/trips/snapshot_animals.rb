@@ -5,7 +5,7 @@ module Trips
         TripDestinationAnimal.create!(
           trip_destination: destination,
           animal: animal,
-          name: animal.name,
+          name: animal.name.to_s,
           species: animal.species
         )
       end

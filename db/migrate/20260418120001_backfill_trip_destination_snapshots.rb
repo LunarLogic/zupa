@@ -26,7 +26,7 @@ class BackfillTripDestinationSnapshots < ActiveRecord::Migration[7.0]
           TripDestinationAnimal.create!(
             trip_destination: td,
             animal: animal,
-            name: animal.name,
+            name: animal.name.to_s,
             species: animal.species
           )
         end

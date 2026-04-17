@@ -2,7 +2,7 @@ class TripDestination < ApplicationRecord
   belongs_to :trip_group
   belongs_to :location
   has_many :trip_destination_people, dependent: :destroy
-  has_many :trip_destination_animals, dependent: :destroy
+  has_many :trip_destination_animals, -> { order(name: :asc) }, dependent: :destroy
 
   alias_attribute :sandwich_count, :sandwiches
   alias_attribute :soup_count, :soups

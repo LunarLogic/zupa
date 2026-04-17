@@ -1,8 +1,10 @@
 class Animal < ApplicationRecord
+  SPECIES = {cat: "cat", dog: "dog", rat: "rat", bird: "bird", other: "other"}.freeze
+
   belongs_to :location, optional: true
   default_scope { order(name: :asc) }
   scope :active, -> { where(active: true) }
-  enum species: {cat: "cat", dog: "dog", rat: "rat", bird: "bird", other: "other"}
+  enum species: SPECIES
 
   def is_a_cat?
     species == "cat"

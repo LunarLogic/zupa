@@ -2,7 +2,7 @@ class TripDestinationAnimal < ApplicationRecord
   belongs_to :trip_destination
   belongs_to :animal, optional: true
 
-  enum species: {cat: "cat", dog: "dog", rat: "rat", bird: "bird", other: "other"}
+  enum species: Animal::SPECIES
 
   def is_a_cat?
     species == "cat"
