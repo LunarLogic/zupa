@@ -24,11 +24,15 @@ class Person < ApplicationRecord
   end
 
   def full_name
-    "#{first_name} #{last_name}"
+    [first_name, last_name].compact_blank.join(" ")
   end
 
   def packed_package_count
     packed_packages.size
+  end
+
+  def total_water_count
+    sparkling_water_count + still_water_count
   end
 
   def lives_in_a_location?

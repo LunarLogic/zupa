@@ -5,7 +5,7 @@ module.exports = {
   transform: {
     "^.+\\.(ts|tsx|js)?$": ["ts-jest"],
   },
-  testMatch: ["**/*.(test|spec).(ts|tsx)"],
+  testMatch: ["**/*.(test|spec).(ts|tsx|js)"],
   moduleNameMapper: {
     "\\.(css|less|sass|scss)$": "./app/javascript/__mocks__/styleMock.js",
     "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2)$":

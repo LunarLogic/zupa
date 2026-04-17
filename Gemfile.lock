@@ -236,6 +236,7 @@ GEM
     msgpack (1.6.0)
     multi_json (1.15.0)
     multipart-post (2.3.0)
+    mustache (1.1.1)
     net-imap (0.3.2)
       date
       net-protocol
@@ -469,6 +470,7 @@ DEPENDENCIES
   jbuilder (~> 2.11.5)
   jsbundling-rails
   jwt
+  mustache (~> 1.1)
   nio4r (>= 2.5.9)
   pagy (~> 9.0)
   pg (~> 1.1)

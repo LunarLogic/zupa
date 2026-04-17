@@ -21,11 +21,14 @@ Trestle.resource(:locations) do
         status_tag(icon("fa fa-question"), :warning)
       end
     end
+    column :location_type, align: :center do |l|
+      I18n.t(l.location_type, scope: "location_types")
+    end
     column :name
     column :region
     column :info
-    column :liczba_osób do |l|
-      l.people.count
+    column :liczba_osób, align: :center do |l|
+      l.person_count
     end
     column :pinezka do |l|
       link_to "http://www.google.com/maps/place/#{l.latitude},#{l.longitude}", target: "_blank" do
@@ -48,6 +51,11 @@ Trestle.resource(:locations) do
       collection_radio_buttons :status, statuses, :second, :first
       text_field :name
       select :region_id, Region.all
+
+      location_types = Location.location_types.keys.map { |lt| [I18n.t(lt, scope: "location_types"), lt] }
+      collection_radio_buttons :location_type, location_types, :second, :first
+      number_field :estimated_person_count, min: 0
+
       text_area :info
       text_field :latitude
       text_field :longitude

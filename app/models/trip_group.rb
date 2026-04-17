@@ -35,7 +35,7 @@ class TripGroup < ApplicationRecord
   alias_method :has_sandwiches, :sandwiches?
 
   def sandwich_count
-    trip_destinations.sum(*:sandwich_count)
+    trip_destinations.sum(&:sandwich_count)
   end
 
   def soups?

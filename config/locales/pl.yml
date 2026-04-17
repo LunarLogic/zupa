@@ -12,6 +12,9 @@ pl:
     active: Aktywne
     pending_verification: Oczekuje na weryfikację
     inactive: Nieaktywne
+  location_types:
+    regular: Zwykłe
+    estimated: Grupowe
   species:
     cat: Kot
     dog: Pies
@@ -52,6 +55,7 @@ pl:
         reports: Raporty
         visit_summaries: Relacje
         trips: Wyjazdy
+        app_settings: Ustawienia
       groups:
         configuration: ⚙️ Konfiguracja
         trips: 🚙 Wyjazdy
@@ -86,11 +90,45 @@ pl:
       visit_summaries: Relacje
       trip: Wyjazd
       groups: Grupy
+      preparations: Przygotowania
+      ksiazki: Książki
+    app_settings:
+      label: Ustawienia
+    trips:
+      tabs:
+        ksiazki: Książki
+      ksiazki:
+        empty: Żadna osoba nie ma zapisanych preferencji książkowych.
+        columns:
+          location: Miejsce
+          person: Osoba
+          preferences: Preferencje książkowe
+    preparation_templates:
+      label: Szablony przygotowań
+      columns:
+        template: Szablon
+        name: Nazwa
+        default: Domyślny
+        trips_count: Wyjazdy
+      labels:
+        template_selector: Szablon
+        no_template: "— brak szablonu —"
+        default_suffix: "(domyślny)"
+        preview: Podgląd
+        print: Drukuj przygotowania
+        editor: Edytor
+        edit_button: Edytuj
+        save_button: Zapisz
+        cancel: Anuluj
+        no_default_template: "Brak domyślnego szablonu"
+        variable_reference: "Dostępne zmienne"
     people:
       breadcrumbs:
         index: Osoby
       titles:
         index: Osoby
+      sections:
+        preferences: Preferencje
     menu_items:
       breadcrumbs:
         index: Menu
@@ -99,6 +137,9 @@ pl:
     locations:
       titles:
         index: Miejsca
+      validations:
+        regular_no_estimate: "— zwykłe miejsce nie może mieć szacowanej liczby osób"
+        has_people: "— nie można zmienić na szacowane, miejsce ma przypisane osoby"
     item_requests:
       titles:
         index: Zgłoszenia
@@ -159,6 +200,15 @@ pl:
         requests_status: Status
         phone_number: Numer telefonu
         active: Obecna
+        long_term_provisions: Prowiant długoterminowy
+        extra_chocolates: Dodatkowe czekolady
+        sparkling_water_count: Woda gazowana (szt.)
+        still_water_count: Woda niegazowana (szt.)
+        book_preferences: Preferencje książkowe
+      app_setting:
+        persons_per_thermos: Liczba osób na duży termos
+        chocolates_per_person: Czekolad na osobę
+        sandwiches_per_person: Kanapek na osobę
       animal:
         name: Imię
         active: Obecny
@@ -189,6 +239,8 @@ pl:
         latitude: szerokość geograficzna
         longitude: długość geograficzna
         status: Status
+        location_type: Typ
+        estimated_person_count: Szacowana liczba osób
       item_category:
         name: Nazwa
         available_sizes: Rozmiary
@@ -229,6 +281,9 @@ pl:
       trip_group:
         volunteers: Wolontariusze
         locations: Miejsca
+      preparation_template:
+        name: Nazwa
+        default: Domyślny
     models:
       person:
         one: Osoba
@@ -272,6 +327,12 @@ pl:
       trip:
         one: Wyjazd
         other: Wyjazdy
+      preparation_template:
+        one: Szablon
+        other: Szablony
+      app_setting:
+        one: Ustawienia
+        other: Ustawienia
   date:
     abbr_day_names:
       - nie

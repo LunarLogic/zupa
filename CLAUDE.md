@@ -31,8 +31,8 @@ If you don't have the asdf plugins installed yet:
 - `foreman start -f Procfile-mingw.dev` - Alternative for Windows
 
 ### Testing
-- `bin/rspec` - Run Ruby/Rails tests (entire suite)
-- `bin/rspec spec/path/to/test_spec.rb` - Run specific Ruby test file
+- `bundle exec rspec` - Run Ruby/Rails tests (entire suite). Do NOT use `bin/rspec`.
+- `bundle exec rspec spec/path/to/test_spec.rb` - Run specific Ruby test file
 - `yarn test` - Run JavaScript/React unit tests with Jest
 - `RAILS_ENV=test SWAGGER_DRY_RUN=0 rails rswag` - Regenerate API documentation
 
