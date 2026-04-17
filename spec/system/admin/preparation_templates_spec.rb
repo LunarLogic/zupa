@@ -266,11 +266,17 @@ RSpec.describe "Admin preparation templates", type: :system do
         g2 = create(:trip_group, trip: t, number: 2, volunteers: ["Bartek"])
         loc_a = create(:location, name: "Lokacja A")
         loc_b = create(:location, name: "Lokacja B")
-        create(:person, location: loc_a, long_term_provisions: true)
-        create(:person, location: loc_b, long_term_provisions: true)
-        create(:person, location: loc_b, long_term_provisions: true)
-        create(:trip_destination, trip_group: g1, location: loc_a, sandwiches: 3, soups: 2)
-        create(:trip_destination, trip_group: g2, location: loc_b, sandwiches: 5, soups: 4)
+        p_a = create(:person, location: loc_a, long_term_provisions: true)
+        p_b1 = create(:person, location: loc_b, long_term_provisions: true)
+        p_b2 = create(:person, location: loc_b, long_term_provisions: true)
+        td1 = create(:trip_destination, trip_group: g1, location: loc_a, sandwiches: 3, soups: 2)
+        td2 = create(:trip_destination, trip_group: g2, location: loc_b, sandwiches: 5, soups: 4)
+        TripDestinationPerson.create!(trip_destination: td1, person: p_a,
+          first_name: p_a.first_name, last_name: p_a.last_name, long_term_provisions: true)
+        TripDestinationPerson.create!(trip_destination: td2, person: p_b1,
+          first_name: p_b1.first_name, last_name: p_b1.last_name, long_term_provisions: true)
+        TripDestinationPerson.create!(trip_destination: td2, person: p_b2,
+          first_name: p_b2.first_name, last_name: p_b2.last_name, long_term_provisions: true)
       end
     end
 

@@ -10,10 +10,7 @@ module Trips
 
       trip_data = build_trip_data.call(date: date, spreadsheet_url: spreadsheet_url)
 
-      validation = validate_headers(trip_data.headers)
-      if validation == true
-        validation = validate_destinations(trip_data)
-      end
+      validation = validate_destinations(trip_data)
 
       if validation == true
         create_in_db!(trip_data, params)
@@ -28,15 +25,6 @@ module Trips
 
     def create_in_db!(trip_data, params)
       TripRepository.new.create!(trip_data: trip_data, params: params)
-    end
-
-    def validate_headers(headers)
-      correct_columns = {kanapki: 3, zupy: 4, prow: 5, woda: 6, książki: 7, uwagi: 8}
-      valid = correct_columns.map { |text, index| headers[index]&.downcase&.include? text.to_s }.all?
-
-      return true if valid
-
-      {wrong_format: "Wrong format"}
     end
 
     def validate_destinations(trip_data)

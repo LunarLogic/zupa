@@ -59,13 +59,19 @@ RSpec.describe TripJsonBuilder do
 
   describe ".build with per-person water/provisions" do
     let(:loc) { create(:location, name: "Lokacja P") }
+    let(:destination) { create(:trip_destination, trip_group: group, location: loc) }
 
     before do
-      create(:person, location: loc, first_name: "Jaromira", last_name: "K",
+      jaromira = create(:person, location: loc, first_name: "Jaromira", last_name: "K",
         long_term_provisions: true, sparkling_water_count: 2, still_water_count: 0)
-      create(:person, location: loc, first_name: "Anna", last_name: "W",
+      anna = create(:person, location: loc, first_name: "Anna", last_name: "W",
         long_term_provisions: false, sparkling_water_count: 0, still_water_count: 1)
-      create(:trip_destination, trip_group: group, location: loc)
+      TripDestinationPerson.create!(trip_destination: destination, person: jaromira,
+        first_name: "Jaromira", last_name: "K",
+        long_term_provisions: true, sparkling_water_count: 2, still_water_count: 0)
+      TripDestinationPerson.create!(trip_destination: destination, person: anna,
+        first_name: "Anna", last_name: "W",
+        long_term_provisions: false, sparkling_water_count: 0, still_water_count: 1)
       trip.reload
     end
 

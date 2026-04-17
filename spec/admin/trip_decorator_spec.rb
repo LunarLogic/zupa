@@ -75,11 +75,17 @@ RSpec.describe TripDecorator do
 
   describe "person-derived totals" do
     let(:loc_with_people) { create(:location, name: "Lokacja X") }
+    let(:destination_with_people) { create(:trip_destination, trip_group: group1, location: loc_with_people) }
 
     before do
-      create(:person, location: loc_with_people, long_term_provisions: true, sparkling_water_count: 2, still_water_count: 0)
-      create(:person, location: loc_with_people, long_term_provisions: false, sparkling_water_count: 1, still_water_count: 3)
-      create(:trip_destination, trip_group: group1, location: loc_with_people)
+      person_a = create(:person, location: loc_with_people, long_term_provisions: true, sparkling_water_count: 2, still_water_count: 0)
+      person_b = create(:person, location: loc_with_people, long_term_provisions: false, sparkling_water_count: 1, still_water_count: 3)
+      TripDestinationPerson.create!(trip_destination: destination_with_people, person: person_a,
+        first_name: person_a.first_name, last_name: person_a.last_name,
+        long_term_provisions: true, sparkling_water_count: 2, still_water_count: 0)
+      TripDestinationPerson.create!(trip_destination: destination_with_people, person: person_b,
+        first_name: person_b.first_name, last_name: person_b.last_name,
+        long_term_provisions: false, sparkling_water_count: 1, still_water_count: 3)
       trip.reload
     end
 

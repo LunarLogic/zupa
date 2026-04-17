@@ -77,7 +77,7 @@ Trestle.resource(:trips) do
           container do |c|
             rows = trip.groups.flat_map do |group|
               group.trip_destinations.flat_map do |td|
-                td.location.active_people
+                td.trip_destination_people
                   .select { |p| p.book_preferences.present? }
                   .map { |p| {location: td.location.name, person: p, preferences: p.book_preferences} }
               end
@@ -99,10 +99,16 @@ Trestle.resource(:trips) do
 
                 body = content_tag(:tbody) do
                   safe_join(rows.map { |r|
+                    snapshot = r[:person]
+                    person_cell = if snapshot.person
+                      admin_link_to(snapshot.full_name, snapshot.person, admin: :people)
+                    else
+                      snapshot.full_name
+                    end
                     content_tag(:tr) do
                       safe_join([
                         content_tag(:td, r[:location]),
-                        content_tag(:td, admin_link_to(r[:person].full_name, r[:person], admin: :people)),
+                        content_tag(:td, person_cell),
                         content_tag(:td, simple_format(r[:preferences]))
                       ])
                     end
@@ -193,12 +199,7 @@ Trestle.resource(:trips) do
         if result == true
           flash[:message] = flash_message("create.success", title: "", message: "")
         else
-          flash[:error] = if result[:wrong_format].present?
-            "Niepoprawny format tabelki, sprawdź czy zgadza się liczba i kolejność kolumn:
-            GRUPA / MIEJSCA | OSOBY | LICZBA OSÓB | KANAPKI | ZUPY | PACZKA Z PROW. DŁ. | DOD. WODA MINERALNA | KSIĄŻKI | UWAGI DOD."
-          else
-            error_message(result[:not_found]).html_safe
-          end
+          flash[:error] = error_message(result[:not_found]).html_safe
         end
 
         redirect_to "/admin/trips"
@@ -215,12 +216,7 @@ Trestle.resource(:trips) do
         if result == true
           flash[:message] = flash_message("update.success", title: "", message: "")
         else
-          flash[:error] = if result[:wrong_format].present?
-            "Niepoprawny format tabelki, sprawdź czy zgadza się liczba i kolejność kolumn:
-            GRUPA / MIEJSCA | OSOBY | LICZBA OSÓB | KANAPKI | ZUPY | PACZKA Z PROW. DŁ. | DOD. WODA MINERALNA | KSIĄŻKI | UWAGI DOD."
-          else
-            error_message(result[:not_found]).html_safe
-          end
+          flash[:error] = error_message(result[:not_found]).html_safe
         end
 
         redirect_to "/admin/trips/#{params[:id]}"

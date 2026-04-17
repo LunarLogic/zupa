@@ -55,11 +55,11 @@ describe Trips::CreateTrip do
 
       first_destination = group.trip_destinations.find_by(order: 1)
       expect(first_destination.name).to eq "Location 1"
-      expect(first_destination.sandwiches).to eq 16
-      expect(first_destination.soups).to eq 8
-      expect(first_destination.provisions).to eq 1
-      expect(first_destination.waters).to eq 3
-      expect(first_destination.additional_info).to eq "Lorem ipsum dolor sit amet, consectetur adipiscing elit\nProwiant: tak\nKsiążki: Trzebor - filozofia, historia"
+      expect(first_destination.sandwiches).to eq 0
+      expect(first_destination.soups).to eq 0
+      expect(first_destination.provisions).to eq 0
+      expect(first_destination.waters).to eq 0
+      expect(first_destination.additional_info).to eq "Lorem ipsum dolor sit amet, consectetur adipiscing elit"
       expect(first_destination.location_snapshot["name"]).to eq("Location 1")
     end
   end
