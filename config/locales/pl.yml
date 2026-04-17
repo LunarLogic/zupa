@@ -201,11 +201,14 @@ pl:
         phone_number: Numer telefonu
         active: Obecna
         long_term_provisions: Prowiant długoterminowy
+        extra_chocolates: Dodatkowe czekolady
         sparkling_water_count: Woda gazowana (szt.)
         still_water_count: Woda niegazowana (szt.)
         book_preferences: Preferencje książkowe
       app_setting:
         persons_per_thermos: Liczba osób na duży termos
+        chocolates_per_person: Czekolad na osobę
+        sandwiches_per_person: Kanapek na osobę
       animal:
         name: Imię
         active: Obecny

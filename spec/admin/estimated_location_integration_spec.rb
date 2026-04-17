@@ -20,19 +20,19 @@ RSpec.describe "Estimated location integration" do
     let(:estimated_td) { group.trip_destinations.find_by(location: estimated_location) }
     let(:regular_td) { group.trip_destinations.find_by(location: regular_location) }
 
-    it "uses estimated_person_count for sandwich_count on estimated locations" do
-      expect(estimated_td.sandwich_count).to eq(10)
+    it "uses estimated_person_count * sandwiches_per_person for sandwich_count on estimated locations" do
+      expect(estimated_td.sandwich_count).to eq(20)
     end
 
     it "uses db column for sandwich_count on regular locations" do
       expect(regular_td.sandwich_count).to eq(5)
     end
 
-    it "uses estimated_person_count for chocolate_count on estimated locations" do
+    it "uses estimated_person_count * setting for chocolate_count on estimated locations" do
       expect(estimated_td.chocolate_count).to eq(10)
     end
 
-    it "uses active_people count for chocolate_count on regular locations" do
+    it "uses active_people count * setting for chocolate_count on regular locations" do
       expect(regular_td.chocolate_count).to eq(2)
     end
 
@@ -45,7 +45,7 @@ RSpec.describe "Estimated location integration" do
     subject(:decorated) { TripGroupDecorator.new(group) }
 
     it "sums sandwich_count across regular and estimated destinations" do
-      expect(decorated.sandwich_count).to eq(15)
+      expect(decorated.sandwich_count).to eq(25)
     end
 
     it "sums chocolate_count across regular and estimated destinations" do
@@ -61,7 +61,7 @@ RSpec.describe "Estimated location integration" do
     subject(:json) { TripJsonBuilder.build(trip) }
 
     it "includes combined sandwich totals" do
-      expect(json["total_sandwich_count"]).to eq(15)
+      expect(json["total_sandwich_count"]).to eq(25)
     end
 
     it "includes combined chocolate totals" do

@@ -21,10 +21,6 @@ class TripGroupDecorator < SimpleDelegator
     end
   end
 
-  def chocolate_count
-    person_count
-  end
-
   def has_cat_food
     cat_food_count > 0
   end

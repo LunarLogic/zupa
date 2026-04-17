@@ -7,6 +7,7 @@ FactoryBot.define do
     requests_status { "green" }
     active { true }
     long_term_provisions { false }
+    extra_chocolates { 0 }
     sparkling_water_count { 0 }
     still_water_count { 0 }
 

@@ -46,10 +46,25 @@ RSpec.describe Location do
   end
 
   describe "#chocolate_count" do
-    it "equals person_count for estimated locations" do
+    it "uses chocolates_per_person setting multiplied by person_count" do
+      AppSetting.instance.update!(chocolates_per_person: 2)
       location = create(:location, location_type: "estimated", estimated_person_count: 5)
 
-      expect(location.chocolate_count).to eq(5)
+      expect(location.chocolate_count).to eq(10)
+    end
+
+    it "adds extra_chocolates from active people" do
+      location = create(:location, location_type: "regular")
+      create(:person, location: location, active: true, extra_chocolates: 3)
+      create(:person, location: location, active: true, extra_chocolates: 0)
+
+      expect(location.chocolate_count).to eq(2 + 3)
+    end
+
+    it "defaults to 1 per person with no extras" do
+      location = create(:location, location_type: "estimated", estimated_person_count: 4)
+
+      expect(location.chocolate_count).to eq(4)
     end
   end
 end

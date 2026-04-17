@@ -40,7 +40,7 @@ class Location < ApplicationRecord
   end
 
   def chocolate_count
-    person_count
+    person_count * AppSetting.instance.chocolates_per_person + active_people.sum(&:extra_chocolates)
   end
 
   private

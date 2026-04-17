@@ -73,6 +73,7 @@ Trestle.resource(:people) do
 
       check_box :long_term_provisions
       concat content_tag(:div, "", style: "margin-bottom: 1.5rem;")
+      number_field :extra_chocolates, min: 0
       number_field :sparkling_water_count, min: 0
       number_field :still_water_count, min: 0
       text_area :book_preferences, rows: 3

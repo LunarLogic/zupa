@@ -7,7 +7,7 @@ class TripDestination < ApplicationRecord
   delegate :id, to: :location, prefix: true
 
   def sandwich_count
-    location.estimated? ? location.person_count : sandwiches
+    location.estimated? ? location.person_count * AppSetting.instance.sandwiches_per_person : sandwiches
   end
 
   def sandwiches?
