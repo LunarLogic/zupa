@@ -72,6 +72,50 @@ Trestle.resource(:trips) do
         end
       end
 
+      tab :ksiazki, label: I18n.t("admin.trips.tabs.ksiazki") do
+        unless trip.new_record?
+          container do |c|
+            rows = trip.groups.flat_map do |group|
+              group.trip_destinations.flat_map do |td|
+                td.location.active_people
+                  .select { |p| p.book_preferences.present? }
+                  .map { |p| {location: td.location.name, person: p, preferences: p.book_preferences} }
+              end
+            end
+
+            card do
+              if rows.empty?
+                content_tag(:p, I18n.t("admin.trips.ksiazki.empty"), style: "margin: 1rem; color: #666;")
+              else
+                header = content_tag(:thead) do
+                  content_tag(:tr) do
+                    safe_join([
+                      content_tag(:th, I18n.t("admin.trips.ksiazki.columns.location")),
+                      content_tag(:th, I18n.t("admin.trips.ksiazki.columns.person")),
+                      content_tag(:th, I18n.t("admin.trips.ksiazki.columns.preferences"))
+                    ])
+                  end
+                end
+
+                body = content_tag(:tbody) do
+                  safe_join(rows.map { |r|
+                    content_tag(:tr) do
+                      safe_join([
+                        content_tag(:td, r[:location]),
+                        content_tag(:td, admin_link_to(r[:person].full_name, r[:person], admin: :people)),
+                        content_tag(:td, simple_format(r[:preferences]))
+                      ])
+                    end
+                  })
+                end
+
+                content_tag(:table, header + body, class: "table table-striped", style: "width: 100%;")
+              end
+            end
+          end
+        end
+      end
+
       tab :przygotowania do
         unless trip.new_record?
           container do |c|

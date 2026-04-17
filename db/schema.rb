@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2026_02_12_201241) do
+ActiveRecord::Schema[7.0].define(version: 2026_04_17_100001) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -42,6 +42,12 @@ ActiveRecord::Schema[7.0].define(version: 2026_02_12_201241) do
     t.datetime "updated_at", null: false
     t.enum "species", default: "cat", null: false, enum_type: "species_type"
     t.index ["location_id"], name: "index_animals_on_location_id"
+  end
+
+  create_table "app_settings", force: :cascade do |t|
+    t.integer "persons_per_thermos", default: 7, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "auth_codes", force: :cascade do |t|
@@ -145,6 +151,10 @@ ActiveRecord::Schema[7.0].define(version: 2026_02_12_201241) do
     t.string "last_name"
     t.string "phone_number"
     t.boolean "active", default: true
+    t.boolean "long_term_provisions", default: false, null: false
+    t.integer "sparkling_water_count", default: 0, null: false
+    t.integer "still_water_count", default: 0, null: false
+    t.text "book_preferences"
     t.index ["code"], name: "index_people_on_code", unique: true
     t.index ["location_id"], name: "index_people_on_location_id"
   end

@@ -52,6 +52,7 @@ pl:
         reports: Raporty
         visit_summaries: Relacje
         trips: Wyjazdy
+        app_settings: Ustawienia
       groups:
         configuration: ⚙️ Konfiguracja
         trips: 🚙 Wyjazdy
@@ -87,6 +88,18 @@ pl:
       trip: Wyjazd
       groups: Grupy
       preparations: Przygotowania
+      ksiazki: Książki
+    app_settings:
+      label: Ustawienia
+    trips:
+      tabs:
+        ksiazki: Książki
+      ksiazki:
+        empty: Żadna osoba nie ma zapisanych preferencji książkowych.
+        columns:
+          location: Miejsce
+          person: Osoba
+          preferences: Preferencje książkowe
     preparation_templates:
       label: Szablony przygotowań
       columns:
@@ -111,6 +124,8 @@ pl:
         index: Osoby
       titles:
         index: Osoby
+      sections:
+        preferences: Preferencje
     menu_items:
       breadcrumbs:
         index: Menu
@@ -179,6 +194,12 @@ pl:
         requests_status: Status
         phone_number: Numer telefonu
         active: Obecna
+        long_term_provisions: Prowiant długoterminowy
+        sparkling_water_count: Woda gazowana (szt.)
+        still_water_count: Woda niegazowana (szt.)
+        book_preferences: Preferencje książkowe
+      app_setting:
+        persons_per_thermos: Liczba osób na duży termos
       animal:
         name: Imię
         active: Obecny
@@ -298,6 +319,9 @@ pl:
       preparation_template:
         one: Szablon
         other: Szablony
+      app_setting:
+        one: Ustawienia
+        other: Ustawienia
   date:
     abbr_day_names:
       - nie

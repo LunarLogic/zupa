@@ -1,12 +1,14 @@
 class TripDecorator < SimpleDelegator
   SUMMABLE_FIELDS = %i[
     sandwich_count
-    provision_count
     soup_count
     chocolate_count
     cat_food_count
     dog_food_count
     package_count
+    sparkling_water_count
+    still_water_count
+    long_term_provisions_count
   ].freeze
 
   def formatted_date

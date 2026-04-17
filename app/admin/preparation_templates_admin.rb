@@ -19,8 +19,11 @@ Trestle.resource(:preparation_templates) do
   end
 
   form do |template|
-    # Fetch last trip and default template for preview
-    last_trip = Trip.active.order(date: :desc).includes(:groups, :organiser).first
+    # Fetch last trip and default template for preview.
+    # Prefer active trips; fall back to any most-recent trip so preview still renders
+    # meaningful data in dev/staging where no trip is active.
+    last_trip = Trip.active.order(date: :desc).includes(:groups, :organiser).first ||
+      Trip.order(date: :desc).includes(:groups, :organiser).first
     default_template = PreparationTemplate.default_template.first
 
     # Prepare trip data for preview
@@ -80,26 +83,33 @@ Trestle.resource(:preparation_templates) do
           <ul>
             <li><code>{{name}}</code> — nazwa grupy</li>
             <li><code>{{sandwich_count}}</code> — kanapki</li>
-            <li><code>{{provision_count}}</code> — prowianty</li>
+
             <li><code>{{soup_count}}</code> — zupy</li>
-            <li><code>{{water}}</code> — woda</li>
+            <li><code>{{water}}</code> — woda (łączna liczba butelek)</li>
+            <li><code>{{sparkling_water_count}}</code> / <code>{{still_water_count}}</code> — butelki z podziałem na gazowaną/niegazowaną</li>
+            <li><code>{{sparkling_water_recipients}}</code> / <code>{{still_water_recipients}}</code> — dla kogo i ile butelek</li>
             <li><code>{{tea}}</code> — herbata</li>
-            <li><code>{{books}}</code> — książki</li>
             <li><code>{{extras}}</code> — dodatki</li>
             <li><code>{{chocolate_count}}</code> — czekolady</li>
             <li><code>{{has_cat_food}}</code> / <code>{{cat_food_count}}</code> — karma dla kotów</li>
             <li><code>{{has_dog_food}}</code> / <code>{{dog_food_count}}</code> — karma dla psów</li>
             <li><code>{{has_packages}}</code> / <code>{{package_count}}</code> — paczki</li>
+            <li><code>{{package_recipients}}</code> — dla kogo paczki z Magazynu Ciepła</li>
+            <li><code>{{long_term_provisions_count}}</code> / <code>{{long_term_provisions_recipients}}</code> — prowiant długoterminowy (liczba i dla kogo)</li>
+            <li><code>{{#people}}{{name}}{{/people}}</code> — iteracja po osobach (pola: <code>name</code>, <code>long_term_provisions</code>, <code>sparkling_water_count</code>, <code>still_water_count</code>, <code>book_preferences</code>, <code>has_package</code>)</li>
           </ul>
+          <p style="color: #666; font-size: 0.9em;">Informacja o książkach znajduje się teraz w osobnej zakładce „Książki” na wyjeździe.</p>
           <p><strong>Podsumowanie</strong> (sumy ze wszystkich grup):</p>
           <ul>
             <li><code>{{total_sandwich_count}}</code> — kanapki łącznie</li>
-            <li><code>{{total_provision_count}}</code> — prowianty łącznie</li>
+
             <li><code>{{total_soup_count}}</code> — zupy łącznie</li>
             <li><code>{{total_chocolate_count}}</code> — czekolady łącznie</li>
             <li><code>{{total_cat_food_count}}</code> — karma dla kotów łącznie</li>
             <li><code>{{total_dog_food_count}}</code> — karma dla psów łącznie</li>
             <li><code>{{total_package_count}}</code> — paczki łącznie</li>
+            <li><code>{{total_sparkling_water_count}}</code> / <code>{{total_still_water_count}}</code> — woda łącznie</li>
+            <li><code>{{total_long_term_provisions_count}}</code> — prowiant długoterminowy łącznie</li>
           </ul>
         </div>
       </details>

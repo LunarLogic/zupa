@@ -40,10 +40,6 @@ RSpec.describe TripDecorator do
       expect(decorated.total_sandwich_count).to eq(8)
     end
 
-    it "sums provision_count across groups" do
-      expect(decorated.total_provision_count).to eq(3)
-    end
-
     it "sums soup_count across groups" do
       expect(decorated.total_soup_count).to eq(6)
     end
@@ -62,6 +58,41 @@ RSpec.describe TripDecorator do
 
     it "sums package_count across groups" do
       expect(decorated.total_package_count).to eq(0)
+    end
+
+    it "sums sparkling_water_count across groups" do
+      expect(decorated.total_sparkling_water_count).to eq(0)
+    end
+
+    it "sums still_water_count across groups" do
+      expect(decorated.total_still_water_count).to eq(0)
+    end
+
+    it "sums long_term_provisions_count across groups" do
+      expect(decorated.total_long_term_provisions_count).to eq(0)
+    end
+  end
+
+  describe "person-derived totals" do
+    let(:loc_with_people) { create(:location, name: "Lokacja X") }
+
+    before do
+      create(:person, location: loc_with_people, long_term_provisions: true, sparkling_water_count: 2, still_water_count: 0)
+      create(:person, location: loc_with_people, long_term_provisions: false, sparkling_water_count: 1, still_water_count: 3)
+      create(:trip_destination, trip_group: group1, location: loc_with_people)
+      trip.reload
+    end
+
+    it "sums sparkling water across people" do
+      expect(decorated.total_sparkling_water_count).to eq(3)
+    end
+
+    it "sums still water across people" do
+      expect(decorated.total_still_water_count).to eq(3)
+    end
+
+    it "counts people wanting long_term_provisions" do
+      expect(decorated.total_long_term_provisions_count).to eq(1)
     end
   end
 end

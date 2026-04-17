@@ -36,6 +36,16 @@ Trestle.resource(:people) do
       text = I18n.t(person.requests_status, scope: :requests_statuses)
       status_tag(text, person.requests_status.to_sym)
     end
+    column :long_term_provisions, align: :center do |person|
+      if person.long_term_provisions
+        status_tag(icon("fa fa-check"), :success)
+      end
+    end
+    column :sparkling_water_count, align: :center
+    column :still_water_count, align: :center
+    column :book_preferences do |person|
+      truncate(person.book_preferences.to_s, length: 40)
+    end
     actions
   end
 
@@ -57,6 +67,15 @@ Trestle.resource(:people) do
       text_field :phone_number
       requests_statuses = Person.requests_statuses.keys.map { |status| [I18n.t(status, scope: "requests_statuses"), status] }
       collection_radio_buttons :requests_status, requests_statuses, :second, :first
+
+      concat content_tag(:h2, I18n.t("admin.people.sections.preferences"),
+        style: "margin-top: 2.5rem; margin-bottom: 1.25rem; padding-top: 1.5rem; border-top: 2px solid #e5e5e5; font-size: 1.4rem; font-weight: 600;")
+
+      check_box :long_term_provisions
+      concat content_tag(:div, "", style: "margin-bottom: 1.5rem;")
+      number_field :sparkling_water_count, min: 0
+      number_field :still_water_count, min: 0
+      text_area :book_preferences, rows: 3
     end
 
     tab :item_requests, badge: person.item_requests.size do
