@@ -6,11 +6,14 @@ class TripDestination < ApplicationRecord
     :longitude, :latitude, :animal_count, :active_animals, :chocolate_count, to: :location
   delegate :id, to: :location, prefix: true
 
+  def sandwich_count
+    location.estimated? ? location.person_count : sandwiches
+  end
+
   def sandwiches?
-    sandwiches > 0
+    sandwich_count > 0
   end
   alias_method :has_sandwiches, :sandwiches?
-  alias_attribute :sandwich_count, :sandwiches
 
   def soups?
     soups > 0

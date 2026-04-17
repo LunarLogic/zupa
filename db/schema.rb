@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2026_04_17_100001) do
+ActiveRecord::Schema[7.0].define(version: 2026_04_17_100002) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -18,6 +18,7 @@ ActiveRecord::Schema[7.0].define(version: 2026_04_17_100001) do
   # Note that some types may not work with other database engines. Be careful if changing database.
   create_enum "item_request_status_type", ["to_prepare", "prepared", "delivered", "rejected", "during_consultation", "packing"]
   create_enum "location_status_type", ["active", "pending_verification", "inactive"]
+  create_enum "location_type", ["regular", "estimated"]
   create_enum "menu_item_type", ["internal", "external"]
   create_enum "package_status_type", ["packing", "packed", "delivered"]
   create_enum "request_status_type", ["red", "yellow", "green"]
@@ -118,6 +119,8 @@ ActiveRecord::Schema[7.0].define(version: 2026_04_17_100001) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.enum "status", default: "active", null: false, enum_type: "location_status_type"
+    t.enum "location_type", default: "regular", null: false, enum_type: "location_type"
+    t.integer "estimated_person_count", default: 0, null: false
     t.index ["region_id"], name: "index_locations_on_region_id"
   end
 

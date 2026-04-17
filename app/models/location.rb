@@ -11,6 +11,14 @@ class Location < ApplicationRecord
     inactive: "inactive"
   }
 
+  enum location_type: {
+    regular: "regular",
+    estimated: "estimated"
+  }
+
+  validates :estimated_person_count, numericality: {equal_to: 0, message: ->(_model, _data) { I18n.t("admin.locations.validations.regular_no_estimate") }}, if: :regular?
+  validate :no_estimated_with_people, if: :estimated?
+
   def region_name
     region.name
   end
@@ -20,7 +28,7 @@ class Location < ApplicationRecord
   end
 
   def person_count
-    active_people.size
+    estimated? ? estimated_person_count : active_people.size
   end
 
   def animal_count
@@ -33,5 +41,13 @@ class Location < ApplicationRecord
 
   def chocolate_count
     person_count
+  end
+
+  private
+
+  def no_estimated_with_people
+    if active_people.any?
+      errors.add(:location_type, I18n.t("admin.locations.validations.has_people"))
+    end
   end
 end

@@ -12,6 +12,9 @@ pl:
     active: Aktywne
     pending_verification: Oczekuje na weryfikację
     inactive: Nieaktywne
+  location_types:
+    regular: Zwykłe
+    estimated: Grupowe
   species:
     cat: Kot
     dog: Pies
@@ -134,6 +137,9 @@ pl:
     locations:
       titles:
         index: Miejsca
+      validations:
+        regular_no_estimate: "— zwykłe miejsce nie może mieć szacowanej liczby osób"
+        has_people: "— nie można zmienić na szacowane, miejsce ma przypisane osoby"
     item_requests:
       titles:
         index: Zgłoszenia
@@ -230,6 +236,8 @@ pl:
         latitude: szerokość geograficzna
         longitude: długość geograficzna
         status: Status
+        location_type: Typ
+        estimated_person_count: Szacowana liczba osób
       item_category:
         name: Nazwa
         available_sizes: Rozmiary
