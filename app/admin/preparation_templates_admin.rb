@@ -83,13 +83,11 @@ Trestle.resource(:preparation_templates) do
           <ul>
             <li><code>{{name}}</code> — nazwa grupy</li>
             <li><code>{{sandwich_count}}</code> — kanapki</li>
-
             <li><code>{{soup_count}}</code> — zupy</li>
             <li><code>{{water}}</code> — woda (łączna liczba butelek)</li>
             <li><code>{{sparkling_water_count}}</code> / <code>{{still_water_count}}</code> — butelki z podziałem na gazowaną/niegazowaną</li>
             <li><code>{{sparkling_water_recipients}}</code> / <code>{{still_water_recipients}}</code> — dla kogo i ile butelek</li>
             <li><code>{{tea}}</code> — herbata</li>
-            <li><code>{{extras}}</code> — dodatki</li>
             <li><code>{{chocolate_count}}</code> — czekolady</li>
             <li><code>{{has_cat_food}}</code> / <code>{{cat_food_count}}</code> — karma dla kotów</li>
             <li><code>{{has_dog_food}}</code> / <code>{{dog_food_count}}</code> — karma dla psów</li>
@@ -102,7 +100,6 @@ Trestle.resource(:preparation_templates) do
           <p><strong>Podsumowanie</strong> (sumy ze wszystkich grup):</p>
           <ul>
             <li><code>{{total_sandwich_count}}</code> — kanapki łącznie</li>
-
             <li><code>{{total_soup_count}}</code> — zupy łącznie</li>
             <li><code>{{total_chocolate_count}}</code> — czekolady łącznie</li>
             <li><code>{{total_cat_food_count}}</code> — karma dla kotów łącznie</li>

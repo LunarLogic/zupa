@@ -11,7 +11,6 @@ module TripJsonBuilder
         soup_count: g.soup_count,
         water: g.water,
         tea: g.tea,
-        extras: g.extras,
         chocolate_count: g.chocolate_count,
         has_cat_food: g.has_cat_food,
         has_dog_food: g.has_dog_food,

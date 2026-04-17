@@ -21,21 +21,6 @@ class TripGroupDecorator < SimpleDelegator
     end
   end
 
-  def books
-    trip_destinations
-      .map(&:additional_info)
-      .compact
-      .flat_map { |info| info.lines }
-      .select { |line| line.strip.start_with?("Książki:") }
-      .map { |line| line.sub("Książki:", "").strip }
-      .reject(&:blank?)
-      .join("\n")
-  end
-
-  def extras
-    # trip_destinations.flat_map(&:extra_notes).uniq
-  end
-
   def chocolate_count
     person_count
   end
@@ -115,7 +100,7 @@ class TripGroupDecorator < SimpleDelegator
   end
 
   def people_across_destinations
-    @people_across_destinations ||= trip_destinations.flat_map { |td| td.active_people.to_a }
+    @people_across_destinations ||= trip_destinations.flat_map { |td| td.active_people.includes(:packed_packages).to_a }
   end
 
   def format_water_recipients(count_attr)
