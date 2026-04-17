@@ -11,10 +11,6 @@ module Trips
       @groups ||= build_groups
     end
 
-    def headers
-      @headers ||= build_headers
-    end
-
     private
 
     attr_reader :spreadsheet
@@ -24,10 +20,6 @@ module Trips
         groups << Group.new(data: row.first) if group_row?(row)
         groups.last.add_destination(row) if destination_row?(row)
       end
-    end
-
-    def build_headers
-      spreadsheet.rows[0]
     end
 
     def group_row?(row)

@@ -19,10 +19,9 @@ describe Trips::UpdateTrip do
         number: "1",
         volunteers: ["Jerzy*", "Basia", "Gordon"],
         destinations: [
-          double(value: "Tents", address: "Tents", sandwiches: 10, soups: 88, waters: 0, books: 0, provisions: 0, additional_info: 0, order: 1),
-          double(value: "Mall", address: "Mall", sandwiches: 11, soups: 99, waters: 0, books: 0, provisions: 0, additional_info: 0, order: 2)
-        ])],
-      headers: ["", "", "", "kanapki", "zupy", "prow", "woda", "książki", "uwagi"])
+          double(value: "Tents", address: "Tents", additional_info: "", order: 1),
+          double(value: "Mall", address: "Mall", additional_info: "", order: 2)
+        ])])
 
     expect(build_trip_data).to receive(:call).and_return(trip_data)
 
