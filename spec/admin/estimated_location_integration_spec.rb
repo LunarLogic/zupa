@@ -11,8 +11,10 @@ RSpec.describe "Estimated location integration" do
   before do
     create(:person, location: regular_location, active: true)
     create(:person, location: regular_location, active: true)
+    # Destinations below are created directly for unit-level assertions on the new "counts stored in DB" semantics.
+    # TripRepository is the one responsible for computing `sandwiches`/`soups` from AppSetting × person_count.
     create(:trip_destination, trip_group: group, location: regular_location, sandwiches: 5, soups: 3)
-    create(:trip_destination, trip_group: group, location: estimated_location, sandwiches: 0, soups: 2)
+    create(:trip_destination, trip_group: group, location: estimated_location, sandwiches: 20, soups: 2)
     trip.reload
   end
 
@@ -20,11 +22,8 @@ RSpec.describe "Estimated location integration" do
     let(:estimated_td) { group.trip_destinations.find_by(location: estimated_location) }
     let(:regular_td) { group.trip_destinations.find_by(location: regular_location) }
 
-    it "uses estimated_person_count * sandwiches_per_person for sandwich_count on estimated locations" do
+    it "reads sandwich_count from the stored column (precomputed by repo)" do
       expect(estimated_td.sandwich_count).to eq(20)
-    end
-
-    it "uses db column for sandwich_count on regular locations" do
       expect(regular_td.sandwich_count).to eq(5)
     end
 

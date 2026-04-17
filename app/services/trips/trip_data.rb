@@ -99,13 +99,7 @@ module Trips
         end
 
         def additional_info
-          info = @data[8].strip
-          info = [info, textualize(@data[3])].compact.join("\nKanapki: ")
-          info = [info, textualize(@data[4])].compact.join("\nZupy: ")
-          info = [info, textualize(@data[5])].compact.join("\nProwiant: ")
-          info = [info, textualize(@data[6])].compact.join("\nWoda: ")
-          info = [info, textualize(@data[7])].compact.join("\nKsiążki: ")
-          info.strip
+          @data[8].strip
         end
 
         private

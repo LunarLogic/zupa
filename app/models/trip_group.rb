@@ -44,7 +44,7 @@ class TripGroup < ApplicationRecord
   alias_method :has_soups, :soups?
 
   def soup_count
-    trip_destinations.sum(*:soup_count)
+    trip_destinations.sum(&:soup_count)
   end
 
   def waters?
@@ -53,7 +53,7 @@ class TripGroup < ApplicationRecord
   alias_method :has_waters, :waters?
 
   def water_count
-    trip_destinations.sum(*:water_count)
+    trip_destinations.sum(&:water_count)
   end
 
   def provisions?
@@ -62,7 +62,7 @@ class TripGroup < ApplicationRecord
   alias_method :has_provisions, :provisions?
 
   def provision_count
-    trip_destinations.sum(*:provision_count)
+    trip_destinations.sum(&:provision_count)
   end
 
   def packages?
@@ -80,7 +80,7 @@ class TripGroup < ApplicationRecord
   alias_method :has_books, :books?
 
   def book_count
-    trip_destinations.sum(*:book_count)
+    trip_destinations.sum(&:book_count)
   end
 
   def chocolates?

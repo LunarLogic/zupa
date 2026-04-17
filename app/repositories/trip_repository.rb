@@ -25,22 +25,35 @@ class TripRepository
   end
 
   def create_destinations!(group, destinations_data)
-    destinations_data.each do |destination|
+    app_settings = AppSetting.instance
+
+    destinations_data.each do |destination_data|
       location = location_repository.find_by_name_approximation(
-        destination.value,
+        destination_data.value,
         includes: [:active_people, :active_animals]
       )
-      TripDestination.create!(
+
+      destination = TripDestination.create!(
         trip_group: group,
         location: location,
-        sandwiches: destination.sandwiches,
-        soups: destination.soups,
-        provisions: destination.provisions,
-        waters: destination.waters,
-        books: destination.books,
-        additional_info: destination.additional_info,
-        order: destination.order,
+        sandwiches: location.person_count * app_settings.sandwiches_per_person,
+        soups: location.person_count * app_settings.soups_per_person,
+        provisions: 0,
+        waters: 0,
+        books: 0,
+        additional_info: "",
+        order: destination_data.order,
         location_snapshot: Trips::BuildLocationSnapshot.new.call(location:)
+      )
+
+      Trips::SnapshotPeople.new.call(destination: destination, location: location)
+
+      destination.reload
+      destination.update!(
+        additional_info: Trips::ComposeAdditionalInfo.new.call(
+          destination: destination,
+          notes: destination_data.additional_info
+        )
       )
     end
   end

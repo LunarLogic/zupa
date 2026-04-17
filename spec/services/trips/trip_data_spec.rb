@@ -57,7 +57,7 @@ describe Trips::TripData do
       expect(destination1.waters).to eq 1
       expect(destination1.books).to eq 1
       expect(destination1.order).to eq 1
-      expect(destination1.additional_info).to eq "Przyczepa zaparkowana\nKsiążki: coś Jo Nesbo"
+      expect(destination1.additional_info).to eq "Przyczepa zaparkowana"
 
       destination2 = first_group.destinations.second
       expect(destination2.value).to eq "Wielicka"
@@ -68,7 +68,7 @@ describe Trips::TripData do
       expect(destination2.waters).to eq 4
       expect(destination2.books).to eq 0
       expect(destination2.order).to eq 2
-      expect(destination2.additional_info).to eq "Info dodatkowe\nZupy: TAK"
+      expect(destination2.additional_info).to eq "Info dodatkowe"
 
       destination3 = first_group.destinations[2]
       expect(destination3.sandwiches).to eq 6
@@ -77,7 +77,7 @@ describe Trips::TripData do
       expect(destination3.waters).to eq 1
       expect(destination3.books).to eq 2
       expect(destination3.order).to eq 3
-      expect(destination3.additional_info).to eq "Info dodatkowe\nKanapki: Z masłem\nZupy: Ewa i Bartek\nProwiant: Andrzej\nWoda: TAK - GAZOWANA\nKsiążki: Ewa - kryminał, Andrzej - poezja"
+      expect(destination3.additional_info).to eq "Info dodatkowe"
 
       destination4 = first_group.destinations[3]
       expect(destination4.additional_info).to eq ""

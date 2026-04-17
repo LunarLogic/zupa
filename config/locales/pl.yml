@@ -209,6 +209,7 @@ pl:
         persons_per_thermos: Liczba osób na duży termos
         chocolates_per_person: Czekolad na osobę
         sandwiches_per_person: Kanapek na osobę
+        soups_per_person: Zup na osobę
       animal:
         name: Imię
         active: Obecny

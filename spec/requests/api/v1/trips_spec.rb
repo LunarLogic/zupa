@@ -8,7 +8,20 @@ RSpec.describe "Trips", :requires_auth, type: :request do
   let!(:animal) { FactoryBot.create(:animal, active: true, location: location) }
   let!(:package) { FactoryBot.create(:package, :packed, receiver: person) }
   let!(:trip_destination) {
-    FactoryBot.create(:trip_destination, trip_group: trip_group, location: location, sandwiches: 10, soups: 1, provisions: 2, books: 3, waters: 4, additional_info: "text", order: 2)
+    FactoryBot.create(:trip_destination, trip_group: trip_group, location: location, sandwiches: 10, soups: 1, provisions: 2, books: 3, waters: 4, additional_info: "text", order: 2).tap do |td|
+      TripDestinationPerson.create!(trip_destination: td, person: person,
+        first_name: person.first_name, last_name: person.last_name,
+        long_term_provisions: true, sparkling_water_count: 2, still_water_count: 2,
+        book_preferences: "kryminały", package_count: 1)
+      p2 = FactoryBot.create(:person, :inactive, location: location)
+      TripDestinationPerson.create!(trip_destination: td, person: p2,
+        first_name: p2.first_name, last_name: p2.last_name,
+        long_term_provisions: true, book_preferences: "poezja")
+      p3 = FactoryBot.create(:person, :inactive, location: location)
+      TripDestinationPerson.create!(trip_destination: td, person: p3,
+        first_name: p3.first_name, last_name: p3.last_name,
+        book_preferences: "sci-fi")
+    end
   }
 
   path "/api/v1/trips/{id}" do

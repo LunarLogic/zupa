@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2026_04_17_100003) do
+ActiveRecord::Schema[7.0].define(version: 2026_04_18_100001) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -51,6 +51,7 @@ ActiveRecord::Schema[7.0].define(version: 2026_04_17_100003) do
     t.datetime "updated_at", null: false
     t.integer "chocolates_per_person", default: 1, null: false
     t.integer "sandwiches_per_person", default: 2, null: false
+    t.integer "soups_per_person", default: 1, null: false
   end
 
   create_table "auth_codes", force: :cascade do |t|
@@ -198,6 +199,23 @@ ActiveRecord::Schema[7.0].define(version: 2026_04_17_100003) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "trip_destination_people", force: :cascade do |t|
+    t.bigint "trip_destination_id", null: false
+    t.bigint "person_id"
+    t.string "first_name", null: false
+    t.string "last_name"
+    t.boolean "long_term_provisions", default: false, null: false
+    t.integer "sparkling_water_count", default: 0, null: false
+    t.integer "still_water_count", default: 0, null: false
+    t.text "book_preferences"
+    t.integer "extra_chocolates", default: 0, null: false
+    t.integer "package_count", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["person_id"], name: "index_trip_destination_people_on_person_id"
+    t.index ["trip_destination_id"], name: "index_trip_destination_people_on_trip_destination_id"
+  end
+
   create_table "trip_destinations", force: :cascade do |t|
     t.bigint "trip_group_id", null: false
     t.bigint "location_id", null: false
@@ -260,6 +278,8 @@ ActiveRecord::Schema[7.0].define(version: 2026_04_17_100003) do
   add_foreign_key "people_visit_summaries", "visit_summaries", on_delete: :cascade
   add_foreign_key "person_sizes", "item_categories"
   add_foreign_key "person_sizes", "people"
+  add_foreign_key "trip_destination_people", "people", on_delete: :nullify
+  add_foreign_key "trip_destination_people", "trip_destinations"
   add_foreign_key "trip_destinations", "locations"
   add_foreign_key "trip_destinations", "trip_groups"
   add_foreign_key "trip_groups", "trips"

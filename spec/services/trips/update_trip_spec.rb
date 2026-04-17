@@ -41,7 +41,7 @@ describe Trips::UpdateTrip do
     expect(trip.groups.first.number).to eq(1)
     expect(trip.groups.first.volunteers).to eq(["Jerzy*", "Basia", "Gordon"])
     expect(trip.groups.first.locations.pluck(:name)).to eq(["Tents", "Mall"])
-    expect(trip.groups.first.trip_destinations.pluck(:soups)).to eq([88, 99])
-    expect(trip.groups.first.trip_destinations.pluck(:sandwiches)).to eq([10, 11])
+    expect(trip.groups.first.trip_destinations.pluck(:soups)).to eq([0, 0])
+    expect(trip.groups.first.trip_destinations.pluck(:sandwiches)).to eq([0, 0])
   end
 end

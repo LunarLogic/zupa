@@ -1,14 +1,14 @@
 class TripDestination < ApplicationRecord
   belongs_to :trip_group
   belongs_to :location
+  has_many :trip_destination_people, dependent: :destroy
 
   delegate :name, :person_count, :active_people,
     :longitude, :latitude, :animal_count, :active_animals, :chocolate_count, to: :location
   delegate :id, to: :location, prefix: true
 
-  def sandwich_count
-    location.estimated? ? location.person_count * AppSetting.instance.sandwiches_per_person : sandwiches
-  end
+  alias_attribute :sandwich_count, :sandwiches
+  alias_attribute :soup_count, :soups
 
   def sandwiches?
     sandwich_count > 0
@@ -16,37 +16,45 @@ class TripDestination < ApplicationRecord
   alias_method :has_sandwiches, :sandwiches?
 
   def soups?
-    soups > 0
+    soup_count > 0
   end
   alias_method :has_soups, :soups?
-  alias_attribute :soup_count, :soups
+
+  def water_count
+    trip_destination_people.sum(:sparkling_water_count) + trip_destination_people.sum(:still_water_count)
+  end
 
   def waters?
-    waters > 0
+    water_count > 0
   end
   alias_method :has_waters, :waters?
-  alias_attribute :water_count, :waters
+
+  def provision_count
+    long_term_provisions_people.count
+  end
 
   def provisions?
-    provisions > 0
+    provision_count > 0
   end
   alias_method :has_provisions, :provisions?
-  alias_attribute :provision_count, :provisions
+
+  def book_count
+    book_people.count
+  end
 
   def books?
-    books > 0
+    book_count > 0
   end
   alias_method :has_books, :books?
-  alias_attribute :book_count, :books
+
+  def package_count
+    trip_destination_people.sum(:package_count)
+  end
 
   def packages?
     package_count > 0
   end
   alias_method :has_packages, :packages?
-
-  def package_count
-    location.packed_package_count
-  end
 
   def animals?
     animal_count > 0
@@ -62,4 +70,24 @@ class TripDestination < ApplicationRecord
     chocolate_count > 0
   end
   alias_method :has_chocolates, :chocolates?
+
+  def long_term_provisions_people
+    trip_destination_people.where(long_term_provisions: true)
+  end
+
+  def sparkling_water_people
+    trip_destination_people.where("sparkling_water_count > 0")
+  end
+
+  def still_water_people
+    trip_destination_people.where("still_water_count > 0")
+  end
+
+  def book_people
+    trip_destination_people.where.not(book_preferences: [nil, ""])
+  end
+
+  def package_people
+    trip_destination_people.where("package_count > 0")
+  end
 end
