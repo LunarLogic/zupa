@@ -33,9 +33,9 @@ describe Trips::CreateTrip do
       expect(trip.date.to_s).to eq("2024-02-08")
       expect(trip.organiser).to eq(admin)
       expect(trip.groups.count).to eq(3)
-      expect(trip.groups.first.volunteers).to eq(["Jan Kowalski*", "Polimeria Gnat", "Wyszeniega Zanussi"])
-      expect(trip.groups.second.volunteers).to eq(["Elżbieta Łinsdor*", "Miłorad Jackiewicz", "Trzebiesława Drewniakowska"])
-      expect(trip.groups.last.volunteers).to eq(["Alan Wake*", "Książe Persii", "Bezimienny"])
+      expect(trip.groups.first.volunteer_names).to eq(["Jan Kowalski*", "Polimeria Gnat", "Wyszeniega Zanussi"])
+      expect(trip.groups.second.volunteer_names).to eq(["Elżbieta Łinsdor*", "Miłorad Jackiewicz", "Trzebiesława Drewniakowska"])
+      expect(trip.groups.last.volunteer_names).to eq(["Alan Wake*", "Książe Persii", "Bezimienny"])
     end
 
     it "with proper details from columns", vcr: {match_requests_on: [:method, :uri]} do

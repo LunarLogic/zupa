@@ -4,7 +4,7 @@ RSpec.describe TripJsonBuilder do
   let(:admin_user) { create(:admin_user) }
   let(:trip) { create(:trip, date: Date.new(2025, 6, 10), organiser: admin_user) }
 
-  let(:group) { create(:trip_group, trip: trip, number: 1, volunteers: ["Celina"]) }
+  let(:group) { create(:trip_group, trip: trip, number: 1, volunteer_names: ["Celina"]) }
   let(:location) { create(:location, name: "Lokacja C") }
 
   before do

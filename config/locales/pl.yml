@@ -55,6 +55,8 @@ pl:
         reports: Raporty
         visit_summaries: Relacje
         trips: Wyjazdy
+        trips_beta: Wyjazdy BETA
+        volunteers: Wolontariusze
         app_settings: Ustawienia
       groups:
         configuration: ⚙️ Konfiguracja
@@ -103,6 +105,24 @@ pl:
           location: Miejsce
           person: Osoba
           preferences: Preferencje książkowe
+    trips_beta:
+      menu: Wyjazdy BETA
+      columns:
+        destinations: Destynacje
+      form:
+        organizer: Organizator
+        groups: Grupy
+        add_group: Grupa
+        remove_group: Usuń grupę
+        number: Numer grupy
+        volunteers: Wolontariusze
+        destinations: Destynacje
+        add_destination: Destynacja
+        location: Lokacja
+        notes: Uwagi
+    volunteers:
+      errors:
+        cannot_delete_assigned: Nie można usunąć wolontariusza przypisanego do wyjazdu.
     preparation_templates:
       label: Szablony przygotowań
       columns:
@@ -280,8 +300,13 @@ pl:
         admin_user_id: Osoba Organizująca
         active: Aktywny
       trip_group:
+        volunteer_names: Wolontariusze
         volunteers: Wolontariusze
         locations: Miejsca
+      volunteer:
+        first_name: Imię
+        last_name: Nazwisko
+        active: Aktywny
       preparation_template:
         name: Nazwa
         default: Domyślny
@@ -328,6 +353,9 @@ pl:
       trip:
         one: Wyjazd
         other: Wyjazdy
+      volunteer:
+        one: Wolontariusz
+        other: Wolontariusze
       preparation_template:
         one: Szablon
         other: Szablony

@@ -1,7 +1,7 @@
 Trestle.resource(:trips) do
   if Flipper.enabled?(:trip)
     collection do
-      Trip
+      Trip.sheet
         .includes(groups: [trip_destinations: :location])
         .order(date: :desc)
     end
@@ -11,7 +11,7 @@ Trestle.resource(:trips) do
     end
 
     menu do
-      item :trips, icon: "fa fa-car-side", badge: Trip.count, priority: 20, group: :trips
+      item :trips, icon: "fa fa-car-side", badge: Trip.sheet.count, priority: 20, group: :trips
     end
 
     table do

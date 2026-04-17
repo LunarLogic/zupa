@@ -11,7 +11,7 @@ class TripRepository
       group = TripGroup.create!(
         trip: trip,
         number: group_data.number,
-        volunteers: group_data.volunteers
+        volunteer_names: group_data.volunteers
       )
 
       create_destinations!(group, group_data.destinations)

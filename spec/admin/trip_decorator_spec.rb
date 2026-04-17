@@ -4,8 +4,8 @@ RSpec.describe TripDecorator do
   let(:admin_user) { create(:admin_user) }
   let(:trip) { create(:trip, date: Date.new(2025, 3, 15), organiser: admin_user) }
 
-  let(:group1) { create(:trip_group, trip: trip, number: 1, volunteers: ["Anna"]) }
-  let(:group2) { create(:trip_group, trip: trip, number: 2, volunteers: ["Bartek"]) }
+  let(:group1) { create(:trip_group, trip: trip, number: 1, volunteer_names: ["Anna"]) }
+  let(:group2) { create(:trip_group, trip: trip, number: 2, volunteer_names: ["Bartek"]) }
 
   let(:location1) { create(:location, name: "Lokacja A") }
   let(:location2) { create(:location, name: "Lokacja B") }

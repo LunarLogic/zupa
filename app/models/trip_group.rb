@@ -2,13 +2,28 @@ class TripGroup < ApplicationRecord
   belongs_to :trip
   has_many :trip_destinations, dependent: :destroy
   has_many :locations, through: :trip_destinations
+  has_and_belongs_to_many :volunteers, join_table: "trip_groups_volunteers"
+  has_and_belongs_to_many :drivers, class_name: "Volunteer",
+    join_table: "trip_groups_drivers", association_foreign_key: :volunteer_id
+
+  accepts_nested_attributes_for :trip_destinations, allow_destroy: true, reject_if: :all_blank
+
+  validate :manual_has_destinations
+
+  def all_volunteer_names
+    if trip&.manual?
+      volunteers.map(&:full_name)
+    else
+      volunteer_names || []
+    end
+  end
 
   def destination_count
     trip_destinations.size
   end
 
   def volunteer_count
-    volunteers.size
+    all_volunteer_names.size
   end
 
   def person_count
@@ -90,5 +105,13 @@ class TripGroup < ApplicationRecord
 
   def chocolate_count
     trip_destinations.sum(&:chocolate_count)
+  end
+
+  private
+
+  def manual_has_destinations
+    return unless trip&.manual?
+    active_destinations = trip_destinations.reject(&:marked_for_destruction?)
+    errors.add(:trip_destinations, :too_short, count: 1) if active_destinations.empty?
   end
 end

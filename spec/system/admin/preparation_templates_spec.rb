@@ -11,8 +11,8 @@ RSpec.describe "Admin preparation templates", type: :system do
 
   let(:trip) do
     create(:trip, date: "2025-12-01", organiser: admin_user).tap do |t|
-      create(:trip_group, trip: t, number: 1, volunteers: ["Anna", "Bartek"])
-      create(:trip_group, trip: t, number: 2, volunteers: ["Celina"])
+      create(:trip_group, trip: t, number: 1, volunteer_names: ["Anna", "Bartek"])
+      create(:trip_group, trip: t, number: 2, volunteer_names: ["Celina"])
     end
   end
 
@@ -262,8 +262,8 @@ RSpec.describe "Admin preparation templates", type: :system do
   describe "Preview renders totals across groups" do
     let(:trip_with_data) do
       create(:trip, date: "2025-12-15", organiser: admin_user).tap do |t|
-        g1 = create(:trip_group, trip: t, number: 1, volunteers: ["Anna"])
-        g2 = create(:trip_group, trip: t, number: 2, volunteers: ["Bartek"])
+        g1 = create(:trip_group, trip: t, number: 1, volunteer_names: ["Anna"])
+        g2 = create(:trip_group, trip: t, number: 2, volunteer_names: ["Bartek"])
         loc_a = create(:location, name: "Lokacja A")
         loc_b = create(:location, name: "Lokacja B")
         p_a = create(:person, location: loc_a, long_term_provisions: true)

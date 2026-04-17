@@ -202,7 +202,7 @@ AdminUser.create(email: "admin@example.com", password: "pass1234", first_name: "
 
   trip_data[:groups].each_with_index do |group_data, index|
     trip_group = TripGroup.create(
-      volunteers: group_data[:volunteers],
+      volunteer_names: group_data[:volunteers],
       trip_id: trip.id,
       number: index + 1
     )
@@ -261,7 +261,7 @@ end
 
   trip_data[:groups].each_with_index do |group_data, index|
     trip_group = TripGroup.create(
-      volunteers: group_data[:volunteers],
+      volunteer_names: group_data[:volunteers],
       trip_id: trip.id,
       number: index + 1
     )

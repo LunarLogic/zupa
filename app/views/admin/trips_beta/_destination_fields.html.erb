@@ -1,0 +1,19 @@
+<%
+  loc = f.object.location || Location.find_by(id: f.object.location_id)
+  location_name = loc&.name || ""
+%>
+<div class="trip-beta-destination"
+  data-trip-form-target="destination"
+  data-location-id="<%= f.object.location_id %>"
+  style="margin:0.5rem 0; padding:0.5rem; background:#f9f9f9; border-left:3px solid #4a90e2;">
+  <%= f.hidden_field :id if f.object.persisted? %>
+  <%= f.hidden_field :location_id, data: {trip_form_target: "destinationLocationId"} %>
+  <%= f.hidden_field :_destroy, data: {trip_form_target: "destinationDestroy"}, value: "0" %>
+
+  <strong data-trip-form-target="destinationLabel"><%= location_name %></strong>
+
+  <div class="form-group" style="margin-top:0.5rem;">
+    <label><%= I18n.t("admin.trips_beta.form.notes", default: "Uwagi") %></label>
+    <%= f.text_area :additional_info, rows: 2, class: "form-control", wrapper: false %>
+  </div>
+</div>

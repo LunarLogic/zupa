@@ -1,6 +1,6 @@
 class TripGroupDecorator < SimpleDelegator
   def name
-    [prefix, volunteers].join(": ")
+    [prefix, formatted_volunteer_names].join(": ")
   end
 
   def water_count
@@ -91,8 +91,8 @@ class TripGroupDecorator < SimpleDelegator
     "GR #{number}"
   end
 
-  def volunteers
-    super.join(", ")
+  def formatted_volunteer_names
+    all_volunteer_names.join(", ")
   end
 
   def people_across_destinations

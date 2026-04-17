@@ -8,6 +8,8 @@ class TripDestination < ApplicationRecord
   alias_attribute :soup_count, :soups
   alias_attribute :chocolate_count, :chocolates
 
+  before_validation :populate_frozen_counts, on: :create, if: :manual_auto_populate?
+
   def name
     location_snapshot&.dig("name") || location.name
   end
@@ -107,5 +109,31 @@ class TripDestination < ApplicationRecord
 
   def package_people
     trip_destination_people.where("package_count > 0")
+  end
+
+  private
+
+  def manual_auto_populate?
+    trip_group&.trip&.manual? && person_count.to_i.zero? && location.present?
+  end
+
+  def populate_frozen_counts
+    settings = AppSetting.instance
+    self.person_count = location.person_count
+    self.chocolates = location.chocolate_count
+    self.sandwiches = location.person_count * settings.sandwiches_per_person
+    self.soups = location.person_count * settings.soups_per_person
+    self.provisions ||= 0
+    self.waters ||= 0
+    self.books ||= 0
+    self.additional_info = "" if additional_info.nil?
+    self.location_snapshot ||= Trips::BuildLocationSnapshot.new.call(location: location)
+    self.order ||= next_order_within_group
+  end
+
+  def next_order_within_group
+    return 1 unless trip_group
+    siblings = trip_group.trip_destinations.reject { |td| td == self }
+    (siblings.map { |td| td.order.to_i }.max || 0) + 1
   end
 end

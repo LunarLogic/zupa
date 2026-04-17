@@ -6,7 +6,7 @@ describe Trips::UpdateTrip do
       date: "2025-05-11",
       source_spreadsheet_url: "https://old.io")
 
-    trip_group = create(:trip_group, trip: trip, volunteers: ["*Dyzio", "Zyzio", "Hyzio"])
+    trip_group = create(:trip_group, trip: trip, volunteer_names: ["*Dyzio", "Zyzio", "Hyzio"])
     create(:trip_destination,
       location: create(:location, name: "Vacant building"),
       trip_group: trip_group)
@@ -38,7 +38,7 @@ describe Trips::UpdateTrip do
     expect(trip).not_to be_active
     expect(trip.source_spreadsheet_url).to eq("https://new.com")
     expect(trip.groups.first.number).to eq(1)
-    expect(trip.groups.first.volunteers).to eq(["Jerzy*", "Basia", "Gordon"])
+    expect(trip.groups.first.volunteer_names).to eq(["Jerzy*", "Basia", "Gordon"])
     expect(trip.groups.first.locations.pluck(:name)).to eq(["Tents", "Mall"])
     expect(trip.groups.first.trip_destinations.pluck(:soups)).to eq([0, 0])
     expect(trip.groups.first.trip_destinations.pluck(:sandwiches)).to eq([0, 0])

@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe "Estimated location integration" do
   let(:admin_user) { create(:admin_user) }
   let(:trip) { create(:trip, date: Date.new(2025, 5, 1), organiser: admin_user) }
-  let(:group) { create(:trip_group, trip: trip, number: 1, volunteers: ["Ola"]) }
+  let(:group) { create(:trip_group, trip: trip, number: 1, volunteer_names: ["Ola"]) }
 
   let(:regular_location) { create(:location, name: "Zwykłe miejsce") }
   let(:estimated_location) { create(:location, name: "Grupowe miejsce", location_type: "estimated", estimated_person_count: 10) }

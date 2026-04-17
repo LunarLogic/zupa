@@ -17,7 +17,7 @@ RSpec.describe "Admin trips preparations", type: :system do
 
   let(:trip) do
     create(:trip, date: "2025-12-01", organiser: admin_user, preparation_template: default_template).tap do |t|
-      create(:trip_group, trip: t, number: 1, volunteers: ["Anna", "Bartek"])
+      create(:trip_group, trip: t, number: 1, volunteer_names: ["Anna", "Bartek"])
     end
   end
 

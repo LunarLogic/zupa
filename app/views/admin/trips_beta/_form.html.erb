@@ -1,0 +1,71 @@
+<%
+  trip = instance
+  trip.admin_user_id ||= current_user.id
+  if trip.date.blank?
+    today = Date.current
+    days_ahead = (4 - today.wday) % 7
+    days_ahead = 7 if days_ahead.zero?
+    trip.date = today + days_ahead
+  end
+  trip.groups.build if trip.groups.empty?
+  trip.groups.each { |g| g.trip_destinations.build if g.trip_destinations.empty? }
+  active_locations = Location.where(status: "active").order(:name)
+  assigned_volunteer_ids = trip.groups.flat_map { |g| g.volunteer_ids + g.driver_ids }
+  volunteers_pool = Volunteer
+    .where("active = ? OR id IN (?)", true, assigned_volunteer_ids.presence || [0])
+    .order(:last_name, :first_name)
+%>
+
+<div class="trip-beta-section" style="border:1px solid #ddd; padding:1rem; margin-bottom:1rem;">
+  <h3 style="margin-top:0;"><%= I18n.t("admin.trips_beta.form.basic_data", default: "Podstawowe dane") %></h3>
+
+  <div class="form-group">
+    <label for="trip_date"><%= I18n.t("activerecord.attributes.trip.date") %></label>
+    <%= form.date_field :date, class: "form-control", id: "trip_date", wrapper: false %>
+  </div>
+
+  <div class="form-group">
+    <%= form.check_box :active, {id: "trip_active", wrapper: false} %>
+    <label for="trip_active" style="margin-left: 0.4rem;"><%= I18n.t("activerecord.attributes.trip.active") %></label>
+  </div>
+
+  <div class="form-group">
+    <label for="trip_admin_user_id"><%= I18n.t("admin.trips_beta.form.organizer") %></label>
+    <%= form.select :admin_user_id, AdminUser.all.map { |u| [u.full_name, u.id] },
+      {selected: trip.admin_user_id || current_user.id},
+      {class: "form-control", id: "trip_admin_user_id", wrapper: false} %>
+  </div>
+</div>
+
+<h3><%= I18n.t("admin.trips_beta.form.groups") %></h3>
+
+<div data-controller="trip-form">
+  <div data-trip-form-target="groupsContainer">
+    <%= form.fields_for :groups do |group_form| %>
+      <%= render "group_fields", f: group_form,
+        volunteers_pool: volunteers_pool,
+        active_locations: active_locations %>
+    <% end %>
+  </div>
+
+  <button type="button" class="btn btn-secondary" data-action="trip-form#addGroup">
+    + <%= I18n.t("admin.trips_beta.form.add_group") %>
+  </button>
+
+  <template data-trip-form-target="groupTemplate">
+    <% new_group = TripGroup.new %>
+    <%= form.fields_for :groups, new_group, child_index: "__GROUP_INDEX__" do |group_form| %>
+      <%= render "group_fields", f: group_form,
+        volunteers_pool: volunteers_pool,
+        active_locations: active_locations %>
+    <% end %>
+  </template>
+
+  <template data-trip-form-target="destinationTemplate">
+    <%= form.fields_for :groups, TripGroup.new, child_index: "__GROUP_INDEX__" do |group_form| %>
+      <%= group_form.fields_for :trip_destinations, TripDestination.new, child_index: "__DEST_INDEX__" do |dest_form| %>
+        <%= render "destination_fields", f: dest_form, active_locations: active_locations %>
+      <% end %>
+    <% end %>
+  </template>
+</div>
