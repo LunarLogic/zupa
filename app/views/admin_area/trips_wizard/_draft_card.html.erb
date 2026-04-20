@@ -1,0 +1,16 @@
+<div class="wizard__card wizard__card--draft" id="draft-card-<%= trip.id %>">
+  <%= button_to main_app.admin_area_trips_wizard_path(trip),
+    method: :get,
+    class: "wizard__card-link",
+    form: {class: "wizard__card-link-form", data: {turbo: "true", turbo_stream: "true"}} do %>
+    <div class="wizard__card-date"><%= l(trip.date, format: :long) if trip.date %></div>
+    <div class="wizard__card-meta">
+      <%= trip.code_name %> · <%= trip.organiser&.full_name %> · <%= pluralize(trip.groups.size, "grupa", plural: "grup") %>
+    </div>
+  <% end %>
+  <%= button_to "✕",
+    main_app.admin_area_trips_wizard_path(trip),
+    method: :delete,
+    class: "wizard__card-delete wizard__card-delete--absolute",
+    form: {data: {turbo: "true", turbo_stream: "true", turbo_confirm: t("admin.trips_wizard.index.confirm_delete_draft")}} %>
+</div>

@@ -20,11 +20,18 @@ RSpec.describe TripGroup do
   end
 
   describe "manual validations" do
-    it "requires at least one destination when trip is manual" do
-      trip = build(:trip, source: "manual", source_spreadsheet_url: nil)
+    it "requires at least one destination when trip is manual and published" do
+      trip = build(:trip, source: "manual", status: "published", source_spreadsheet_url: nil)
       group = trip.groups.build(number: 1)
       group.valid?
       expect(group.errors[:trip_destinations]).to be_present
+    end
+
+    it "allows empty destinations for manual draft" do
+      trip = build(:trip, source: "manual", status: "draft", source_spreadsheet_url: nil)
+      group = trip.groups.build(number: 1)
+      group.valid?
+      expect(group.errors[:trip_destinations]).to be_empty
     end
   end
 end

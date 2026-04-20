@@ -49,6 +49,14 @@ Rails.application.routes.draw do
         patch :deliver
       end
     end
+    resources :trips_wizard, only: %i[new create show destroy] do
+      member do
+        patch :basic
+        patch :locations
+        patch :volunteers
+        patch :publish
+      end
+    end
   end
   get "*path", to: "components#index"
   root "components#index"

@@ -1,0 +1,11 @@
+<div class="wizard">
+  <div class="wizard__flash" id="wizard-flash"></div>
+
+  <div class="wizard__panel">
+    <%= render "admin_area/trips_wizard/header", drafts: drafts, published: published, current_trip: current_trip %>
+
+    <div id="wizard-panel" class="wizard__body">
+      <%= render "admin_area/trips_wizard/empty_panel" %>
+    </div>
+  </div>
+</div>

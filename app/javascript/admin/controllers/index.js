@@ -4,8 +4,12 @@
 import { application } from "./application";
 import ErrorController from "./error_controller";
 import TripPreviewController from "./trip_preview_controller";
-import TripFormController from "./trip_form_controller";
+import MapPickerController from "./map_picker_controller";
+import VolunteerDndController from "./volunteer_dnd_controller";
+import DropdownController from "./dropdown_controller";
 
 application.register("error", ErrorController);
 application.register("trip-preview", TripPreviewController);
-application.register("trip-form", TripFormController);
+application.register("map-picker", MapPickerController);
+application.register("volunteer-dnd", VolunteerDndController);
+application.register("dropdown", DropdownController);

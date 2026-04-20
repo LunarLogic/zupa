@@ -1,0 +1,23 @@
+<nav class="wizard__progress">
+  <% steps = [["basic", 1, t("admin.trips_wizard.progress.step_1")],
+              ["locations", 2, t("admin.trips_wizard.progress.step_2")],
+              ["volunteers", 3, t("admin.trips_wizard.progress.step_3")]] %>
+  <% steps.each do |name, num, label| %>
+    <% active = step == name %>
+    <% if trip&.persisted? %>
+      <%= button_to main_app.admin_area_trips_wizard_path(trip),
+        method: :get,
+        params: {step: name},
+        class: "wizard__progress-step #{'wizard__progress-step--active' if active}",
+        form: {data: {turbo: "true", turbo_stream: "true"}} do %>
+        <span class="wizard__progress-num"><%= num %></span>
+        <span class="wizard__progress-label"><%= label %></span>
+      <% end %>
+    <% else %>
+      <span class="wizard__progress-step <%= 'wizard__progress-step--active' if active %> wizard__progress-step--disabled">
+        <span class="wizard__progress-num"><%= num %></span>
+        <span class="wizard__progress-label"><%= label %></span>
+      </span>
+    <% end %>
+  <% end %>
+</nav>

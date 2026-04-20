@@ -1,0 +1,98 @@
+<%
+  pool = Volunteer.active.order(:last_name, :first_name)
+  assigned_ids = trip.groups.flat_map { |g| g.volunteer_ids + g.driver_ids }.uniq
+  pool_remaining = pool.reject { |v| assigned_ids.include?(v.id) }
+
+  groups_with_members = trip.groups.includes(:volunteers, :drivers, trip_destinations: :location)
+%>
+
+<div class="wizard__step wizard__step--volunteers"
+  data-controller="volunteer-dnd"
+  data-volunteer-dnd-save-url-value="<%= main_app.volunteers_admin_area_trips_wizard_path(trip) %>"
+  data-volunteer-dnd-publish-url-value="<%= main_app.publish_admin_area_trips_wizard_path(trip) %>"
+  data-volunteer-dnd-trip-id-value="<%= trip.id %>">
+
+  <h3><%= t("admin.trips_wizard.steps.volunteers.title") %></h3>
+
+  <div class="volunteer-dnd">
+    <aside class="volunteer-dnd__pool">
+      <h4><%= t("admin.trips_wizard.steps.volunteers.pool") %></h4>
+      <div class="volunteer-dnd__pool-list"
+        data-volunteer-dnd-target="pool"
+        data-zone="pool"
+        data-group-id=""
+        data-role="">
+        <% pool_remaining.each do |v| %>
+          <div class="volunteer-chip"
+            data-volunteer-id="<%= v.id %>"
+            draggable="false"><%= v.full_name %></div>
+        <% end %>
+      </div>
+    </aside>
+
+    <div class="volunteer-dnd__groups">
+      <% groups_with_members.each_with_index do |g, i| %>
+        <%
+          palette = %w[#e74c3c #3498db #2ecc71 #f39c12 #9b59b6 #1abc9c #d35400 #34495e]
+          color = palette[(g.number - 1) % palette.size]
+        %>
+        <div class="group-card" style="border-color: <%= color %>">
+          <h4 style="color: <%= color %>">
+            Grupa <%= g.number %>
+            <small>(<%= g.trip_destinations.map { |d| d.name }.join(", ") %>)</small>
+          </h4>
+
+          <div class="group-card__zone group-card__zone--drivers">
+            <h5><%= t("admin.trips_wizard.steps.volunteers.drivers") %></h5>
+            <div class="group-card__list"
+              data-volunteer-dnd-target="zone"
+              data-group-id="<%= g.id %>"
+              data-role="driver">
+              <% g.drivers.each do |v| %>
+                <div class="volunteer-chip volunteer-chip--driver"
+                  data-volunteer-id="<%= v.id %>"
+                  draggable="false"><%= v.full_name %></div>
+              <% end %>
+            </div>
+          </div>
+
+          <div class="group-card__zone group-card__zone--helpers">
+            <h5><%= t("admin.trips_wizard.steps.volunteers.helpers") %></h5>
+            <div class="group-card__list"
+              data-volunteer-dnd-target="zone"
+              data-group-id="<%= g.id %>"
+              data-role="volunteer">
+              <% g.volunteers.each do |v| %>
+                <div class="volunteer-chip"
+                  data-volunteer-id="<%= v.id %>"
+                  draggable="false"><%= v.full_name %></div>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="wizard__actions">
+    <%= button_to "← #{t("admin.trips_wizard.steps.volunteers.back")}",
+      main_app.admin_area_trips_wizard_path(trip),
+      method: :get,
+      params: {step: "locations"},
+      class: "btn btn-default",
+      form: {data: {turbo: "true", turbo_stream: "true"}} %>
+    <button type="button" class="btn btn-primary"
+      data-action="volunteer-dnd#save"
+      data-volunteer-dnd-target="saveBtn"
+      data-save-label="<%= t("admin.trips_wizard.steps.volunteers.save") %>"
+      data-saved-label="<%= t("admin.trips_wizard.steps.volunteers.saved") %> ✓">
+      <%= t("admin.trips_wizard.steps.volunteers.save") %>
+    </button>
+    <button type="button" class="btn btn-success"
+      data-action="volunteer-dnd#publish"
+      data-volunteer-dnd-target="publishBtn"
+      disabled>
+      <%= t("admin.trips_wizard.steps.volunteers.publish") %> ✓
+    </button>
+  </div>
+</div>

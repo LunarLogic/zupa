@@ -1,0 +1,12 @@
+<div class="wizard__panel-inner">
+  <%= render "admin_area/trips_wizard/progress", trip: trip, step: step %>
+
+  <% case step
+     when "basic" %>
+    <%= render "admin_area/trips_wizard/step_basic", trip: trip %>
+  <% when "locations" %>
+    <%= render "admin_area/trips_wizard/step_locations", trip: trip %>
+  <% when "volunteers" %>
+    <%= render "admin_area/trips_wizard/step_volunteers", trip: trip %>
+  <% end %>
+</div>

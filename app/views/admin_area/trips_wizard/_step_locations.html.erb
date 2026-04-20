@@ -1,0 +1,83 @@
+<%
+  locations = LocationRepository.new.active_with_recency(before_date: trip.date)
+  group_palette = %w[#e74c3c #3498db #2ecc71 #f39c12 #9b59b6 #1abc9c #d35400 #34495e]
+  skip_map = ENV["SKIP_MAPS"].present? || ENV["REACT_APP_GOOGLE_MAPS_API_KEY"].blank?
+
+  groups_data = trip.groups.includes(trip_destinations: :location).map do |g|
+    {
+      id: g.id,
+      number: g.number,
+      color: group_palette[(g.number - 1) % group_palette.size],
+      location_ids: g.trip_destinations.map(&:location_id),
+      locations: g.trip_destinations.map { |d| {id: d.location_id, name: d.name} }
+    }
+  end
+
+  location_features = locations.map do |row|
+    loc = row[:location]
+    {
+      id: loc.id,
+      name: loc.name,
+      lat: loc.latitude.to_f,
+      lng: loc.longitude.to_f,
+      last_scheduled_at: row[:last_scheduled_at]&.iso8601,
+      recent_rank: row[:recent_rank]
+    }
+  end
+%>
+
+<div class="wizard__step wizard__step--locations"
+  data-controller="map-picker"
+  data-map-picker-locations-value="<%= location_features.to_json %>"
+  data-map-picker-groups-value="<%= groups_data.to_json %>"
+  data-map-picker-palette-value="<%= group_palette.to_json %>"
+  data-map-picker-api-key-value="<%= ENV['REACT_APP_GOOGLE_MAPS_API_KEY'] %>"
+  data-map-picker-skip-map-value="<%= skip_map %>"
+  data-map-picker-save-url-value="<%= main_app.locations_admin_area_trips_wizard_path(trip) %>">
+
+  <h3><%= t("admin.trips_wizard.steps.locations.title") %></h3>
+
+  <div class="map-picker">
+    <% if skip_map %>
+      <div class="map-picker__map-wrap">
+        <div class="map-picker__list" data-map-picker-target="list"></div>
+      </div>
+    <% else %>
+      <div class="map-picker__map-wrap">
+        <div class="map-picker__map" data-map-picker-target="map"></div>
+        <div class="map-picker__legend">
+          <div class="map-picker__legend-title">Odwiedzone:</div>
+          <div><%= render "admin_area/trips_wizard/legend_flag", color: "#27ae60" %> ostatni wyjazd</div>
+          <div><%= render "admin_area/trips_wizard/legend_flag", color: "#f39c12" %> 2 wyjazdy temu</div>
+          <div><%= render "admin_area/trips_wizard/legend_flag", color: "#c0392b" %> dawniej / nigdy</div>
+        </div>
+      </div>
+    <% end %>
+
+    <aside class="map-picker__sidebar">
+      <div data-map-picker-target="groups" class="map-picker__groups">
+        <!-- Populated by Stimulus -->
+      </div>
+
+      <button type="button"
+        class="btn btn-secondary map-picker__add-group"
+        data-action="map-picker#addGroup">
+        + <%= t("admin.trips_wizard.steps.locations.add_group") %>
+      </button>
+    </aside>
+  </div>
+
+  <div class="wizard__actions">
+    <%= button_to "← #{t("admin.trips_wizard.steps.locations.back")}",
+      main_app.admin_area_trips_wizard_path(trip),
+      method: :get,
+      params: {step: "basic"},
+      class: "btn btn-default",
+      form: {data: {turbo: "true", turbo_stream: "true"}} %>
+    <button type="button"
+      class="btn btn-primary"
+      data-action="map-picker#advance">
+      <%= t("admin.trips_wizard.steps.locations.continue") %> →
+    </button>
+  </div>
+</div>

@@ -1,10 +1,10 @@
 Flipper.register(:trip)
-Flipper.register(:trips_beta)
+Flipper.register(:trips_wizard)
 
 if Rails.env.test?
   begin
     Flipper.enable(:trip)
-    Flipper.enable(:trips_beta)
+    Flipper.enable(:trips_wizard)
   rescue ActiveRecord::StatementInvalid
     # DB may not be ready yet (e.g. during db:schema:load)
   end

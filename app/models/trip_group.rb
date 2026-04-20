@@ -12,10 +12,15 @@ class TripGroup < ApplicationRecord
 
   def all_volunteer_names
     if trip&.manual?
-      volunteers.map(&:full_name)
+      drivers.map { |d| "*#{d.full_name}" } + volunteers.map(&:full_name)
     else
       volunteer_names || []
     end
+  end
+
+  def all_driver_names
+    return [] unless trip&.manual?
+    drivers.map(&:full_name)
   end
 
   def destination_count
@@ -111,6 +116,7 @@ class TripGroup < ApplicationRecord
 
   def manual_has_destinations
     return unless trip&.manual?
+    return if trip&.draft?
     active_destinations = trip_destinations.reject(&:marked_for_destruction?)
     errors.add(:trip_destinations, :too_short, count: 1) if active_destinations.empty?
   end

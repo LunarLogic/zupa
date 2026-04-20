@@ -55,7 +55,7 @@ pl:
         reports: Raporty
         visit_summaries: Relacje
         trips: Wyjazdy
-        trips_beta: Wyjazdy BETA
+        trips_wizard: Nowy wyjazd
         volunteers: Wolontariusze
         app_settings: Ustawienia
       groups:
@@ -105,21 +105,61 @@ pl:
           location: Miejsce
           person: Osoba
           preferences: Preferencje książkowe
-    trips_beta:
-      menu: Wyjazdy BETA
-      columns:
-        destinations: Destynacje
-      form:
-        organizer: Organizator
-        groups: Grupy
-        add_group: Grupa
-        remove_group: Usuń grupę
-        number: Numer grupy
-        volunteers: Wolontariusze
-        destinations: Destynacje
-        add_destination: Destynacja
-        location: Lokacja
-        notes: Uwagi
+    trips_wizard:
+      menu: Nowy wyjazd
+      index:
+        new_button: Nowy wyjazd
+        drafts: Wersje robocze
+        published: Poprzednie Wyjazdy
+        empty_drafts: Brak wersji roboczych.
+        empty_published: Brak opublikowanych wyjazdów.
+        continue: Kontynuuj
+        edit: Edytuj
+        new_draft_label: "Wersja Robocza:"
+        save: Zapisz
+        delete: Usuń
+        confirm_delete_draft: Usunąć wersję roboczą?
+      progress:
+        step_1: Podstawowe
+        step_2: Lokacje i grupy
+        step_3: Wolontariusze
+      steps:
+        basic:
+          title: Podstawowe dane
+          date: Data wyjazdu
+          organiser: Organizator
+          continue: Dalej
+        locations:
+          title: Lokacje i grupy
+          map_legend: Świeżo (<7 dni), Niedawno (<3 tyg), Dawno (>3 tyg)
+          active_group: Aktywna grupa
+          add_group: Dodaj grupę
+          remove_group: Usuń grupę
+          remove_location: Usuń lokację
+          select_group_first: Wybierz grupę, aby dodać lokację
+          back: Wstecz
+          continue: Dalej
+        volunteers:
+          title: Wolontariusze
+          pool: Dostępni wolontariusze
+          drivers: Kierowcy
+          helpers: Wolontariusze
+          drop_here: Upuść tutaj
+          back: Wstecz
+          save: Zapisz
+          saved: Zapisane
+          publish: Opublikuj
+      flash:
+        created: Utworzono wersję roboczą.
+        updated: Zapisano.
+        saved: Zapisano.
+        published: Wyjazd opublikowany.
+        publish_failed: "Nie udało się opublikować: %{errors}"
+      errors:
+        no_date: Brak daty.
+        no_organiser: Brak organizatora.
+        no_groups: Wyjazd musi mieć co najmniej jedną grupę.
+        group_no_destinations: "Grupa %{number} nie ma żadnych lokacji."
     volunteers:
       errors:
         cannot_delete_assigned: Nie można usunąć wolontariusza przypisanego do wyjazdu.

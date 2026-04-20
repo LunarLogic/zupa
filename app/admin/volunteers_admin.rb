@@ -1,5 +1,5 @@
 Trestle.resource(:volunteers) do
-  if Flipper.enabled?(:trips_beta)
+  if Flipper.enabled?(:trips_wizard)
     menu do
       item :volunteers, icon: "fa fa-user-friends", group: :trips, priority: 25
     end

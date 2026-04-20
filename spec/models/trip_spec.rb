@@ -41,6 +41,7 @@ RSpec.describe Trip, type: :model do
         date: Date.tomorrow,
         organiser: admin,
         source: "manual",
+        status: "published",
         source_spreadsheet_url: nil
       )
       trip.groups.build(number: 1).tap do |g|
@@ -49,16 +50,36 @@ RSpec.describe Trip, type: :model do
       expect(trip).to be_valid
     end
 
-    it "requires at least one group when manual" do
+    it "requires at least one group when manual and published" do
       admin = create(:admin_user)
       trip = Trip.new(
         date: Date.tomorrow,
         organiser: admin,
         source: "manual",
+        status: "published",
         source_spreadsheet_url: nil
       )
       expect(trip).not_to be_valid
       expect(trip.errors[:groups]).to be_present
+    end
+
+    it "allows manual draft without groups" do
+      admin = create(:admin_user)
+      trip = Trip.new(
+        date: Date.tomorrow,
+        organiser: admin,
+        source: "manual",
+        status: "draft",
+        source_spreadsheet_url: nil
+      )
+      expect(trip).to be_valid
+    end
+  end
+
+  describe "status enum" do
+    it "defaults to draft" do
+      trip = build(:trip, source: "manual", source_spreadsheet_url: nil)
+      expect(trip).to be_draft
     end
   end
 end

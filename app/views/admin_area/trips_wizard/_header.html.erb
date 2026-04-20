@@ -1,0 +1,55 @@
+<div id="wizard-header" class="wizard__header">
+  <div class="wizard__header-left">
+    <% if current_trip&.draft? %>
+      <span class="wizard__current-draft">
+        <strong><%= t("admin.trips_wizard.index.new_draft_label") %></strong>
+        <% if current_trip.persisted? %>
+          <%= current_trip.code_name %>
+          · <%= l(current_trip.date, format: :long) if current_trip.date %>
+          · <%= pluralize(current_trip.groups.size, "grupa", plural: "grup") %>
+        <% end %>
+      </span>
+    <% elsif current_trip&.published? %>
+      <span class="wizard__current-published">
+        <strong>Opublikowany:</strong>
+        <%= l(current_trip.date, format: :long) if current_trip.date %>
+        · <%= current_trip.organiser&.full_name %>
+        · <%= pluralize(current_trip.groups.size, "grupa", plural: "grup") %>
+      </span>
+    <% end %>
+  </div>
+
+  <div class="wizard__header-right">
+    <details class="wizard__dropdown wizard__dropdown--drafts" data-controller="dropdown">
+      <summary><%= t("admin.trips_wizard.index.drafts") %> (<%= drafts.size %>)</summary>
+      <div class="wizard__dropdown-list">
+        <% if drafts.empty? %>
+          <div class="wizard__empty"><%= t("admin.trips_wizard.index.empty_drafts") %></div>
+        <% else %>
+          <% drafts.each do |draft| %>
+            <%= render "admin_area/trips_wizard/draft_card", trip: draft %>
+          <% end %>
+        <% end %>
+      </div>
+    </details>
+
+    <% if published.any? %>
+      <details class="wizard__dropdown wizard__dropdown--published" data-controller="dropdown">
+        <summary><%= t("admin.trips_wizard.index.published") %> (<%= published.size %>)</summary>
+        <div class="wizard__dropdown-list">
+          <% published.each do |trip| %>
+            <%= render "admin_area/trips_wizard/published_card", trip: trip %>
+          <% end %>
+        </div>
+      </details>
+    <% end %>
+
+    <%= button_to main_app.new_admin_area_trips_wizard_path,
+      method: :get,
+      class: "wizard__new-btn",
+      form: {data: {turbo: "true", turbo_stream: "true"}} do %>
+      <span class="wizard__new-btn-plus">+</span>
+      <%= t("admin.trips_wizard.index.new_button") %>
+    <% end %>
+  </div>
+</div>
