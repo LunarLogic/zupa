@@ -27,6 +27,7 @@ Rails.application.routes.draw do
           get :show
         end
       end
+      resource :backup, only: :create, controller: :backups
     end
   end
 
