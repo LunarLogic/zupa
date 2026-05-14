@@ -9,21 +9,13 @@ module Trips
     private
 
     def google_spreadsheet(url)
-      session = GoogleDrive::Session.from_service_account_key(StringIO.new(google_drive_config))
+      session = ::Google::DriveSession.new.call
 
       session.spreadsheet_by_key(spreadsheet_id(url)).worksheets[0]
     end
 
     def spreadsheet_id(url)
       url.split("/")[5]
-    end
-
-    def google_drive_config
-      template = File.read("google_drive_client_config.json.erb")
-      config = ERB.new(template).result
-      parsed = JSON.parse(config)
-      parsed["private_key"] = parsed["private_key"].gsub('\n', "\n")
-      JSON.generate(parsed)
     end
 
     class Spreadsheet
