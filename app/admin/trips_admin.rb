@@ -75,41 +75,66 @@ Trestle.resource(:trips) do
       tab :ksiazki, label: I18n.t("admin.trips.tabs.ksiazki") do
         unless trip.new_record?
           container do |c|
-            rows = trip.groups.flat_map do |group|
-              group.trip_destinations.flat_map do |td|
+            groups_with_rows = trip.groups.map do |group|
+              rows = group.trip_destinations.flat_map do |td|
                 td.location.active_people
                   .select { |p| p.book_preferences.present? }
                   .map { |p| {location: td.location.name, person: p, preferences: p.book_preferences} }
               end
-            end
+              [TripGroupDecorator.new(group), rows]
+            end.reject { |_g, rows| rows.empty? }
 
             card do
-              if rows.empty?
+              if groups_with_rows.empty?
                 content_tag(:p, I18n.t("admin.trips.ksiazki.empty"), style: "margin: 1rem; color: #666;")
               else
-                header = content_tag(:thead) do
-                  content_tag(:tr) do
-                    safe_join([
-                      content_tag(:th, I18n.t("admin.trips.ksiazki.columns.location")),
-                      content_tag(:th, I18n.t("admin.trips.ksiazki.columns.person")),
-                      content_tag(:th, I18n.t("admin.trips.ksiazki.columns.preferences"))
-                    ])
-                  end
-                end
-
-                body = content_tag(:tbody) do
-                  safe_join(rows.map { |r|
+                sections = groups_with_rows.map { |group, rows|
+                  header = content_tag(:thead) do
                     content_tag(:tr) do
                       safe_join([
-                        content_tag(:td, r[:location]),
-                        content_tag(:td, admin_link_to(r[:person].full_name, r[:person], admin: :people)),
-                        content_tag(:td, simple_format(r[:preferences]))
+                        content_tag(:th, I18n.t("admin.trips.ksiazki.columns.location")),
+                        content_tag(:th, I18n.t("admin.trips.ksiazki.columns.person")),
+                        content_tag(:th, I18n.t("admin.trips.ksiazki.columns.preferences"))
                       ])
                     end
-                  })
-                end
+                  end
 
-                content_tag(:table, header + body, class: "table table-striped", style: "width: 100%;")
+                  body = content_tag(:tbody) do
+                    safe_join(rows.map { |r|
+                      content_tag(:tr) do
+                        safe_join([
+                          content_tag(:td, r[:location]),
+                          content_tag(:td, admin_link_to(r[:person].full_name, r[:person], admin: :people)),
+                          content_tag(:td, simple_format(r[:preferences]))
+                        ])
+                      end
+                    })
+                  end
+
+                  content_tag(:h3, group.name, style: "margin-top: 1.5rem;") +
+                    content_tag(:table, header + body, class: "table table-striped", style: "width: 100%;")
+                }
+
+                content_tag(:div, safe_join(sections), id: "books-content") +
+                  content_tag(:div, class: "btn-group", style: "margin-top: 1rem;") {
+                    content_tag(:button, I18n.t("admin.trips.ksiazki.print"),
+                      onclick: "event.preventDefault(); (function() {
+                        var content = document.getElementById('books-content').innerHTML;
+                        var w = window.open('', '_blank');
+                        w.document.write('<html><head><title>#{I18n.t("admin.trips.ksiazki.print_title")}</title><style>' +
+                          '@page { size: A4 portrait; margin: 1cm; }' +
+                          'body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; margin: 0; padding: 1cm; }' +
+                          'h3 { margin-top: 1.5em; }' +
+                          'table { width: 100%; border-collapse: collapse; margin: 0.5em 0; page-break-inside: avoid; }' +
+                          'th, td { border: 1px solid #ccc; padding: 0.5em; vertical-align: top; }' +
+                          'th { background-color: #f7f7f7; font-weight: bold; }' +
+                          '</style></head><body>' + content + '</body></html>');
+                        w.document.close();
+                        w.focus();
+                        w.print();
+                      })()",
+                      class: "btn btn-success print-button no-print")
+                  }
               end
             end
           end

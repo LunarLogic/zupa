@@ -39,14 +39,14 @@ VCR.configure do |config|
   config.default_cassette_options = {
     match_requests_on: [:method, :uri, :body]
   }
-  config.filter_sensitive_data('<AUTHORIZATION>') do |interaction|
-    interaction.request.headers['Authorization']&.first
+  config.filter_sensitive_data("<AUTHORIZATION>") do |interaction|
+    interaction.request.headers["Authorization"]&.first
   end
-  config.filter_sensitive_data('<ACCESS_TOKEN>') do |interaction|
+  config.filter_sensitive_data("<ACCESS_TOKEN>") do |interaction|
     match = interaction.response.body.match(/"access_token":"([^"]+)"/)
     match[1] if match
   end
-  config.filter_sensitive_data('<OAUTH_ASSERTION>') do |interaction|
+  config.filter_sensitive_data("<OAUTH_ASSERTION>") do |interaction|
     match = interaction.response.body.match(/jwt-bearer&assertion=([^&"]+)/)
     match[1] if match
   end

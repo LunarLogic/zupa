@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2026_04_17_100003) do
+ActiveRecord::Schema[7.0].define(version: 2026_05_16_000001) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -51,6 +51,9 @@ ActiveRecord::Schema[7.0].define(version: 2026_04_17_100003) do
     t.datetime "updated_at", null: false
     t.integer "chocolates_per_person", default: 1, null: false
     t.integer "sandwiches_per_person", default: 2, null: false
+    t.integer "soups_per_person", default: 1, null: false
+    t.integer "sparkling_water_per_person", default: 0, null: false
+    t.integer "still_water_per_person", default: 0, null: false
   end
 
   create_table "auth_codes", force: :cascade do |t|
@@ -157,10 +160,12 @@ ActiveRecord::Schema[7.0].define(version: 2026_04_17_100003) do
     t.string "phone_number"
     t.boolean "active", default: true
     t.boolean "long_term_provisions", default: false, null: false
-    t.integer "sparkling_water_count", default: 0, null: false
-    t.integer "still_water_count", default: 0, null: false
+    t.integer "sparkling_water", default: 0, null: false
+    t.integer "still_water", default: 0, null: false
     t.text "book_preferences"
-    t.integer "extra_chocolates", default: 0, null: false
+    t.integer "soups", default: 0, null: false
+    t.integer "chocolates", default: 0, null: false
+    t.integer "sandwiches", default: 0, null: false
     t.index ["code"], name: "index_people_on_code", unique: true
     t.index ["location_id"], name: "index_people_on_location_id"
   end

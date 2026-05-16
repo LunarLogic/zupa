@@ -40,10 +40,26 @@ class Location < ApplicationRecord
   end
 
   def chocolate_count
-    person_count * AppSetting.instance.chocolates_per_person + active_people.sum(&:extra_chocolates)
+    packing_field_total(:chocolates)
+  end
+
+  def sandwich_count
+    packing_field_total(:sandwiches)
+  end
+
+  def soup_count
+    packing_field_total(:soups)
   end
 
   private
+
+  def packing_field_total(field)
+    if estimated?
+      (estimated_person_count || 0) * AppSetting.instance.public_send(:"#{field}_per_person")
+    else
+      active_people.sum(&field)
+    end
+  end
 
   def no_estimated_with_people
     if active_people.any?

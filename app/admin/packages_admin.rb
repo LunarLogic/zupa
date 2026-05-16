@@ -1,7 +1,6 @@
 Trestle.resource(:packages, readonly: true) do
   menu do
     item :packages, icon: "fa fa-box-open", badge: Package.count, priority: 32, group: :wardrobe
-
   end
 
   collection do

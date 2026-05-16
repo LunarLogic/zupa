@@ -7,9 +7,11 @@ FactoryBot.define do
     requests_status { "green" }
     active { true }
     long_term_provisions { false }
-    extra_chocolates { 0 }
-    sparkling_water_count { 0 }
-    still_water_count { 0 }
+    soups { 0 }
+    chocolates { 0 }
+    sandwiches { 0 }
+    sparkling_water { 0 }
+    still_water { 0 }
 
     trait :inactive do
       active { false }

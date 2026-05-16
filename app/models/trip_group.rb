@@ -44,7 +44,7 @@ class TripGroup < ApplicationRecord
   alias_method :has_soups, :soups?
 
   def soup_count
-    trip_destinations.sum(*:soup_count)
+    trip_destinations.sum(&:soup_count)
   end
 
   def waters?

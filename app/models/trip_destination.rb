@@ -3,12 +3,9 @@ class TripDestination < ApplicationRecord
   belongs_to :location
 
   delegate :name, :person_count, :active_people,
-    :longitude, :latitude, :animal_count, :active_animals, :chocolate_count, to: :location
+    :longitude, :latitude, :animal_count, :active_animals,
+    :chocolate_count, :sandwich_count, :soup_count, to: :location
   delegate :id, to: :location, prefix: true
-
-  def sandwich_count
-    location.estimated? ? location.person_count * AppSetting.instance.sandwiches_per_person : sandwiches
-  end
 
   def sandwiches?
     sandwich_count > 0
@@ -16,10 +13,9 @@ class TripDestination < ApplicationRecord
   alias_method :has_sandwiches, :sandwiches?
 
   def soups?
-    soups > 0
+    soup_count > 0
   end
   alias_method :has_soups, :soups?
-  alias_attribute :soup_count, :soups
 
   def waters?
     waters > 0

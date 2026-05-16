@@ -4,7 +4,7 @@ RSpec.describe "Trips", :requires_auth, type: :request do
   let!(:trip) { FactoryBot.create(:trip) }
   let!(:trip_group) { FactoryBot.create(:trip_group, trip: trip) }
   let!(:location) { FactoryBot.create(:location, name: "Second Location") }
-  let!(:person) { FactoryBot.create(:person, location: location) }
+  let!(:person) { FactoryBot.create(:person, location: location, sandwiches: 10, soups: 1, chocolates: 1) }
   let!(:animal) { FactoryBot.create(:animal, active: true, location: location) }
   let!(:package) { FactoryBot.create(:package, :packed, receiver: person) }
   let!(:trip_destination) {

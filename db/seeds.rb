@@ -191,7 +191,7 @@ AdminUser.create(email: "admin@example.com", password: "pass1234", first_name: "
         ]
       }
     ]
-  },
+  }
 ].each do |trip_data|
   trip = Trip.create(
     date: trip_data[:date],

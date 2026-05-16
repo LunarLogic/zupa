@@ -36,6 +36,7 @@ module TripJsonBuilder
     {
       date: decorated.formatted_date,
       organiser: decorated.organiser_name,
+      group_count: decorated.group_count,
       groups: groups,
       **totals
     }.as_json

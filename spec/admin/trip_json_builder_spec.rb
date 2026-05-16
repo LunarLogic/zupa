@@ -8,7 +8,8 @@ RSpec.describe TripJsonBuilder do
   let(:location) { create(:location, name: "Lokacja C") }
 
   before do
-    create(:trip_destination, trip_group: group, location: location, sandwiches: 4, soups: 3, provisions: 2)
+    create(:person, location: location, sandwiches: 4, soups: 3, chocolates: 0)
+    create(:trip_destination, trip_group: group, location: location)
     trip.reload
   end
 
@@ -21,6 +22,10 @@ RSpec.describe TripJsonBuilder do
 
     it "includes organiser name" do
       expect(json["organiser"]).to eq(admin_user.full_name)
+    end
+
+    it "includes group_count" do
+      expect(json["group_count"]).to eq(1)
     end
 
     it "includes groups with per-group fields" do
@@ -62,9 +67,9 @@ RSpec.describe TripJsonBuilder do
 
     before do
       create(:person, location: loc, first_name: "Jaromira", last_name: "K",
-        long_term_provisions: true, sparkling_water_count: 2, still_water_count: 0)
+        long_term_provisions: true, sparkling_water: 2, still_water: 0)
       create(:person, location: loc, first_name: "Anna", last_name: "W",
-        long_term_provisions: false, sparkling_water_count: 0, still_water_count: 1)
+        long_term_provisions: false, sparkling_water: 0, still_water: 1)
       create(:trip_destination, trip_group: group, location: loc)
       trip.reload
     end
