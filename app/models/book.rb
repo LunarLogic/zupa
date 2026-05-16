@@ -34,7 +34,19 @@ class Book < ApplicationRecord
   scope :by_query, ->(q) { q.present? ? where("title ILIKE ? OR author ILIKE ?", "%#{q}%", "%#{q}%") : all }
   scope :by_genre, ->(g) { g.present? ? where("? = ANY(genres)", g) : all }
 
+  # Trestle's `select multiple` posts an empty "" when nothing is selected.
+  # Drop blanks before persisting so the array never contains junk that
+  # would blow up I18n lookups or downstream filters.
+  def genres=(values)
+    super(Array(values).map(&:to_s).reject(&:blank?))
+  end
+
   def self.genre_color(name)
     GENRE_COLORS.fetch(name, DEFAULT_GENRE_COLOR)
+  end
+
+  def self.genre_label(slug)
+    return slug.to_s.humanize if slug.blank?
+    I18n.t("book_genres.#{slug}", default: slug.to_s.humanize)
   end
 end

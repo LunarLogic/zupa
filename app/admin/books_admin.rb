@@ -20,9 +20,8 @@ Trestle.resource(:books) do
       status_tag(text, "book_#{book.status}")
     end
     column :genres do |book|
-      safe_join(book.genres.map { |g|
-        text = I18n.t(g, scope: :book_genres, default: g.humanize)
-        status_tag(text, "genre_#{g}")
+      safe_join(book.genres.reject(&:blank?).map { |g|
+        status_tag(Book.genre_label(g), "genre_#{g}")
       })
     end
     column :qr_code
@@ -60,7 +59,7 @@ Trestle.resource(:books) do
         statuses = Book.statuses.keys.map { |s| [I18n.t(s, scope: :book_statuses), s] }
         collection_radio_buttons :status, statuses, :second, :first
 
-        genre_options = Book::KNOWN_GENRES.map { |g| [I18n.t(g, scope: :book_genres, default: g.humanize), g] }
+        genre_options = Book::KNOWN_GENRES.map { |g| [Book.genre_label(g), g] }
         select :genres, genre_options, {include_blank: false}, {multiple: true, class: "form-control", size: 8}
       end
 
