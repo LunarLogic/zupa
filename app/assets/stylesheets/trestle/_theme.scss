@@ -37,4 +37,29 @@ $theme-colors: (
   "rat": #e17572,
   "bird": #e17572,
   "other": #bbbbbb,
+
+  // book statuses
+  "book_available": #7dc67d,
+  "book_packed": #fcad03,
+  "book_borrowed": #87ceeb,
+  "book_archived": #bbbbbb,
+
+  // book genres
+  "genre_literatura_piekna": #006653,
+  "genre_kryminal": #c4362c,
+  "genre_fantasy": #5b3f8a,
+  "genre_biografia": #c0b190,
+  "genre_dla_dzieci": #fdd051,
+  "genre_popularnonaukowa": #2e5894,
+  "genre_poezja": #a0507c,
+  "genre_inne": #585858,
 );
+
+// Tight spacing between badges in the genres column
+.badge[class*="badge-genre_"] {
+  margin-right: 4px;
+  padding: 4px 10px;
+  font-size: 0.85em;
+  font-weight: 500;
+  color: #ffffff;
+}

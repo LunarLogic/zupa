@@ -27,6 +27,15 @@ Rails.application.routes.draw do
           get :show
         end
       end
+
+      namespace :library do
+        resources :books do
+          member do
+            post :photo
+            post :qr_code
+          end
+        end
+      end
     end
   end
 
@@ -50,6 +59,6 @@ Rails.application.routes.draw do
       end
     end
   end
-  get "*path", to: "components#index"
+  get "*path", to: "components#index", constraints: ->(req) { !req.path.start_with?("/rails/") }
   root "components#index"
 end
