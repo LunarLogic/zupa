@@ -15,3 +15,17 @@
 .trip-location-card__tag {
   margin-top: $spacing-xs;
 }
+
+.trip-location-card__book-preferences {
+  margin-top: $spacing-sm;
+  font-size: 0.9em;
+
+  ul {
+    margin: $spacing-xxs 0 0;
+    padding-left: $spacing-md;
+  }
+
+  li + li {
+    margin-top: $spacing-xxs;
+  }
+}

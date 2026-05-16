@@ -37,6 +37,8 @@ const TripLocationCard: FC<TripLocationCardProps> = ({
   const needsWithoutHasAnimals: TripNeeds = { ...needs, hasAnimals: false };
   const needsList = prepareNeedsList(needsWithoutHasAnimals, needsCount);
 
+  const peopleWithBookPreferences = people.filter((person) => person.bookPreferences);
+
   const cardContent = () => (
     <>
       {people.length > 0 && (
@@ -51,6 +53,18 @@ const TripLocationCard: FC<TripLocationCardProps> = ({
       {additionalInfo && (
         <div onClick={(e) => e.stopPropagation()} className="trip-location-card__info">
           <ExpandableContent content={additionalInfo} isRow={false} />
+        </div>
+      )}
+      {peopleWithBookPreferences.length > 0 && (
+        <div onClick={(e) => e.stopPropagation()} className="trip-location-card__book-preferences">
+          <strong>Książki:</strong>
+          <ul>
+            {peopleWithBookPreferences.map((person) => (
+              <li key={person.firstName}>
+                {person.firstName}: {person.bookPreferences}
+              </li>
+            ))}
+          </ul>
         </div>
       )}
     </>
