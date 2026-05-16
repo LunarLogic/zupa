@@ -37,7 +37,12 @@ const TripLocationCard: FC<TripLocationCardProps> = ({
   const needsWithoutHasAnimals: TripNeeds = { ...needs, hasAnimals: false };
   const needsList = prepareNeedsList(needsWithoutHasAnimals, needsCount);
 
-  const peopleWithBookPreferences = people.filter((person) => person.bookPreferences);
+  const bookPreferencesText = people
+    .filter((person) => person.bookPreferences)
+    .map((person) => `${person.firstName}: ${person.bookPreferences}`)
+    .join("\n");
+
+  const combinedInfo = [additionalInfo, bookPreferencesText].filter(Boolean).join("\n");
 
   const cardContent = () => (
     <>
@@ -50,21 +55,9 @@ const TripLocationCard: FC<TripLocationCardProps> = ({
         </div>
       )}
       <TagWithNeedsIcons needs={needsList} className="trip-location-card__tag" />
-      {additionalInfo && (
+      {combinedInfo && (
         <div onClick={(e) => e.stopPropagation()} className="trip-location-card__info">
-          <ExpandableContent content={additionalInfo} isRow={false} />
-        </div>
-      )}
-      {peopleWithBookPreferences.length > 0 && (
-        <div onClick={(e) => e.stopPropagation()} className="trip-location-card__book-preferences">
-          <strong>Książki:</strong>
-          <ul>
-            {peopleWithBookPreferences.map((person) => (
-              <li key={person.firstName}>
-                {person.firstName}: {person.bookPreferences}
-              </li>
-            ))}
-          </ul>
+          <ExpandableContent content={combinedInfo} isRow={false} />
         </div>
       )}
     </>

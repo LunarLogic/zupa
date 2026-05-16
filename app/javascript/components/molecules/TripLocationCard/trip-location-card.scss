@@ -16,26 +16,3 @@
   margin-top: $spacing-xs;
 }
 
-.trip-location-card__book-preferences {
-  margin-top: $spacing-sm;
-  padding-top: $spacing-xs;
-  border-top: 1px solid $grey-100;
-  font-size: $sm-font-size;
-  color: $grey-200;
-  overflow-wrap: anywhere;
-  word-break: break-word;
-
-  ul {
-    margin: $spacing-xxs 0 0;
-    padding-left: $spacing-md;
-    list-style: disc;
-  }
-
-  li {
-    line-height: $sm-body-line-height;
-  }
-
-  li + li {
-    margin-top: $spacing-xxs;
-  }
-}
