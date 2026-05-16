@@ -59,6 +59,6 @@ Rails.application.routes.draw do
       end
     end
   end
-  get "*path", to: "components#index"
+  get "*path", to: "components#index", constraints: ->(req) { !req.path.start_with?("/rails/") }
   root "components#index"
 end
