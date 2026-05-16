@@ -23,6 +23,9 @@ class Book < ApplicationRecord
 
   DEFAULT_GENRE_COLOR = "#b9b9b9"
 
+  COVER_PHOTO_CONTENT_TYPES = %w[image/jpeg image/png image/webp].freeze
+  COVER_PHOTO_MAX_SIZE = 5.megabytes
+
   enum status: {available: 0, packed: 1, borrowed: 2, archived: 3}
 
   has_one_attached :cover_photo
@@ -30,8 +33,16 @@ class Book < ApplicationRecord
   validates :title, presence: true
   validates :author, presence: true
   validates :qr_code, uniqueness: true, allow_nil: true
+  validate :acceptable_cover_photo
 
-  scope :by_query, ->(q) { q.present? ? where("title ILIKE ? OR author ILIKE ?", "%#{q}%", "%#{q}%") : all }
+  scope :by_query, ->(q) {
+    if q.blank?
+      all
+    else
+      pattern = "%#{sanitize_sql_like(q)}%"
+      where("title ILIKE ? OR author ILIKE ?", pattern, pattern)
+    end
+  }
   scope :by_genre, ->(g) { g.present? ? where("? = ANY(genres)", g) : all }
 
   # Trestle's `select multiple` posts an empty "" when nothing is selected.
@@ -48,5 +59,21 @@ class Book < ApplicationRecord
   def self.genre_label(slug)
     return slug.to_s.humanize if slug.blank?
     I18n.t("book_genres.#{slug}", default: slug.to_s.humanize)
+  end
+
+  private
+
+  def acceptable_cover_photo
+    return unless cover_photo.attached?
+
+    blob = cover_photo.blob
+
+    unless COVER_PHOTO_CONTENT_TYPES.include?(blob.content_type)
+      errors.add(:cover_photo, :invalid_content_type, allowed: COVER_PHOTO_CONTENT_TYPES.join(", "))
+    end
+
+    if blob.byte_size > COVER_PHOTO_MAX_SIZE
+      errors.add(:cover_photo, :too_large, max: ActiveSupport::NumberHelper.number_to_human_size(COVER_PHOTO_MAX_SIZE))
+    end
   end
 end

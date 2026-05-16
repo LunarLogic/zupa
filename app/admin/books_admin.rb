@@ -1,6 +1,6 @@
 Trestle.resource(:books) do
   menu do
-    item :books, icon: "fa fa-book", priority: 5, badge: Book.count, group: :library
+    item :books, icon: "fa fa-book", priority: 40, badge: Book.count, group: :library
   end
 
   search do |query|
@@ -22,7 +22,7 @@ Trestle.resource(:books) do
     column :genres do |book|
       safe_join(book.genres.reject(&:blank?).map { |g|
         status_tag(Book.genre_label(g), "genre_#{g}")
-      })
+      }, " ")
     end
     column :qr_code
     column :created_at, align: :center
@@ -70,7 +70,7 @@ Trestle.resource(:books) do
           if book.cover_photo.attached?
             concat content_tag(
               :div,
-              image_tag(Rails.application.routes.url_helpers.rails_blob_path(book.cover_photo, only_path: true),
+              image_tag(Rails.application.routes.url_helpers.rails_blob_path(book.cover_photo),
                 style: "max-width: 100%; height: auto; border-radius: 4px; box-shadow: 0 2px 6px rgba(0,0,0,0.15);"),
               style: "text-align: center; margin-bottom: 1rem;"
             )

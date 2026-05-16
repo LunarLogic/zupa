@@ -40,11 +40,24 @@ module Api
         end
 
         def photo
-          if params[:photo].blank?
+          uploaded = params[:photo]
+          if uploaded.blank?
             return render json: {errors: {photo: ["is required"]}}, status: :unprocessable_entity
           end
 
-          @book.cover_photo.attach(params[:photo])
+          content_type = uploaded.respond_to?(:content_type) ? uploaded.content_type : nil
+          unless Book::COVER_PHOTO_CONTENT_TYPES.include?(content_type)
+            return render json: {errors: {photo: ["must be one of: #{Book::COVER_PHOTO_CONTENT_TYPES.join(", ")}"]}},
+              status: :unprocessable_entity
+          end
+
+          size = uploaded.respond_to?(:size) ? uploaded.size : 0
+          if size > Book::COVER_PHOTO_MAX_SIZE
+            return render json: {errors: {photo: ["must be smaller than #{ActiveSupport::NumberHelper.number_to_human_size(Book::COVER_PHOTO_MAX_SIZE)}"]}},
+              status: :unprocessable_entity
+          end
+
+          @book.cover_photo.attach(uploaded)
           render :show
         end
 
@@ -60,6 +73,8 @@ module Api
 
           @book.update!(qr_code: new_code)
           render :show
+        rescue ActiveRecord::RecordInvalid, ActiveRecord::RecordNotUnique
+          render json: {errors: {qr_code: ["is already bound to another book"]}}, status: :conflict
         end
 
         private

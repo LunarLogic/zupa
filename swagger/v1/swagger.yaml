@@ -40,8 +40,8 @@ paths:
                 - M
                 - S
                 - XS
-                created_at: '2026-05-16T14:20:23.437Z'
-                updated_at: '2026-05-16T14:20:23.437Z'
+                created_at: '2026-05-16T14:38:08.070Z'
+                updated_at: '2026-05-16T14:38:08.070Z'
                 icon_name: jacket
   "/api/v1/people/{person_id}/item_requests":
     parameters:
@@ -71,8 +71,8 @@ paths:
                 delivered_at:
                 delivery_confirmed_at:
                 status: to_prepare
-                created_at: '2026-05-16T14:20:23.547Z'
-                updated_at: '2026-05-16T14:20:23.547Z'
+                created_at: '2026-05-16T14:38:08.194Z'
+                updated_at: '2026-05-16T14:38:08.194Z'
                 url: http://www.example.com/api/v1/item_requests/53
       requestBody:
         content:
@@ -117,8 +117,8 @@ paths:
                 delivered_at:
                 delivery_confirmed_at:
                 status: to_prepare
-                created_at: '2026-05-16T14:20:23.643Z'
-                updated_at: '2026-05-16T14:20:23.664Z'
+                created_at: '2026-05-16T14:38:08.328Z'
+                updated_at: '2026-05-16T14:38:08.364Z'
                 url: http://www.example.com/api/v1/item_requests/55
       requestBody:
         content:
@@ -155,8 +155,8 @@ paths:
                 delivered_at:
                 delivery_confirmed_at:
                 status: to_prepare
-                created_at: '2026-05-16T14:20:23.740Z'
-                updated_at: '2026-05-16T14:20:23.779Z'
+                created_at: '2026-05-16T14:38:08.440Z'
+                updated_at: '2026-05-16T14:38:08.461Z'
                 url: http://www.example.com/api/v1/item_requests/57
       requestBody:
         content:
@@ -203,7 +203,7 @@ paths:
           content:
             application/json:
               example:
-              - id: 56
+              - id: 98
                 title: Hobbit
                 author: Tolkien
                 isbn: '9788300000006'
@@ -217,9 +217,9 @@ paths:
                 - fantasy
                 status: available
                 cover_photo_url:
-                created_at: '2026-05-16T14:20:23.836Z'
-                updated_at: '2026-05-16T14:20:23.836Z'
-              - id: 55
+                created_at: '2026-05-16T14:38:08.543Z'
+                updated_at: '2026-05-16T14:38:08.543Z'
+              - id: 97
                 title: Old Tome
                 author: Ancient
                 isbn: '9788300000005'
@@ -233,9 +233,9 @@ paths:
                 - fantasy
                 status: archived
                 cover_photo_url:
-                created_at: '2026-05-16T14:20:23.835Z'
-                updated_at: '2026-05-16T14:20:23.835Z'
-              - id: 54
+                created_at: '2026-05-16T14:38:08.540Z'
+                updated_at: '2026-05-16T14:38:08.540Z'
+              - id: 96
                 title: Lalka
                 author: Bolesław Prus
                 isbn: '9788300000004'
@@ -249,8 +249,8 @@ paths:
                 - literatura_piekna
                 status: available
                 cover_photo_url:
-                created_at: '2026-05-16T14:20:23.833Z'
-                updated_at: '2026-05-16T14:20:23.833Z'
+                created_at: '2026-05-16T14:38:08.538Z'
+                updated_at: '2026-05-16T14:38:08.538Z'
     post:
       summary: create book
       tags:
@@ -414,8 +414,8 @@ paths:
                 longitude: '9.99'
                 latitude: '9.99'
                 info: MyText
-                created_at: '2026-05-16T14:20:24.310Z'
-                updated_at: '2026-05-16T14:20:24.310Z'
+                created_at: '2026-05-16T14:38:09.022Z'
+                updated_at: '2026-05-16T14:38:09.022Z'
                 people:
                 - id: 262
                   name: Ryszard
@@ -457,8 +457,8 @@ paths:
                 longitude: '9.99'
                 latitude: '9.99'
                 info: MyText
-                created_at: '2026-05-16T14:20:24.477Z'
-                updated_at: '2026-05-16T14:20:24.477Z'
+                created_at: '2026-05-16T14:38:09.190Z'
+                updated_at: '2026-05-16T14:38:09.190Z'
                 people:
                 - id: 267
                   name: Ryszard
@@ -560,8 +560,8 @@ paths:
                     name: Ryszard
                     code: '012'
                     requests_status: green
-                    created_at: '2026-05-16T14:20:24.957Z'
-                    updated_at: '2026-05-16T14:20:24.957Z'
+                    created_at: '2026-05-16T14:38:09.590Z'
+                    updated_at: '2026-05-16T14:38:09.590Z'
                     phone_number: '123456789'
                     sizes:
                     - size: M
@@ -574,7 +574,7 @@ paths:
                       item_category_id: 66
                       item_category_name: Jacket
                       item_category_icon_name: jacket
-                      created_at: '2026-05-16T14:20:24.971Z'
+                      created_at: '2026-05-16T14:38:09.601Z'
                       status: to_prepare
                     location:
                       id: 337
@@ -594,8 +594,8 @@ paths:
                     name: Ryszard
                     code: '124'
                     requests_status: green
-                    created_at: '2026-05-16T14:20:24.968Z'
-                    updated_at: '2026-05-16T14:20:24.968Z'
+                    created_at: '2026-05-16T14:38:09.595Z'
+                    updated_at: '2026-05-16T14:38:09.595Z'
                     phone_number:
                     sizes: []
                     item_requests: []
@@ -630,8 +630,8 @@ paths:
                 name: Ryszard
                 code: '012'
                 requests_status: green
-                created_at: '2026-05-16T14:20:25.106Z'
-                updated_at: '2026-05-16T14:20:25.106Z'
+                created_at: '2026-05-16T14:38:09.720Z'
+                updated_at: '2026-05-16T14:38:09.720Z'
                 phone_number: '123456789'
                 sizes:
                 - size: M
@@ -644,7 +644,7 @@ paths:
                   item_category_id: 68
                   item_category_name: Jacket
                   item_category_icon_name: jacket
-                  created_at: '2026-05-16T14:20:25.120Z'
+                  created_at: '2026-05-16T14:38:09.740Z'
                   status: to_prepare
                 location:
                   id: 342
@@ -675,8 +675,8 @@ paths:
                 name: Ryszard
                 code: '012'
                 requests_status: yellow
-                created_at: '2026-05-16T14:20:25.160Z'
-                updated_at: '2026-05-16T14:20:25.202Z'
+                created_at: '2026-05-16T14:38:09.778Z'
+                updated_at: '2026-05-16T14:38:09.821Z'
                 phone_number: '123456789'
                 sizes:
                 - size: M
@@ -689,7 +689,7 @@ paths:
                   item_category_id: 69
                   item_category_name: Jacket
                   item_category_icon_name: jacket
-                  created_at: '2026-05-16T14:20:25.171Z'
+                  created_at: '2026-05-16T14:38:09.791Z'
                   status: to_prepare
                 location:
                   id: 344
@@ -743,8 +743,8 @@ paths:
                 name: Ryszard
                 code: '012'
                 requests_status: yellow
-                created_at: '2026-05-16T14:20:25.216Z'
-                updated_at: '2026-05-16T14:20:25.265Z'
+                created_at: '2026-05-16T14:38:09.833Z'
+                updated_at: '2026-05-16T14:38:09.871Z'
                 phone_number: '123456789'
                 sizes:
                 - size: M
@@ -757,7 +757,7 @@ paths:
                   item_category_id: 70
                   item_category_name: Jacket
                   item_category_icon_name: jacket
-                  created_at: '2026-05-16T14:20:25.227Z'
+                  created_at: '2026-05-16T14:38:09.843Z'
                   status: to_prepare
                 location:
                   id: 346
@@ -898,8 +898,8 @@ paths:
                       name: Faraon
                       active: true
                       location_id: 352
-                      created_at: '2026-05-16T14:20:25.418Z'
-                      updated_at: '2026-05-16T14:20:25.418Z'
+                      created_at: '2026-05-16T14:38:10.009Z'
+                      updated_at: '2026-05-16T14:38:10.009Z'
                       species: cat
                     has_chocolates: true
                     chocolate_count: 1
@@ -908,8 +908,8 @@ paths:
                       first_name: Ryszard
                       location_id: 352
                       code: '134'
-                      created_at: '2026-05-16T14:20:25.416Z'
-                      updated_at: '2026-05-16T14:20:25.416Z'
+                      created_at: '2026-05-16T14:38:10.008Z'
+                      updated_at: '2026-05-16T14:38:10.008Z'
                       requests_status: green
                       last_name: Bugajski
                       phone_number:
@@ -991,8 +991,8 @@ paths:
                       name: Faraon
                       active: true
                       location_id: 355
-                      created_at: '2026-05-16T14:20:25.525Z'
-                      updated_at: '2026-05-16T14:20:25.525Z'
+                      created_at: '2026-05-16T14:38:10.110Z'
+                      updated_at: '2026-05-16T14:38:10.110Z'
                       species: cat
                     has_chocolates: true
                     chocolate_count: 1
@@ -1001,8 +1001,8 @@ paths:
                       first_name: Ryszard
                       location_id: 355
                       code: '137'
-                      created_at: '2026-05-16T14:20:25.524Z'
-                      updated_at: '2026-05-16T14:20:25.524Z'
+                      created_at: '2026-05-16T14:38:10.108Z'
+                      updated_at: '2026-05-16T14:38:10.108Z'
                       requests_status: green
                       last_name: Bugajski
                       phone_number:
@@ -1085,8 +1085,8 @@ paths:
                         name: Faraon
                         active: true
                         location_id: 357
-                        created_at: '2026-05-16T14:20:25.670Z'
-                        updated_at: '2026-05-16T14:20:25.670Z'
+                        created_at: '2026-05-16T14:38:10.216Z'
+                        updated_at: '2026-05-16T14:38:10.216Z'
                         species: cat
                       has_chocolates: true
                       chocolate_count: 1
@@ -1095,8 +1095,8 @@ paths:
                         first_name: Ryszard
                         location_id: 357
                         code: '139'
-                        created_at: '2026-05-16T14:20:25.667Z'
-                        updated_at: '2026-05-16T14:20:25.667Z'
+                        created_at: '2026-05-16T14:38:10.214Z'
+                        updated_at: '2026-05-16T14:38:10.214Z'
                         requests_status: green
                         last_name: Bugajski
                         phone_number:

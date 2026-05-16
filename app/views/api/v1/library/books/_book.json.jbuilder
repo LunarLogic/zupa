@@ -12,7 +12,7 @@ json.genres book.genres
 json.status book.status
 json.cover_photo_url(
   if book.cover_photo.attached?
-    Rails.application.routes.url_helpers.rails_blob_path(book.cover_photo, only_path: true)
+    Rails.application.routes.url_helpers.rails_blob_path(book.cover_photo)
   end
 )
 json.created_at book.created_at
