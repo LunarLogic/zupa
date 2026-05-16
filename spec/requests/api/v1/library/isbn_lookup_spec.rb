@@ -54,6 +54,18 @@ RSpec.describe "Library ISBN Lookup", type: :request do
           assert_response_matches_metadata(example.metadata)
         end
       end
+
+      response(422, "invalid isbn format") do
+        let(:isbn) { "abc" }
+
+        before do |example|
+          submit_request(example.metadata)
+        end
+
+        it "returns 422 without hitting upstream" do |example|
+          assert_response_matches_metadata(example.metadata)
+        end
+      end
     end
   end
 end
