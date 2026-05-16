@@ -56,7 +56,7 @@ RSpec.describe Book, type: :model do
 
   describe "status enum" do
     it "maps to fixed integer values so reordering doesn't silently mutate data" do
-      expect(Book.statuses).to eq("available" => 0, "packed" => 1, "borrowed" => 2, "archived" => 3)
+      expect(Book.statuses).to eq("available" => 0, "in_package" => 1, "archived" => 2)
     end
   end
 

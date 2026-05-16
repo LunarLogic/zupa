@@ -30,8 +30,7 @@ pl:
     packing: W trakcie pakowania
   book_statuses:
     available: Dostępna
-    packed: Spakowana
-    borrowed: Wypożyczona
+    in_package: W paczce
     archived: Zarchiwizowana
   book_genres:
     literatura_piekna: Literatura piękna
