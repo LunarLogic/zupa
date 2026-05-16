@@ -27,6 +27,15 @@ Rails.application.routes.draw do
           get :show
         end
       end
+
+      namespace :library do
+        resources :books do
+          member do
+            post :photo
+            post :qr_code
+          end
+        end
+      end
     end
   end
 

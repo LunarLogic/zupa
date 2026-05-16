@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2026_05_16_000001) do
+ActiveRecord::Schema[7.0].define(version: 2026_05_16_133502) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -23,6 +23,34 @@ ActiveRecord::Schema[7.0].define(version: 2026_05_16_000001) do
   create_enum "package_status_type", ["packing", "packed", "delivered"]
   create_enum "request_status_type", ["red", "yellow", "green"]
   create_enum "species_type", ["cat", "dog", "rat", "bird", "other"]
+
+  create_table "active_storage_attachments", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "record_type", null: false
+    t.bigint "record_id", null: false
+    t.bigint "blob_id", null: false
+    t.datetime "created_at", null: false
+    t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
+    t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
+  end
+
+  create_table "active_storage_blobs", force: :cascade do |t|
+    t.string "key", null: false
+    t.string "filename", null: false
+    t.string "content_type"
+    t.text "metadata"
+    t.string "service_name", null: false
+    t.bigint "byte_size", null: false
+    t.string "checksum"
+    t.datetime "created_at", null: false
+    t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
+  end
+
+  create_table "active_storage_variant_records", force: :cascade do |t|
+    t.bigint "blob_id", null: false
+    t.string "variation_digest", null: false
+    t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
+  end
 
   create_table "admin_users", force: :cascade do |t|
     t.string "email"
@@ -61,6 +89,25 @@ ActiveRecord::Schema[7.0].define(version: 2026_05_16_000001) do
     t.datetime "expires_at", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "books", force: :cascade do |t|
+    t.string "title", null: false
+    t.string "author", null: false
+    t.string "isbn"
+    t.text "description"
+    t.integer "length"
+    t.string "publisher"
+    t.integer "pub_year"
+    t.string "qr_code"
+    t.text "extra_note"
+    t.string "genres", default: [], null: false, array: true
+    t.integer "status", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["genres"], name: "index_books_on_genres", using: :gin
+    t.index ["isbn"], name: "index_books_on_isbn"
+    t.index ["qr_code"], name: "index_books_on_qr_code", unique: true
   end
 
   create_table "flipper_features", force: :cascade do |t|
@@ -254,6 +301,8 @@ ActiveRecord::Schema[7.0].define(version: 2026_05_16_000001) do
     t.index ["location_id"], name: "index_visit_summaries_on_location_id"
   end
 
+  add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "animals", "locations"
   add_foreign_key "item_requests", "item_categories"
   add_foreign_key "item_requests", "packages"
