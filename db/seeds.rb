@@ -162,6 +162,68 @@ end
 
 AdminUser.create(email: "admin@example.com", password: "pass1234", first_name: "Admin", last_name: "Adminowski")
 
+PreparationTemplate.destroy_all
+
+PreparationTemplate.create!(
+  name: "Standardowy wyjazd",
+  default: true,
+  content_html: <<~HTML
+    <h1>Przygotowania na wyjazd</h1>
+    <p><strong>Data:</strong> {{date}}</p>
+    <p><strong>Organizator:</strong> {{organiser}}</p>
+    <p><strong>Liczba grup:</strong> {{group_count}}</p>
+
+    <h2>Podsumowanie pakowania</h2>
+    <ul>
+      <li>Kanapki: {{total_sandwich_count}}</li>
+      <li>Zupy: {{total_soup_count}}</li>
+      <li>Czekolady: {{total_chocolate_count}}</li>
+      <li>Woda gazowana: {{total_sparkling_water_count}}</li>
+      <li>Woda niegazowana: {{total_still_water_count}}</li>
+      <li>Prowiant długoterminowy (osoby): {{total_long_term_provisions_count}}</li>
+      <li>Karma dla kotów: {{total_cat_food_count}}</li>
+      <li>Karma dla psów: {{total_dog_food_count}}</li>
+      <li>Paczki: {{total_package_count}}</li>
+    </ul>
+
+    <h2>Grupy</h2>
+    {{#groups}}
+      <h3>{{name}}</h3>
+      <ul>
+        <li>Kanapki: {{sandwich_count}}</li>
+        <li>Zupy: {{soup_count}}</li>
+        <li>Czekolady: {{chocolate_count}}</li>
+        <li>Woda gazowana dla: {{sparkling_water_recipients}}</li>
+        <li>Woda niegazowana dla: {{still_water_recipients}}</li>
+        <li>Prowiant długoterminowy dla: {{long_term_provisions_recipients}}</li>
+        <li>Paczki dla: {{package_recipients}}</li>
+      </ul>
+    {{/groups}}
+  HTML
+)
+
+PreparationTemplate.create!(
+  name: "Krótki — tylko sumy",
+  default: false,
+  content_html: <<~HTML
+    <h1>Wyjazd {{date}}</h1>
+    <p>Organizuje: {{organiser}} · {{group_count}} grup(y)</p>
+    <table>
+      <thead>
+        <tr><th>Produkt</th><th>Sztuk</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Kanapki</td><td>{{total_sandwich_count}}</td></tr>
+        <tr><td>Zupy</td><td>{{total_soup_count}}</td></tr>
+        <tr><td>Czekolady</td><td>{{total_chocolate_count}}</td></tr>
+        <tr><td>Woda gazowana</td><td>{{total_sparkling_water_count}}</td></tr>
+        <tr><td>Woda niegazowana</td><td>{{total_still_water_count}}</td></tr>
+        <tr><td>Paczki</td><td>{{total_package_count}}</td></tr>
+      </tbody>
+    </table>
+  HTML
+)
+
 [
   {
     date: "2025-01-01",
