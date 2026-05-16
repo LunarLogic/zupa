@@ -23,7 +23,7 @@ class Book < ApplicationRecord
 
   DEFAULT_GENRE_COLOR = "#b9b9b9"
 
-  enum status: {available: 0, in_package: 1, archived: 2}
+  enum status: {available: 0, packed: 1, borrowed: 2, archived: 3}
 
   has_one_attached :cover_photo
 

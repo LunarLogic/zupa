@@ -14,8 +14,12 @@ FactoryBot.define do
       status { :archived }
     end
 
-    trait :in_package do
-      status { :in_package }
+    trait :packed do
+      status { :packed }
+    end
+
+    trait :borrowed do
+      status { :borrowed }
     end
   end
 end
