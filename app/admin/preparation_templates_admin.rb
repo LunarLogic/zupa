@@ -7,7 +7,6 @@ Trestle.resource(:preparation_templates) do
     PreparationTemplate.all.order(updated_at: :desc)
   end
 
-
   table do
     column :name
     column :default, align: :center do |template|
@@ -53,7 +52,7 @@ Trestle.resource(:preparation_templates) do
     render inline: <<~HTML
       <div id="editor-section" style="display: none;">
         <p><strong>#{I18n.t("admin.preparation_templates.labels.editor")}:</strong></p>
-        <div class="element" data-template-id="#{template.id || 'new'}"></div>
+        <div class="element" data-template-id="#{template.id || "new"}"></div>
         <div style="margin-top: 1rem;">
           <button type="submit" class="btn btn-success">#{I18n.t("admin.preparation_templates.labels.save_button")}</button>
           <button type="button" class="btn btn-default" onclick="window.closeTemplateEditor && window.closeTemplateEditor();">#{I18n.t("admin.preparation_templates.labels.cancel")}</button>
@@ -84,6 +83,7 @@ Trestle.resource(:preparation_templates) do
           <ul>
             <li><span class="var">{{date}}</span> — data wyjazdu</li>
             <li><span class="var">{{organiser}}</span> — organizator</li>
+            <li><span class="var">{{group_count}}</span> — liczba grup</li>
           </ul>
           <p><strong>Grupy</strong> (wewnątrz <span class="var">{{#groups}}...{{/groups}}</span>):</p>
           <ul>
@@ -154,5 +154,4 @@ Trestle.resource(:preparation_templates) do
       </div>
     HTML
   end
-
 end

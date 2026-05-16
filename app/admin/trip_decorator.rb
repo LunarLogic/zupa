@@ -15,6 +15,10 @@ class TripDecorator < SimpleDelegator
     date.strftime("%d / %m / %Y")
   end
 
+  def group_count
+    groups.size
+  end
+
   def decorated_groups
     @decorated_groups ||= groups.map { |g| TripGroupDecorator.new(g) }
   end

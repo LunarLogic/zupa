@@ -9,10 +9,10 @@ RSpec.describe "Estimated location integration" do
   let(:estimated_location) { create(:location, name: "Grupowe miejsce", location_type: "estimated", estimated_person_count: 10) }
 
   before do
-    create(:person, location: regular_location, active: true)
-    create(:person, location: regular_location, active: true)
-    create(:trip_destination, trip_group: group, location: regular_location, sandwiches: 5, soups: 3)
-    create(:trip_destination, trip_group: group, location: estimated_location, sandwiches: 0, soups: 2)
+    create(:person, location: regular_location, active: true, sandwiches: 3, chocolates: 1, soups: 1)
+    create(:person, location: regular_location, active: true, sandwiches: 2, chocolates: 1, soups: 1)
+    create(:trip_destination, trip_group: group, location: regular_location)
+    create(:trip_destination, trip_group: group, location: estimated_location)
     trip.reload
   end
 
@@ -24,7 +24,7 @@ RSpec.describe "Estimated location integration" do
       expect(estimated_td.sandwich_count).to eq(20)
     end
 
-    it "uses db column for sandwich_count on regular locations" do
+    it "sums person.sandwiches for sandwich_count on regular locations" do
       expect(regular_td.sandwich_count).to eq(5)
     end
 
@@ -32,8 +32,16 @@ RSpec.describe "Estimated location integration" do
       expect(estimated_td.chocolate_count).to eq(10)
     end
 
-    it "uses active_people count * setting for chocolate_count on regular locations" do
+    it "sums person.chocolates for chocolate_count on regular locations" do
       expect(regular_td.chocolate_count).to eq(2)
+    end
+
+    it "uses estimated_person_count * setting for soup_count on estimated locations" do
+      expect(estimated_td.soup_count).to eq(10)
+    end
+
+    it "sums person.soups for soup_count on regular locations" do
+      expect(regular_td.soup_count).to eq(2)
     end
 
     it "uses estimated_person_count for person_count on estimated locations" do
@@ -52,8 +60,8 @@ RSpec.describe "Estimated location integration" do
       expect(decorated.chocolate_count).to eq(12)
     end
 
-    it "sums soup_count from db columns regardless of location type" do
-      expect(decorated.soup_count).to eq(5)
+    it "sums soup_count across regular and estimated destinations" do
+      expect(decorated.soup_count).to eq(12)
     end
   end
 
@@ -66,6 +74,10 @@ RSpec.describe "Estimated location integration" do
 
     it "includes combined chocolate totals" do
       expect(json["total_chocolate_count"]).to eq(12)
+    end
+
+    it "includes combined soup totals" do
+      expect(json["total_soup_count"]).to eq(12)
     end
   end
 end

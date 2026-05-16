@@ -97,4 +97,5 @@ export type TripAnimal = {
 
 export type Person = {
   firstName: string;
+  bookPreferences?: string | null;
 };

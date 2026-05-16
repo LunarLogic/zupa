@@ -46,25 +46,60 @@ RSpec.describe Location do
   end
 
   describe "#chocolate_count" do
-    it "uses chocolates_per_person setting multiplied by person_count" do
+    it "sums chocolates from active people for regular locations" do
+      location = create(:location, location_type: "regular")
+      create(:person, location: location, active: true, chocolates: 3)
+      create(:person, location: location, active: true, chocolates: 1)
+      create(:person, location: location, active: false, chocolates: 99)
+
+      expect(location.chocolate_count).to eq(4)
+    end
+
+    it "uses estimated_person_count * AppSetting default for estimated locations" do
       AppSetting.instance.update!(chocolates_per_person: 2)
       location = create(:location, location_type: "estimated", estimated_person_count: 5)
 
       expect(location.chocolate_count).to eq(10)
     end
 
-    it "adds extra_chocolates from active people" do
-      location = create(:location, location_type: "regular")
-      create(:person, location: location, active: true, extra_chocolates: 3)
-      create(:person, location: location, active: true, extra_chocolates: 0)
-
-      expect(location.chocolate_count).to eq(2 + 3)
-    end
-
-    it "defaults to 1 per person with no extras" do
+    it "defaults to 1 per person for estimated locations with no override" do
       location = create(:location, location_type: "estimated", estimated_person_count: 4)
 
       expect(location.chocolate_count).to eq(4)
+    end
+  end
+
+  describe "#sandwich_count" do
+    it "sums sandwiches from active people for regular locations" do
+      location = create(:location, location_type: "regular")
+      create(:person, location: location, active: true, sandwiches: 2)
+      create(:person, location: location, active: true, sandwiches: 3)
+
+      expect(location.sandwich_count).to eq(5)
+    end
+
+    it "uses estimated_person_count * AppSetting default for estimated locations" do
+      AppSetting.instance.update!(sandwiches_per_person: 2)
+      location = create(:location, location_type: "estimated", estimated_person_count: 6)
+
+      expect(location.sandwich_count).to eq(12)
+    end
+  end
+
+  describe "#soup_count" do
+    it "sums soups from active people for regular locations" do
+      location = create(:location, location_type: "regular")
+      create(:person, location: location, active: true, soups: 1)
+      create(:person, location: location, active: true, soups: 2)
+
+      expect(location.soup_count).to eq(3)
+    end
+
+    it "uses estimated_person_count * AppSetting default for estimated locations" do
+      AppSetting.instance.update!(soups_per_person: 1)
+      location = create(:location, location_type: "estimated", estimated_person_count: 7)
+
+      expect(location.soup_count).to eq(7)
     end
   end
 end

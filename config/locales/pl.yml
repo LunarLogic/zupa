@@ -99,6 +99,8 @@ pl:
         ksiazki: Książki
       ksiazki:
         empty: Żadna osoba nie ma zapisanych preferencji książkowych.
+        print: Drukuj książki
+        print_title: Książki
         columns:
           location: Miejsce
           person: Osoba
@@ -129,6 +131,8 @@ pl:
         index: Osoby
       sections:
         preferences: Preferencje
+      validations:
+        estimated_location: "— nie można przypisać do miejsca grupowego"
     menu_items:
       breadcrumbs:
         index: Menu
@@ -201,14 +205,19 @@ pl:
         phone_number: Numer telefonu
         active: Obecna
         long_term_provisions: Prowiant długoterminowy
-        extra_chocolates: Dodatkowe czekolady
-        sparkling_water_count: Woda gazowana (szt.)
-        still_water_count: Woda niegazowana (szt.)
+        soups: Zupy (szt.)
+        chocolates: Czekolady (szt.)
+        sandwiches: Kanapki (szt.)
+        sparkling_water: Woda gazowana (szt.)
+        still_water: Woda niegazowana (szt.)
         book_preferences: Preferencje książkowe
       app_setting:
         persons_per_thermos: Liczba osób na duży termos
+        soups_per_person: Zup na osobę
         chocolates_per_person: Czekolad na osobę
         sandwiches_per_person: Kanapek na osobę
+        sparkling_water_per_person: Wody gazowanej na osobę
+        still_water_per_person: Wody niegazowanej na osobę
       animal:
         name: Imię
         active: Obecny

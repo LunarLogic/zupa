@@ -126,4 +126,104 @@ RSpec.describe "Admin trips preparations", type: :system do
       expect(trip.preparation_template_id).to be_nil
     end
   end
+
+  describe "Books tab" do
+    let(:trip_with_books) do
+      create(:trip, date: "2025-10-10", organiser: admin_user).tap do |t|
+        g1 = create(:trip_group, trip: t, number: 1, volunteers: ["Anna"])
+        g2 = create(:trip_group, trip: t, number: 2, volunteers: ["Bartek"])
+        loc_a = create(:location, name: "Lokacja A")
+        loc_b = create(:location, name: "Lokacja B")
+        loc_c = create(:location, name: "Lokacja C")
+        create(:person, location: loc_a, first_name: "Czytelnik", last_name: "Pierwszy",
+          book_preferences: "Kryminały")
+        create(:person, location: loc_b, first_name: "Czytelnik", last_name: "Drugi",
+          book_preferences: "Fantastyka")
+        create(:person, location: loc_c, first_name: "Niezainteresowany", last_name: "Trzeci",
+          book_preferences: nil)
+        create(:trip_destination, trip_group: g1, location: loc_a)
+        create(:trip_destination, trip_group: g2, location: loc_b)
+        create(:trip_destination, trip_group: g2, location: loc_c)
+      end
+    end
+
+    it "groups entries by trip group with one section per group" do
+      visit "/admin/trips/#{trip_with_books.id}"
+      click_link "Książki"
+
+      within("#books-content") do
+        expect(page).to have_css("h3", text: "GR 1: Anna")
+        expect(page).to have_css("h3", text: "GR 2: Bartek")
+        expect(page).to have_css("table", count: 2)
+      end
+    end
+
+    it "shows person names, locations and book preferences" do
+      visit "/admin/trips/#{trip_with_books.id}"
+      click_link "Książki"
+
+      within("#books-content") do
+        expect(page).to have_content("Czytelnik Pierwszy")
+        expect(page).to have_content("Lokacja A")
+        expect(page).to have_content("Kryminały")
+
+        expect(page).to have_content("Czytelnik Drugi")
+        expect(page).to have_content("Lokacja B")
+        expect(page).to have_content("Fantastyka")
+      end
+    end
+
+    it "skips people without book preferences" do
+      visit "/admin/trips/#{trip_with_books.id}"
+      click_link "Książki"
+
+      expect(page).not_to have_content("Niezainteresowany Trzeci")
+      expect(page).not_to have_content("Lokacja C")
+    end
+
+    it "shows print button when entries exist" do
+      visit "/admin/trips/#{trip_with_books.id}"
+      click_link "Książki"
+
+      expect(page).to have_button("Drukuj książki")
+    end
+
+    it "shows empty message and hides print button when no preferences anywhere" do
+      empty_trip = create(:trip, date: "2025-10-11", organiser: admin_user).tap do |t|
+        g = create(:trip_group, trip: t, number: 1, volunteers: ["Ola"])
+        loc = create(:location, name: "Bez książek")
+        create(:person, location: loc, book_preferences: nil)
+        create(:trip_destination, trip_group: g, location: loc)
+      end
+
+      visit "/admin/trips/#{empty_trip.id}"
+      click_link "Książki"
+
+      expect(page).to have_content("Żadna osoba nie ma zapisanych preferencji książkowych.")
+      expect(page).not_to have_button("Drukuj książki")
+    end
+
+    it "omits groups that have no people with preferences" do
+      partial_trip = create(:trip, date: "2025-10-12", organiser: admin_user).tap do |t|
+        g1 = create(:trip_group, trip: t, number: 1, volunteers: ["Kasia"])
+        g2 = create(:trip_group, trip: t, number: 2, volunteers: ["Marek"])
+        loc1 = create(:location, name: "Z książkami")
+        loc2 = create(:location, name: "Bez")
+        create(:person, location: loc1, first_name: "Czyta", last_name: "Książki",
+          book_preferences: "Poezja")
+        create(:person, location: loc2, book_preferences: nil)
+        create(:trip_destination, trip_group: g1, location: loc1)
+        create(:trip_destination, trip_group: g2, location: loc2)
+      end
+
+      visit "/admin/trips/#{partial_trip.id}"
+      click_link "Książki"
+
+      within("#books-content") do
+        expect(page).to have_css("h3", text: "GR 1: Kasia")
+        expect(page).not_to have_css("h3", text: "GR 2")
+        expect(page).to have_css("table", count: 1)
+      end
+    end
+  end
 end

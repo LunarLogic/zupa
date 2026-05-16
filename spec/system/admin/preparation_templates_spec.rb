@@ -266,11 +266,11 @@ RSpec.describe "Admin preparation templates", type: :system do
         g2 = create(:trip_group, trip: t, number: 2, volunteers: ["Bartek"])
         loc_a = create(:location, name: "Lokacja A")
         loc_b = create(:location, name: "Lokacja B")
-        create(:person, location: loc_a, long_term_provisions: true)
+        create(:person, location: loc_a, long_term_provisions: true, sandwiches: 3, soups: 2)
+        create(:person, location: loc_b, long_term_provisions: true, sandwiches: 5, soups: 4)
         create(:person, location: loc_b, long_term_provisions: true)
-        create(:person, location: loc_b, long_term_provisions: true)
-        create(:trip_destination, trip_group: g1, location: loc_a, sandwiches: 3, soups: 2)
-        create(:trip_destination, trip_group: g2, location: loc_b, sandwiches: 5, soups: 4)
+        create(:trip_destination, trip_group: g1, location: loc_a)
+        create(:trip_destination, trip_group: g2, location: loc_b)
       end
     end
 

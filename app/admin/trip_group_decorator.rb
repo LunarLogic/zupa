@@ -42,11 +42,11 @@ class TripGroupDecorator < SimpleDelegator
   end
 
   def sparkling_water_count
-    people_across_destinations.sum(&:sparkling_water_count)
+    people_across_destinations.sum(&:sparkling_water)
   end
 
   def still_water_count
-    people_across_destinations.sum(&:still_water_count)
+    people_across_destinations.sum(&:still_water)
   end
 
   def long_term_provisions_count
@@ -58,11 +58,11 @@ class TripGroupDecorator < SimpleDelegator
   end
 
   def sparkling_water_recipients
-    format_water_recipients(:sparkling_water_count)
+    format_water_recipients(:sparkling_water)
   end
 
   def still_water_recipients
-    format_water_recipients(:still_water_count)
+    format_water_recipients(:still_water)
   end
 
   def package_recipients
@@ -77,8 +77,8 @@ class TripGroupDecorator < SimpleDelegator
       {
         name: p.full_name,
         long_term_provisions: p.long_term_provisions,
-        sparkling_water_count: p.sparkling_water_count,
-        still_water_count: p.still_water_count,
+        sparkling_water_count: p.sparkling_water,
+        still_water_count: p.still_water,
         book_preferences: p.book_preferences,
         has_package: p.packed_packages.any?
       }

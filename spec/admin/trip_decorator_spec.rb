@@ -11,8 +11,10 @@ RSpec.describe TripDecorator do
   let(:location2) { create(:location, name: "Lokacja B") }
 
   before do
-    create(:trip_destination, trip_group: group1, location: location1, sandwiches: 3, soups: 2, provisions: 1)
-    create(:trip_destination, trip_group: group2, location: location2, sandwiches: 5, soups: 4, provisions: 2)
+    create(:person, location: location1, sandwiches: 3, soups: 2, chocolates: 0)
+    create(:person, location: location2, sandwiches: 5, soups: 4, chocolates: 0)
+    create(:trip_destination, trip_group: group1, location: location1)
+    create(:trip_destination, trip_group: group2, location: location2)
     trip.reload
   end
 
@@ -21,6 +23,12 @@ RSpec.describe TripDecorator do
   describe "#formatted_date" do
     it "formats the date as dd / mm / yyyy" do
       expect(decorated.formatted_date).to eq("15 / 03 / 2025")
+    end
+  end
+
+  describe "#group_count" do
+    it "returns the number of groups" do
+      expect(decorated.group_count).to eq(2)
     end
   end
 
@@ -77,8 +85,8 @@ RSpec.describe TripDecorator do
     let(:loc_with_people) { create(:location, name: "Lokacja X") }
 
     before do
-      create(:person, location: loc_with_people, long_term_provisions: true, sparkling_water_count: 2, still_water_count: 0)
-      create(:person, location: loc_with_people, long_term_provisions: false, sparkling_water_count: 1, still_water_count: 3)
+      create(:person, location: loc_with_people, long_term_provisions: true, sparkling_water: 2, still_water: 0)
+      create(:person, location: loc_with_people, long_term_provisions: false, sparkling_water: 1, still_water: 3)
       create(:trip_destination, trip_group: group1, location: loc_with_people)
       trip.reload
     end
