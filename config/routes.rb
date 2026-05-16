@@ -35,6 +35,7 @@ Rails.application.routes.draw do
             post :qr_code
           end
         end
+        get "isbn_lookup", to: "isbn_lookup#show"
       end
     end
   end

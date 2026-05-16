@@ -1,0 +1,130 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://openlibrary.org/api/books?bibkeys=ISBN:9780140449266&format=json&jscmd=data
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.30.0
+      Date:
+      - Sat, 16 May 2026 14:49:59 GMT
+      Content-Type:
+      - application/json
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      X-Served-By:
+      - FastAPI
+      Referrer-Policy:
+      - no-referrer-when-downgrade
+    body:
+      encoding: ASCII-8BIT
+      string: '{"ISBN:9780140449266": {"url": "http://openlibrary.org/books/OL3703020M/The_Count_of_Monte_Cristo",
+        "key": "/books/OL3703020M", "title": "The Count of Monte Cristo", "authors":
+        [{"url": "http://openlibrary.org/authors/OL18236A/Alexandre_Dumas", "name":
+        "Alexandre Dumas"}], "number_of_pages": 1276, "pagination": "xxviii, 1276
+        p. ;", "by_statement": "Alexandre Dumas (pe\u0300re) ; translated and with
+        an introduction and notes by Robin Buss.", "identifiers": {"goodreads": ["7126"],
+        "isbn_10": ["0140449264"], "lccn": ["2003270054"], "openlibrary": ["OL3703020M"]},
+        "classifications": {"lc_classifications": ["PQ2226 .A327 2003"], "dewey_decimal_class":
+        ["843/.7"]}, "publishers": [{"name": "Penguin Books"}], "publish_places":
+        [{"name": "London, England"}, {"name": "New York, N.Y"}], "publish_date":
+        "2003", "subjects": [{"name": "France -- History -- 19th century -- Fiction",
+        "url": "https://openlibrary.org/subjects/france_--_history_--_19th_century_--_fiction"},
+        {"name": "France", "url": "https://openlibrary.org/subjects/france"}, {"name":
+        "Fiction", "url": "https://openlibrary.org/subjects/fiction"}, {"name": "France
+        in fiction", "url": "https://openlibrary.org/subjects/france_in_fiction"},
+        {"name": "History", "url": "https://openlibrary.org/subjects/history"}, {"name":
+        "Adventure and adventurers in fiction", "url": "https://openlibrary.org/subjects/adventure_and_adventurers_in_fiction"},
+        {"name": "Readers", "url": "https://openlibrary.org/subjects/readers"}, {"name":
+        "French language", "url": "https://openlibrary.org/subjects/french_language"},
+        {"name": "Adventure and adventurers", "url": "https://openlibrary.org/subjects/adventure_and_adventurers"},
+        {"name": "Translations into Yiddish", "url": "https://openlibrary.org/subjects/translations_into_yiddish"},
+        {"name": "Pirates in fiction", "url": "https://openlibrary.org/subjects/pirates_in_fiction"},
+        {"name": "Pirates", "url": "https://openlibrary.org/subjects/pirates"}, {"name":
+        "Adventure stories", "url": "https://openlibrary.org/subjects/adventure_stories"},
+        {"name": "Revenge in fiction", "url": "https://openlibrary.org/subjects/revenge_in_fiction"},
+        {"name": "Revenge", "url": "https://openlibrary.org/subjects/revenge"}, {"name":
+        "False arrest", "url": "https://openlibrary.org/subjects/false_arrest"}, {"name":
+        "Social life and customs", "url": "https://openlibrary.org/subjects/social_life_and_customs"},
+        {"name": "Sailors", "url": "https://openlibrary.org/subjects/sailors"}, {"name":
+        "False arrest in fiction", "url": "https://openlibrary.org/subjects/false_arrest_in_fiction"},
+        {"name": "Historical fiction", "url": "https://openlibrary.org/subjects/historical_fiction"},
+        {"name": "Sailors in fiction", "url": "https://openlibrary.org/subjects/sailors_in_fiction"},
+        {"name": "Language study", "url": "https://openlibrary.org/subjects/language_study"},
+        {"name": "French", "url": "https://openlibrary.org/subjects/french"}, {"name":
+        "Friendship", "url": "https://openlibrary.org/subjects/friendship"}, {"name":
+        "Betrayal", "url": "https://openlibrary.org/subjects/betrayal"}, {"name":
+        "French literature", "url": "https://openlibrary.org/subjects/french_literature"},
+        {"name": "Translations into Tagalog", "url": "https://openlibrary.org/subjects/translations_into_tagalog"},
+        {"name": "French literature, study and teaching", "url": "https://openlibrary.org/subjects/french_literature,_study_and_teaching"},
+        {"name": "Classic", "url": "https://openlibrary.org/subjects/classic"}, {"name":
+        "romance", "url": "https://openlibrary.org/subjects/romance"}, {"name": "suspense",
+        "url": "https://openlibrary.org/subjects/suspense"}, {"name": "drama", "url":
+        "https://openlibrary.org/subjects/drama"}, {"name": "love", "url": "https://openlibrary.org/subjects/love"},
+        {"name": "Adventure and adventurers, fiction", "url": "https://openlibrary.org/subjects/adventure_and_adventurers,_fiction"},
+        {"name": "France, history, 1799-1914, fiction", "url": "https://openlibrary.org/subjects/france,_history,_1799-1914,_fiction"},
+        {"name": "France, fiction", "url": "https://openlibrary.org/subjects/france,_fiction"},
+        {"name": "Fiction, action & adventure", "url": "https://openlibrary.org/subjects/fiction,_action_&_adventure"},
+        {"name": "Fiction, historical, general", "url": "https://openlibrary.org/subjects/fiction,_historical,_general"},
+        {"name": "French language materials", "url": "https://openlibrary.org/subjects/french_language_materials"},
+        {"name": "Historia", "url": "https://openlibrary.org/subjects/historia"},
+        {"name": "Venganza", "url": "https://openlibrary.org/subjects/venganza"},
+        {"name": "Novela", "url": "https://openlibrary.org/subjects/novela"}, {"name":
+        "Novela hist\u00f3rica", "url": "https://openlibrary.org/subjects/novela_hist\u00f3rica"},
+        {"name": "Loyalty", "url": "https://openlibrary.org/subjects/loyalty"}, {"name":
+        "Zhang pian xiao shuo", "url": "https://openlibrary.org/subjects/zhang_pian_xiao_shuo"},
+        {"name": "Fiction, historical", "url": "https://openlibrary.org/subjects/fiction,_historical"},
+        {"name": "Continental european fiction (fictional works by one author)", "url":
+        "https://openlibrary.org/subjects/continental_european_fiction_(fictional_works_by_one_author)"},
+        {"name": "French fiction", "url": "https://openlibrary.org/subjects/french_fiction"},
+        {"name": "Translations into Polish", "url": "https://openlibrary.org/subjects/translations_into_polish"},
+        {"name": "Fiction, romance, historical, general", "url": "https://openlibrary.org/subjects/fiction,_romance,_historical,_general"},
+        {"name": "Translations into Chinese", "url": "https://openlibrary.org/subjects/translations_into_chinese"},
+        {"name": "Chinese fiction", "url": "https://openlibrary.org/subjects/chinese_fiction"},
+        {"name": "Translations from French", "url": "https://openlibrary.org/subjects/translations_from_french"},
+        {"name": "Fiction, general", "url": "https://openlibrary.org/subjects/fiction,_general"},
+        {"name": "Judeo-Arabic literature", "url": "https://openlibrary.org/subjects/judeo-arabic_literature"},
+        {"name": "Action & Adventure - General", "url": "https://openlibrary.org/subjects/action_&_adventure_-_general"},
+        {"name": "Historical - General", "url": "https://openlibrary.org/subjects/historical_-_general"},
+        {"name": "Spanish: Grades 3-4", "url": "https://openlibrary.org/subjects/spanish:_grades_3-4"},
+        {"name": "Literary Criticism & Collections / General", "url": "https://openlibrary.org/subjects/literary_criticism_&_collections_/_general"},
+        {"name": "Tales", "url": "https://openlibrary.org/subjects/tales"}, {"name":
+        "Escapes", "url": "https://openlibrary.org/subjects/escapes"}, {"name": "Prisons",
+        "url": "https://openlibrary.org/subjects/prisons"}, {"name": "Prisoners",
+        "url": "https://openlibrary.org/subjects/prisoners"}, {"name": "Franse fiksie",
+        "url": "https://openlibrary.org/subjects/franse_fiksie"}, {"name": "Long now
+        manual for civilization", "url": "https://openlibrary.org/subjects/long_now_manual_for_civilization"},
+        {"name": "False imprisonment", "url": "https://openlibrary.org/subjects/false_imprisonment"},
+        {"name": "Adventure", "url": "https://openlibrary.org/subjects/adventure"}],
+        "subject_places": [{"name": "France", "url": "https://openlibrary.org/subjects/place:france"},
+        {"name": "Marsailles", "url": "https://openlibrary.org/subjects/place:marsailles"},
+        {"name": "Europe", "url": "https://openlibrary.org/subjects/place:europe"},
+        {"name": "Francia", "url": "https://openlibrary.org/subjects/place:francia"}],
+        "subject_people": [{"name": "Alexandre Dumas (1802-1870)", "url": "https://openlibrary.org/subjects/person:alexandre_dumas_(1802-1870)"},
+        {"name": "The Count of Monte Cristo", "url": "https://openlibrary.org/subjects/person:the_count_of_monte_cristo"}],
+        "subject_times": [{"name": "19th century", "url": "https://openlibrary.org/subjects/time:19th_century"},
+        {"name": "1700''s- 1800''s", "url": "https://openlibrary.org/subjects/time:1700''s-_1800''s"},
+        {"name": "Siglo XIX", "url": "https://openlibrary.org/subjects/time:siglo_xix"},
+        {"name": "1815", "url": "https://openlibrary.org/subjects/time:1815"}], "links":
+        [{"title": "The Count of Monte Cristo-Ebookzy", "url": "https://ebookzy.com/the-count-of-monte-cristo/"}],
+        "ebooks": [{"preview_url": "https://archive.org/details/countofmontecris00duma_8",
+        "availability": "restricted", "formats": {}}], "cover": {"small": "https://covers.openlibrary.org/b/id/14564134-S.jpg",
+        "medium": "https://covers.openlibrary.org/b/id/14564134-M.jpg", "large": "https://covers.openlibrary.org/b/id/14564134-L.jpg"}}}'
+  recorded_at: Sat, 16 May 2026 14:49:59 GMT
+recorded_with: VCR 6.2.0
