@@ -61,17 +61,17 @@ end
 locations = Location.includes(:people).all
 
 [
-  {first_name: "Biecława", code: "001", location: locations[0], requests_status: "green", phone_number: "123456789"},
+  {first_name: "Biecława", code: "001", location: locations[0], requests_status: "green", phone_number: "123456789", book_preferences: "Kryminały, najchętniej skandynawskie. Bez horrorów."},
   {first_name: "Radomił", code: "002", location: locations[0], requests_status: "green", phone_number: "321654987"},
-  {first_name: "Mezamir", code: "003", location: locations[0], requests_status: "green", phone_number: "456789123"},
-  {first_name: "Bratumiła", code: "004", location: locations[1], requests_status: "green", phone_number: "987654321"},
+  {first_name: "Mezamir", code: "003", location: locations[0], requests_status: "green", phone_number: "456789123", book_preferences: "Cokolwiek o historii Polski, lubi II RP."},
+  {first_name: "Bratumiła", code: "004", location: locations[1], requests_status: "green", phone_number: "987654321", book_preferences: "Reportaże, książki podróżnicze."},
   {first_name: "Janisław", code: "005", location: locations[1], requests_status: "green", phone_number: "789456123"},
-  {first_name: "Mojmira", code: "006", location: locations[2], requests_status: "green", phone_number: "654123789"},
+  {first_name: "Mojmira", code: "006", location: locations[2], requests_status: "green", phone_number: "654123789", book_preferences: "Poezja — Szymborska, Miłosz."},
   {first_name: "Nawoja", code: "007", location: locations[2], requests_status: "green"},
-  {first_name: "Pomir", code: "008", location: locations[3], requests_status: "green"},
+  {first_name: "Pomir", code: "008", location: locations[3], requests_status: "green", book_preferences: "Fantastyka i science fiction. Sapkowski, Lem."},
   {first_name: "Misław", code: "009", location: locations[3], requests_status: "green"},
-  {first_name: "Radowit", code: "010", location: locations[3], requests_status: "green"},
-  {first_name: "Wojemił", code: "011", location: locations[4], requests_status: "green"}
+  {first_name: "Radowit", code: "010", location: locations[3], requests_status: "green", book_preferences: "Krzyżówki i łamigłówki, im więcej tym lepiej."},
+  {first_name: "Wojemił", code: "011", location: locations[4], requests_status: "green", book_preferences: "Klasyka literatury — Sienkiewicz, Prus."}
 ].each do |person|
   Person.create(person)
 end
