@@ -1,7 +1,7 @@
 require "swagger_helper"
 
 RSpec.describe "Library Books", type: :request do
-  let!(:book) { FactoryBot.create(:book, title: "Lalka", author: "Bolesław Prus", genres: ["literatura_piękna"]) }
+  let!(:book) { FactoryBot.create(:book, title: "Lalka", author: "Bolesław Prus", genres: ["literatura_piekna"]) }
 
   path "/api/v1/library/books" do
     get("list books") do
@@ -200,7 +200,7 @@ RSpec.describe "Library Books", type: :request do
 
       response(200, "updated") do
         let(:id) { book.id }
-        let(:book_data) { {book: {extra_note: "Damaged spine", genres: ["literatura_piękna", "biografia"]}} }
+        let(:book_data) { {book: {extra_note: "Damaged spine", genres: ["literatura_piekna", "biografia"]}} }
 
         before do |example|
           submit_request(example.metadata)
@@ -209,7 +209,7 @@ RSpec.describe "Library Books", type: :request do
         it "updates fields" do
           result = JSON.parse(response.body)
           expect(result["extra_note"]).to eq "Damaged spine"
-          expect(result["genres"]).to match_array(["literatura_piękna", "biografia"])
+          expect(result["genres"]).to match_array(["literatura_piekna", "biografia"])
         end
       end
     end

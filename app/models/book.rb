@@ -1,7 +1,7 @@
 class Book < ApplicationRecord
   KNOWN_GENRES = %w[
-    literatura_piękna
-    kryminał
+    literatura_piekna
+    kryminal
     fantasy
     biografia
     dla_dzieci
@@ -11,8 +11,8 @@ class Book < ApplicationRecord
   ].freeze
 
   GENRE_COLORS = {
-    "literatura_piękna" => "#006653",
-    "kryminał" => "#c4362c",
+    "literatura_piekna" => "#006653",
+    "kryminal" => "#c4362c",
     "fantasy" => "#5b3f8a",
     "biografia" => "#c0b190",
     "dla_dzieci" => "#fdd051",

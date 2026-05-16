@@ -28,6 +28,19 @@ pl:
     rejected: Odrzucone
     during_consultation: W trakcie konsultacji
     packing: W trakcie pakowania
+  book_statuses:
+    available: Dostępna
+    in_package: W paczce
+    archived: Zarchiwizowana
+  book_genres:
+    literatura_piekna: Literatura piękna
+    kryminal: Kryminał
+    fantasy: Fantasy
+    biografia: Biografia
+    dla_dzieci: Dla dzieci
+    popularnonaukowa: Popularnonaukowa
+    poezja: Poezja
+    inne: Inne
   menu_item:
     item_types:
       internal: Wewnętrzny
@@ -56,7 +69,9 @@ pl:
         visit_summaries: Relacje
         trips: Wyjazdy
         app_settings: Ustawienia
+        books: Książki
       groups:
+        library: 📚 Biblioteka
         configuration: ⚙️ Konfiguracja
         trips: 🚙 Wyjazdy
         content: 📰 Treści
