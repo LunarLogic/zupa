@@ -358,18 +358,18 @@ RSpec.describe "Library Books", type: :request do
           assert_response_matches_metadata(example.metadata)
         end
       end
+    end
+  end
 
-      response(404, "blank qr") do
-        let(:qr) { "" }
+  describe "GET /api/v1/library/books/by_qr_code with blank qr" do
+    it "is treated as not found" do
+      get "/api/v1/library/books/by_qr_code?qr="
+      expect(response).to have_http_status(:not_found)
+    end
 
-        before do |example|
-          submit_request(example.metadata)
-        end
-
-        it "treats blank qr as not found" do
-          expect(response).to have_http_status(:not_found)
-        end
-      end
+    it "is treated as not found when qr param is missing entirely" do
+      get "/api/v1/library/books/by_qr_code"
+      expect(response).to have_http_status(:not_found)
     end
   end
 end
