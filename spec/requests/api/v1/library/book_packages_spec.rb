@@ -140,6 +140,47 @@ RSpec.describe "Library Book Packages", type: :request do
           expect(book1.reload.status).to eq "available"
         end
       end
+
+      response(422, "one book is already packed in another package (atomic rollback)") do
+        let(:available_book) { FactoryBot.create(:book, title: "Lalka") }
+        let(:already_packed) {
+          book = FactoryBot.create(:book, title: "Hobbit")
+          FactoryBot.create(:book_package_item, book_package: book_package, book: book)
+          book
+        }
+        let(:book_package_data) {
+          {book_package: {receiver_id: receiver.id, book_ids: [available_book.id, already_packed.id]}}
+        }
+
+        before do |example|
+          submit_request(example.metadata)
+        end
+
+        it "returns 422 and persists no new package or item" do
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(BookPackage.where(receiver: receiver).count).to eq 1
+          expect(available_book.reload.status).to eq "available"
+          expect(already_packed.reload.status).to eq "packed"
+          expect(BookPackageItem.where(book: already_packed).pluck(:book_package_id))
+            .to contain_exactly(book_package.id)
+        end
+      end
+
+      response(422, "one book is borrowed (atomic rollback)") do
+        let(:borrowed_book) { FactoryBot.create(:book, title: "Pan Tadeusz", status: :borrowed) }
+        let(:book_package_data) {
+          {book_package: {receiver_id: receiver.id, book_ids: [borrowed_book.id]}}
+        }
+
+        before do |example|
+          submit_request(example.metadata)
+        end
+
+        it "returns 422 and leaves the book borrowed" do
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(borrowed_book.reload.status).to eq "borrowed"
+        end
+      end
     end
   end
 
@@ -226,6 +267,27 @@ RSpec.describe "Library Book Packages", type: :request do
         end
       end
 
+      response(200, "delivering marks child books as borrowed") do
+        let(:pkg) { FactoryBot.create(:book_package, :packed, receiver: receiver) }
+        let(:packed_book) {
+          book = FactoryBot.create(:book, title: "Lalka")
+          FactoryBot.create(:book_package_item, book_package: pkg, book: book)
+          book
+        }
+        let(:id) { pkg.id }
+        let(:book_package_data) { {book_package: {status: "delivered", delivered_by: "Wanda W."}} }
+
+        before do |example|
+          packed_book # force creation
+          submit_request(example.metadata)
+        end
+
+        it "flips packed child books to borrowed" do
+          expect(response).to have_http_status(:ok)
+          expect(packed_book.reload.status).to eq "borrowed"
+        end
+      end
+
       response(422, "missing delivered_by when delivered") do
         let(:id) { FactoryBot.create(:book_package, :packed, receiver: receiver).id }
         let(:book_package_data) { {book_package: {status: "delivered"}} }
@@ -304,6 +366,40 @@ RSpec.describe "Library Book Packages", type: :request do
         end
       end
 
+      response(422, "book is packed in a different package") do
+        let(:id) { book_package.id }
+        let(:other_pkg) { FactoryBot.create(:book_package, receiver: receiver) }
+        let(:book) { FactoryBot.create(:book) }
+        let!(:foreign_item) { FactoryBot.create(:book_package_item, book_package: other_pkg, book: book) }
+        let(:item_data) { {book_id: book.id} }
+
+        before do |example|
+          submit_request(example.metadata)
+        end
+
+        it "returns 422 and keeps the book in the original package" do
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(book.reload.status).to eq "packed"
+          expect(BookPackageItem.where(book: book).pluck(:book_package_id))
+            .to contain_exactly(other_pkg.id)
+        end
+      end
+
+      response(422, "book is borrowed") do
+        let(:id) { book_package.id }
+        let(:book) { FactoryBot.create(:book, status: :borrowed) }
+        let(:item_data) { {book_id: book.id} }
+
+        before do |example|
+          submit_request(example.metadata)
+        end
+
+        it "returns 422 and leaves the book borrowed" do
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(book.reload.status).to eq "borrowed"
+        end
+      end
+
       response(422, "book_id does not exist") do
         let(:id) { book_package.id }
         let(:item_data) { {book_id: 999_999} }
@@ -343,6 +439,30 @@ RSpec.describe "Library Book Packages", type: :request do
 
         it "flips book status back to available" do
           expect(book.reload.status).to eq "available"
+        end
+      end
+
+      response(204, "removing item from delivered package keeps book borrowed") do
+        let(:delivered_pkg) { FactoryBot.create(:book_package, :delivered, receiver: receiver) }
+        let(:id) { delivered_pkg.id }
+        let(:book) { FactoryBot.create(:book, status: :borrowed) }
+        let!(:item) {
+          # Bypass both validations and callbacks: a delivered-package item points
+          # at a borrowed book, which mirrors the real lifecycle after
+          # status: packing → packed → delivered.
+          now = Time.current
+          BookPackageItem.insert!({book_package_id: delivered_pkg.id, book_id: book.id, created_at: now, updated_at: now})
+          BookPackageItem.find_by!(book_package: delivered_pkg, book: book)
+        }
+        let(:book_id) { book.id }
+
+        before do |example|
+          submit_request(example.metadata)
+        end
+
+        it "leaves the book borrowed" do
+          expect(response).to have_http_status(:no_content)
+          expect(book.reload.status).to eq "borrowed"
         end
       end
     end
