@@ -39,6 +39,16 @@ module Api
           head :no_content
         end
 
+        def by_qr_code
+          qr = params[:qr]
+          @book = qr.present? ? Book.find_by(qr_code: qr) : nil
+          if @book
+            render :show
+          else
+            head :not_found
+          end
+        end
+
         def photo
           uploaded = params[:photo]
           if uploaded.blank?

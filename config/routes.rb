@@ -30,6 +30,9 @@ Rails.application.routes.draw do
 
       namespace :library do
         resources :books do
+          collection do
+            get :by_qr_code
+          end
           member do
             post :photo
             post :qr_code

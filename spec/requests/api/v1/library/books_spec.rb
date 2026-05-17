@@ -318,4 +318,58 @@ RSpec.describe "Library Books", type: :request do
       end
     end
   end
+
+  path "/api/v1/library/books/by_qr_code" do
+    get("look up book by QR code") do
+      tags "Library Books"
+      produces "application/json"
+      parameter name: :qr, in: :query, type: :string, required: true,
+        description: "exact QR sticker code bound to a book"
+
+      response(200, "found") do
+        let!(:bound) { FactoryBot.create(:book, :with_qr, qr_code: "QR-LOOKUP-1") }
+        let(:qr) { "QR-LOOKUP-1" }
+
+        before do |example|
+          submit_request(example.metadata)
+        end
+
+        it "returns the bound book" do
+          result = JSON.parse(response.body)
+          expect(result["id"]).to eq bound.id
+          expect(result["qr_code"]).to eq "QR-LOOKUP-1"
+        end
+
+        after do |example|
+          example.metadata[:response][:content] = {
+            "application/json" => {example: JSON.parse(response.body, symbolize_names: true)}
+          }
+        end
+      end
+
+      response(404, "not found") do
+        let(:qr) { "QR-UNKNOWN" }
+
+        before do |example|
+          submit_request(example.metadata)
+        end
+
+        it "returns 404" do |example|
+          assert_response_matches_metadata(example.metadata)
+        end
+      end
+    end
+  end
+
+  describe "GET /api/v1/library/books/by_qr_code with blank qr" do
+    it "is treated as not found" do
+      get "/api/v1/library/books/by_qr_code?qr="
+      expect(response).to have_http_status(:not_found)
+    end
+
+    it "is treated as not found when qr param is missing entirely" do
+      get "/api/v1/library/books/by_qr_code"
+      expect(response).to have_http_status(:not_found)
+    end
+  end
 end
