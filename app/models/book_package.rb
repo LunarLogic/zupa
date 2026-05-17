@@ -13,6 +13,7 @@ class BookPackage < ApplicationRecord
   validates :packed_at, presence: true, if: -> { packed? || delivered? }
 
   before_validation :stamp_status_transitions
+  after_update :sync_books_on_delivery
 
   delegate :name, :code, to: :receiver, prefix: true
   delegate :location, to: :receiver
@@ -28,5 +29,15 @@ class BookPackage < ApplicationRecord
 
     self.packed_at ||= Time.current if packed? || delivered?
     self.delivered_at ||= Time.current if delivered?
+  end
+
+  # When a package is marked delivered, its books are physically handed to the
+  # recipient — flip their status from packed → borrowed. A future admin "return
+  # scan" flow will flip them back to available individually.
+  def sync_books_on_delivery
+    return unless saved_change_to_status?
+    return unless delivered?
+
+    books.where(status: "packed").update_all(status: "borrowed")
   end
 end
