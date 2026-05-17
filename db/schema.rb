@@ -10,13 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2026_05_17_121513) do
+ActiveRecord::Schema[7.0].define(version: 2026_05_17_131909) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   # Custom types defined in this database.
   # Note that some types may not work with other database engines. Be careful if changing database.
   create_enum "book_package_status_type", ["packing", "packed", "delivered"]
+  create_enum "book_status_type", ["available", "packed", "borrowed", "archived"]
   create_enum "item_request_status_type", ["to_prepare", "prepared", "delivered", "rejected", "during_consultation", "packing"]
   create_enum "location_status_type", ["active", "pending_verification", "inactive"]
   create_enum "location_type", ["regular", "estimated"]
@@ -126,7 +127,7 @@ ActiveRecord::Schema[7.0].define(version: 2026_05_17_121513) do
     t.string "qr_code"
     t.text "extra_note"
     t.string "genres", default: [], null: false, array: true
-    t.integer "status", default: 0, null: false
+    t.enum "status", default: "available", null: false, enum_type: "book_status_type"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["genres"], name: "index_books_on_genres", using: :gin

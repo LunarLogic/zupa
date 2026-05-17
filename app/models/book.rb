@@ -26,7 +26,7 @@ class Book < ApplicationRecord
   COVER_PHOTO_CONTENT_TYPES = %w[image/jpeg image/png image/webp].freeze
   COVER_PHOTO_MAX_SIZE = 5.megabytes
 
-  enum status: {available: 0, packed: 1, borrowed: 2, archived: 3}
+  enum status: {available: "available", packed: "packed", borrowed: "borrowed", archived: "archived"}
 
   has_one_attached :cover_photo
 

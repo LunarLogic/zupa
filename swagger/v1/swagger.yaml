@@ -40,8 +40,8 @@ paths:
                 - M
                 - S
                 - XS
-                created_at: '2026-05-17T11:16:08.784Z'
-                updated_at: '2026-05-17T11:16:08.784Z'
+                created_at: '2026-05-17T11:22:22.764Z'
+                updated_at: '2026-05-17T11:22:22.764Z'
                 icon_name: jacket
   "/api/v1/people/{person_id}/item_requests":
     parameters:
@@ -65,14 +65,14 @@ paths:
                 id: 104
                 size: XL
                 comment: Tylko nie czerwone
-                person_id: 570
+                person_id: 556
                 item_category_id: 107
                 prepared_at:
                 delivered_at:
                 delivery_confirmed_at:
                 status: to_prepare
-                created_at: '2026-05-17T11:16:08.919Z'
-                updated_at: '2026-05-17T11:16:08.919Z'
+                created_at: '2026-05-17T11:22:22.857Z'
+                updated_at: '2026-05-17T11:22:22.857Z'
                 url: http://www.example.com/api/v1/item_requests/104
       requestBody:
         content:
@@ -111,14 +111,14 @@ paths:
                 id: 106
                 size: S
                 comment: Na rzepy
-                person_id: 573
+                person_id: 559
                 item_category_id: 109
                 prepared_at:
                 delivered_at:
                 delivery_confirmed_at:
                 status: to_prepare
-                created_at: '2026-05-17T11:16:09.191Z'
-                updated_at: '2026-05-17T11:16:09.213Z'
+                created_at: '2026-05-17T11:22:22.928Z'
+                updated_at: '2026-05-17T11:22:22.950Z'
                 url: http://www.example.com/api/v1/item_requests/106
       requestBody:
         content:
@@ -149,14 +149,14 @@ paths:
                 id: 108
                 size: S
                 comment: Na rzepy
-                person_id: 577
+                person_id: 563
                 item_category_id: 111
                 prepared_at:
                 delivered_at:
                 delivery_confirmed_at:
                 status: to_prepare
-                created_at: '2026-05-17T11:16:09.303Z'
-                updated_at: '2026-05-17T11:16:09.321Z'
+                created_at: '2026-05-17T11:22:23.008Z'
+                updated_at: '2026-05-17T11:22:23.030Z'
                 url: http://www.example.com/api/v1/item_requests/108
       requestBody:
         content:
@@ -191,45 +191,45 @@ paths:
           content:
             application/json:
               example:
-              - id: 80
+              - id: 60
                 status: delivered
                 note:
-                packed_at: '2026-05-16T11:16:09.404Z'
-                delivered_at: '2026-05-17T10:16:09.404Z'
+                packed_at: '2026-05-16T11:22:23.117Z'
+                delivered_at: '2026-05-17T10:22:23.117Z'
                 delivered_by: Alexander Bell
-                created_at: '2026-05-17T11:16:09.404Z'
-                updated_at: '2026-05-17T11:16:09.404Z'
+                created_at: '2026-05-17T11:22:23.117Z'
+                updated_at: '2026-05-17T11:22:23.117Z'
                 receiver:
-                  id: 580
+                  id: 566
                   first_name: Anna
                   last_name: Kowalska
                   code: '114'
-                  location_id: 682
+                  location_id: 668
                   book_preferences:
                 location:
-                  id: 682
+                  id: 668
                   name: Planty 1
                   region_name: Bieżanów
                   latitude: '9.99'
                   longitude: '9.99'
                 books: []
-              - id: 79
+              - id: 59
                 status: packing
                 note:
                 packed_at:
                 delivered_at:
                 delivered_by:
-                created_at: '2026-05-17T11:16:09.403Z'
-                updated_at: '2026-05-17T11:16:09.403Z'
+                created_at: '2026-05-17T11:22:23.115Z'
+                updated_at: '2026-05-17T11:22:23.115Z'
                 receiver:
-                  id: 580
+                  id: 566
                   first_name: Anna
                   last_name: Kowalska
                   code: '114'
-                  location_id: 682
+                  location_id: 668
                   book_preferences:
                 location:
-                  id: 682
+                  id: 668
                   name: Planty 1
                   region_name: Bieżanów
                   latitude: '9.99'
@@ -388,7 +388,7 @@ paths:
           content:
             application/json:
               example:
-              - id: 123
+              - id: 117
                 title: Hobbit
                 author: Tolkien
                 isbn: '9788300000017'
@@ -402,9 +402,9 @@ paths:
                 - fantasy
                 status: available
                 cover_photo_url:
-                created_at: '2026-05-17T11:16:10.363Z'
-                updated_at: '2026-05-17T11:16:10.363Z'
-              - id: 122
+                created_at: '2026-05-17T11:22:23.845Z'
+                updated_at: '2026-05-17T11:22:23.845Z'
+              - id: 116
                 title: Old Tome
                 author: Ancient
                 isbn: '9788300000016'
@@ -418,9 +418,9 @@ paths:
                 - fantasy
                 status: archived
                 cover_photo_url:
-                created_at: '2026-05-17T11:16:10.362Z'
-                updated_at: '2026-05-17T11:16:10.362Z'
-              - id: 121
+                created_at: '2026-05-17T11:22:23.843Z'
+                updated_at: '2026-05-17T11:22:23.843Z'
+              - id: 115
                 title: Lalka
                 author: Bolesław Prus
                 isbn: '9788300000015'
@@ -434,8 +434,8 @@ paths:
                 - literatura_piekna
                 status: available
                 cover_photo_url:
-                created_at: '2026-05-17T11:16:10.360Z'
-                updated_at: '2026-05-17T11:16:10.360Z'
+                created_at: '2026-05-17T11:22:23.842Z'
+                updated_at: '2026-05-17T11:22:23.842Z'
     post:
       summary: create book
       tags:
@@ -627,7 +627,7 @@ paths:
           content:
             application/json:
               example:
-              - id: 702
+              - id: 688
                 name: Planty 1
                 region_name: Kraków
                 latitude: '9.99'
@@ -655,11 +655,11 @@ paths:
           content:
             application/json:
               example:
-              - id: 601
+              - id: 587
                 first_name: Anna
                 last_name: Kowalska
                 code: '777'
-                location_id: 707
+                location_id: 693
                 book_preferences:
   "/api/v1/locations":
     get:
@@ -672,18 +672,18 @@ paths:
           content:
             application/json:
               example:
-              - id: 716
+              - id: 702
                 name: Active Location
-                region_id: 691
+                region_id: 677
                 region_name: Bieżanów
                 full_name: Active Location
                 longitude: '9.99'
                 latitude: '9.99'
                 info: MyText
-                created_at: '2026-05-17T11:16:11.077Z'
-                updated_at: '2026-05-17T11:16:11.077Z'
+                created_at: '2026-05-17T11:22:24.569Z'
+                updated_at: '2026-05-17T11:22:24.569Z'
                 people:
-                - id: 608
+                - id: 594
                   name: Ryszard
                   phone_number: '123456789'
                   code: '012'
@@ -715,18 +715,18 @@ paths:
           content:
             application/json:
               example:
-                id: 725
+                id: 711
                 name: Active Location
-                region_id: 694
+                region_id: 680
                 region_name: Bieżanów
                 full_name: Active Location
                 longitude: '9.99'
                 latitude: '9.99'
                 info: MyText
-                created_at: '2026-05-17T11:16:11.184Z'
-                updated_at: '2026-05-17T11:16:11.184Z'
+                created_at: '2026-05-17T11:22:24.705Z'
+                updated_at: '2026-05-17T11:22:24.705Z'
                 people:
-                - id: 613
+                - id: 599
                   name: Ryszard
                   phone_number: '123456789'
                   code: '012'
@@ -822,12 +822,12 @@ paths:
               examples:
                 example:
                   value:
-                  - id: 625
+                  - id: 611
                     name: Ryszard
                     code: '012'
                     requests_status: green
-                    created_at: '2026-05-17T11:16:11.627Z'
-                    updated_at: '2026-05-17T11:16:11.627Z'
+                    created_at: '2026-05-17T11:22:25.143Z'
+                    updated_at: '2026-05-17T11:22:25.143Z'
                     phone_number: '123456789'
                     sizes:
                     - size: M
@@ -840,39 +840,39 @@ paths:
                       item_category_id: 118
                       item_category_name: Jacket
                       item_category_icon_name: jacket
-                      created_at: '2026-05-17T11:16:11.641Z'
+                      created_at: '2026-05-17T11:22:25.158Z'
                       status: to_prepare
                     location:
-                      id: 738
+                      id: 724
                       full_name: Niebieska Altana
                       longitude: '9.99'
                       latitude: '9.99'
                       info: MyText
                     packed_packages:
                     - id: 198
-                    url: http://www.example.com/api/v1/people/625
+                    url: http://www.example.com/api/v1/people/611
                     visit_summaries:
                     - id: 32
                       visit_date: '2026-05-16'
                       content: Visit Summary content
                       author: Marie Curie
-                  - id: 626
+                  - id: 612
                     name: Ryszard
                     code: '148'
                     requests_status: green
-                    created_at: '2026-05-17T11:16:11.639Z'
-                    updated_at: '2026-05-17T11:16:11.639Z'
+                    created_at: '2026-05-17T11:22:25.156Z'
+                    updated_at: '2026-05-17T11:22:25.156Z'
                     phone_number:
                     sizes: []
                     item_requests: []
                     location:
-                      id: 739
+                      id: 725
                       full_name: Niebieska Altana
                       longitude: '9.99'
                       latitude: '9.99'
                       info: MyText
                     packed_packages: []
-                    url: http://www.example.com/api/v1/people/626
+                    url: http://www.example.com/api/v1/people/612
                     visit_summaries: []
   "/api/v1/people/{id}":
     parameters:
@@ -892,12 +892,12 @@ paths:
           content:
             application/json:
               example:
-                id: 630
+                id: 616
                 name: Ryszard
                 code: '012'
                 requests_status: green
-                created_at: '2026-05-17T11:16:11.769Z'
-                updated_at: '2026-05-17T11:16:11.769Z'
+                created_at: '2026-05-17T11:22:25.318Z'
+                updated_at: '2026-05-17T11:22:25.318Z'
                 phone_number: '123456789'
                 sizes:
                 - size: M
@@ -910,17 +910,17 @@ paths:
                   item_category_id: 120
                   item_category_name: Jacket
                   item_category_icon_name: jacket
-                  created_at: '2026-05-17T11:16:11.778Z'
+                  created_at: '2026-05-17T11:22:25.328Z'
                   status: to_prepare
                 location:
-                  id: 743
+                  id: 729
                   full_name: Niebieska Altana
                   longitude: '9.99'
                   latitude: '9.99'
                   info: MyText
                 packed_packages:
                 - id: 202
-                url: http://www.example.com/api/v1/people/630
+                url: http://www.example.com/api/v1/people/616
                 visit_summaries:
                 - id: 34
                   visit_date: '2026-05-16'
@@ -937,12 +937,12 @@ paths:
           content:
             application/json:
               example:
-                id: 632
+                id: 618
                 name: Ryszard
                 code: '012'
                 requests_status: yellow
-                created_at: '2026-05-17T11:16:11.812Z'
-                updated_at: '2026-05-17T11:16:11.847Z'
+                created_at: '2026-05-17T11:22:25.360Z'
+                updated_at: '2026-05-17T11:22:25.395Z'
                 phone_number: '123456789'
                 sizes:
                 - size: M
@@ -955,17 +955,17 @@ paths:
                   item_category_id: 121
                   item_category_name: Jacket
                   item_category_icon_name: jacket
-                  created_at: '2026-05-17T11:16:11.823Z'
+                  created_at: '2026-05-17T11:22:25.370Z'
                   status: to_prepare
                 location:
-                  id: 745
+                  id: 731
                   full_name: Niebieska Altana
                   longitude: '9.99'
                   latitude: '9.99'
                   info: MyText
                 packed_packages:
                 - id: 204
-                url: http://www.example.com/api/v1/people/632
+                url: http://www.example.com/api/v1/people/618
                 visit_summaries:
                 - id: 35
                   visit_date: '2026-05-16'
@@ -1005,12 +1005,12 @@ paths:
           content:
             application/json:
               example:
-                id: 634
+                id: 620
                 name: Ryszard
                 code: '012'
                 requests_status: yellow
-                created_at: '2026-05-17T11:16:11.857Z'
-                updated_at: '2026-05-17T11:16:11.896Z'
+                created_at: '2026-05-17T11:22:25.414Z'
+                updated_at: '2026-05-17T11:22:25.450Z'
                 phone_number: '123456789'
                 sizes:
                 - size: M
@@ -1023,17 +1023,17 @@ paths:
                   item_category_id: 122
                   item_category_name: Jacket
                   item_category_icon_name: jacket
-                  created_at: '2026-05-17T11:16:11.867Z'
+                  created_at: '2026-05-17T11:22:25.424Z'
                   status: to_prepare
                 location:
-                  id: 747
+                  id: 733
                   full_name: Niebieska Altana
                   longitude: '9.99'
                   latitude: '9.99'
                   info: MyText
                 packed_packages:
                 - id: 206
-                url: http://www.example.com/api/v1/people/634
+                url: http://www.example.com/api/v1/people/620
                 visit_summaries:
                 - id: 36
                   visit_date: '2026-05-16'
@@ -1113,7 +1113,7 @@ paths:
                   has_animals: true
                   has_chocolates: true
                   destinations:
-                  - location_id: 754
+                  - location_id: 740
                     name: First Location
                     longitude: '9.99'
                     latitude: '9.99'
@@ -1138,7 +1138,7 @@ paths:
                     has_chocolates: false
                     chocolate_count: 0
                     people: []
-                  - location_id: 753
+                  - location_id: 739
                     name: Second Location
                     longitude: '9.99'
                     latitude: '9.99'
@@ -1163,19 +1163,19 @@ paths:
                     - id: 45
                       name: Faraon
                       active: true
-                      location_id: 753
-                      created_at: '2026-05-17T11:16:12.029Z'
-                      updated_at: '2026-05-17T11:16:12.029Z'
+                      location_id: 739
+                      created_at: '2026-05-17T11:22:25.590Z'
+                      updated_at: '2026-05-17T11:22:25.590Z'
                       species: cat
                     has_chocolates: true
                     chocolate_count: 1
                     people:
-                    - id: 640
+                    - id: 626
                       first_name: Ryszard
-                      location_id: 753
+                      location_id: 739
                       code: '158'
-                      created_at: '2026-05-17T11:16:12.028Z'
-                      updated_at: '2026-05-17T11:16:12.028Z'
+                      created_at: '2026-05-17T11:22:25.589Z'
+                      updated_at: '2026-05-17T11:22:25.589Z'
                       requests_status: green
                       last_name: Bugajski
                       phone_number:
@@ -1231,7 +1231,7 @@ paths:
                   has_animals: true
                   has_chocolates: true
                   destinations:
-                  - location_id: 756
+                  - location_id: 742
                     name: Second Location
                     longitude: '9.99'
                     latitude: '9.99'
@@ -1256,19 +1256,19 @@ paths:
                     - id: 47
                       name: Faraon
                       active: true
-                      location_id: 756
-                      created_at: '2026-05-17T11:16:12.129Z'
-                      updated_at: '2026-05-17T11:16:12.129Z'
+                      location_id: 742
+                      created_at: '2026-05-17T11:22:25.683Z'
+                      updated_at: '2026-05-17T11:22:25.683Z'
                       species: cat
                     has_chocolates: true
                     chocolate_count: 1
                     people:
-                    - id: 643
+                    - id: 629
                       first_name: Ryszard
-                      location_id: 756
+                      location_id: 742
                       code: '161'
-                      created_at: '2026-05-17T11:16:12.128Z'
-                      updated_at: '2026-05-17T11:16:12.128Z'
+                      created_at: '2026-05-17T11:22:25.682Z'
+                      updated_at: '2026-05-17T11:22:25.682Z'
                       requests_status: green
                       last_name: Bugajski
                       phone_number:
@@ -1325,7 +1325,7 @@ paths:
                     has_animals: true
                     has_chocolates: true
                     destinations:
-                    - location_id: 758
+                    - location_id: 744
                       name: Second Location
                       longitude: '9.99'
                       latitude: '9.99'
@@ -1350,19 +1350,19 @@ paths:
                       - id: 49
                         name: Faraon
                         active: true
-                        location_id: 758
-                        created_at: '2026-05-17T11:16:12.236Z'
-                        updated_at: '2026-05-17T11:16:12.236Z'
+                        location_id: 744
+                        created_at: '2026-05-17T11:22:25.779Z'
+                        updated_at: '2026-05-17T11:22:25.779Z'
                         species: cat
                       has_chocolates: true
                       chocolate_count: 1
                       people:
-                      - id: 645
+                      - id: 631
                         first_name: Ryszard
-                        location_id: 758
+                        location_id: 744
                         code: '163'
-                        created_at: '2026-05-17T11:16:12.235Z'
-                        updated_at: '2026-05-17T11:16:12.235Z'
+                        created_at: '2026-05-17T11:22:25.777Z'
+                        updated_at: '2026-05-17T11:22:25.777Z'
                         requests_status: green
                         last_name: Bugajski
                         phone_number:
