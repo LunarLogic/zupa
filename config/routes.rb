@@ -35,6 +35,12 @@ Rails.application.routes.draw do
             post :qr_code
           end
         end
+        resources :book_packages do
+          post "items", to: "book_package_items#create"
+          delete "items/:book_id", to: "book_package_items#destroy", as: :item
+        end
+        resources :people, only: %i[index]
+        resources :locations, only: %i[index]
         get "isbn_lookup", to: "isbn_lookup#show"
       end
     end

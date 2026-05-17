@@ -10,12 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2026_05_16_133502) do
+ActiveRecord::Schema[7.0].define(version: 2026_05_17_121513) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   # Custom types defined in this database.
   # Note that some types may not work with other database engines. Be careful if changing database.
+  create_enum "book_package_status_type", ["packing", "packed", "in_delivery", "delivered"]
   create_enum "item_request_status_type", ["to_prepare", "prepared", "delivered", "rejected", "during_consultation", "packing"]
   create_enum "location_status_type", ["active", "pending_verification", "inactive"]
   create_enum "location_type", ["regular", "estimated"]
@@ -89,6 +90,29 @@ ActiveRecord::Schema[7.0].define(version: 2026_05_16_133502) do
     t.datetime "expires_at", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "book_package_items", force: :cascade do |t|
+    t.bigint "book_package_id", null: false
+    t.bigint "book_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["book_id"], name: "index_book_package_items_on_book_id"
+    t.index ["book_package_id", "book_id"], name: "index_book_package_items_on_package_and_book", unique: true
+    t.index ["book_package_id"], name: "index_book_package_items_on_book_package_id"
+  end
+
+  create_table "book_packages", force: :cascade do |t|
+    t.bigint "receiver_id", null: false
+    t.enum "status", default: "packing", null: false, enum_type: "book_package_status_type"
+    t.text "note"
+    t.datetime "packed_at"
+    t.datetime "delivered_at"
+    t.string "delivered_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["receiver_id"], name: "index_book_packages_on_receiver_id"
+    t.index ["status"], name: "index_book_packages_on_status"
   end
 
   create_table "books", force: :cascade do |t|
@@ -304,6 +328,9 @@ ActiveRecord::Schema[7.0].define(version: 2026_05_16_133502) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "animals", "locations"
+  add_foreign_key "book_package_items", "book_packages"
+  add_foreign_key "book_package_items", "books"
+  add_foreign_key "book_packages", "people", column: "receiver_id"
   add_foreign_key "item_requests", "item_categories"
   add_foreign_key "item_requests", "packages"
   add_foreign_key "item_requests", "people"
