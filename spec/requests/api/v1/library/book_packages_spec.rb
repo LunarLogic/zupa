@@ -176,7 +176,7 @@ RSpec.describe "Library Book Packages", type: :request do
       end
 
       response(200, "status flipped to delivered") do
-        let(:id) { FactoryBot.create(:book_package, :in_delivery, receiver: receiver).id }
+        let(:id) { FactoryBot.create(:book_package, :packed, receiver: receiver).id }
         let(:book_package_data) { {book_package: {status: "delivered", delivered_by: "Wanda W."}} }
 
         before do |example|
@@ -192,7 +192,7 @@ RSpec.describe "Library Book Packages", type: :request do
       end
 
       response(422, "missing delivered_by when delivered") do
-        let(:id) { FactoryBot.create(:book_package, :in_delivery, receiver: receiver).id }
+        let(:id) { FactoryBot.create(:book_package, :packed, receiver: receiver).id }
         let(:book_package_data) { {book_package: {status: "delivered"}} }
 
         before do |example|

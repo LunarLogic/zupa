@@ -9,11 +9,6 @@ FactoryBot.define do
       packed_at { 1.hour.ago }
     end
 
-    trait :in_delivery do
-      status { "in_delivery" }
-      packed_at { 2.hours.ago }
-    end
-
     trait :delivered do
       status { "delivered" }
       packed_at { 1.day.ago }

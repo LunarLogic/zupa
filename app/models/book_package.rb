@@ -6,12 +6,11 @@ class BookPackage < ApplicationRecord
   enum status: {
     packing: "packing",
     packed: "packed",
-    in_delivery: "in_delivery",
     delivered: "delivered"
   }
 
   validates :delivered_at, :delivered_by, presence: true, if: :delivered?
-  validates :packed_at, presence: true, if: -> { packed? || in_delivery? || delivered? }
+  validates :packed_at, presence: true, if: -> { packed? || delivered? }
 
   before_validation :stamp_status_transitions
 
@@ -27,7 +26,7 @@ class BookPackage < ApplicationRecord
   def stamp_status_transitions
     return unless status_changed?
 
-    self.packed_at ||= Time.current if packed? || in_delivery? || delivered?
+    self.packed_at ||= Time.current if packed? || delivered?
     self.delivered_at ||= Time.current if delivered?
   end
 end

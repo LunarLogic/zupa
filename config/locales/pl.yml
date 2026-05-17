@@ -7,7 +7,6 @@ pl:
   book_package_statuses:
     packing: W trakcie pakowania
     packed: Spakowana
-    in_delivery: W dostarczaniu
     delivered: Dostarczona
   requests_statuses:
     green: Zielony
