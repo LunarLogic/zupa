@@ -4,6 +4,10 @@ module Api
       class BookPackageItemsController < BaseController
         before_action :set_book_package
 
+        rescue_from ActiveRecord::RecordNotUnique do
+          render json: {errors: {book: ["already in package"]}}, status: :unprocessable_entity
+        end
+
         def create
           item = @book_package.book_package_items.new(book_id: params[:book_id])
 

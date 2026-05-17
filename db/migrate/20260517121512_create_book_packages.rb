@@ -1,5 +1,5 @@
 class CreateBookPackages < ActiveRecord::Migration[7.0]
-  def change
+  def up
     create_enum :book_package_status_type, %w[packing packed delivered]
 
     create_table :book_packages do |t|
@@ -13,5 +13,10 @@ class CreateBookPackages < ActiveRecord::Migration[7.0]
     end
 
     add_index :book_packages, :status
+  end
+
+  def down
+    drop_table :book_packages
+    execute "DROP TYPE IF EXISTS book_package_status_type"
   end
 end

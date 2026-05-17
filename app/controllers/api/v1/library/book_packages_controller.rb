@@ -20,12 +20,16 @@ module Api
           attrs = book_package_params.except(:book_ids)
           @book_package = BookPackage.new(attrs)
 
-          if @book_package.save
-            attach_books(@book_package, book_ids) if book_ids.any?
-            render :show, status: :created
-          else
-            render json: {errors: @book_package.errors}, status: :unprocessable_entity
+          ActiveRecord::Base.transaction do
+            @book_package.save!
+            book_ids.uniq.each do |book_id|
+              @book_package.book_package_items.create!(book_id: book_id)
+            end
           end
+
+          render :show, status: :created
+        rescue ActiveRecord::RecordInvalid => e
+          render json: {errors: e.record.errors}, status: :unprocessable_entity
         end
 
         def update
@@ -52,13 +56,7 @@ module Api
         end
 
         def book_package_update_params
-          params.require(:book_package).permit(:status, :note, :delivered_by, :delivered_at)
-        end
-
-        def attach_books(book_package, book_ids)
-          book_ids.uniq.each do |book_id|
-            book_package.book_package_items.create(book_id: book_id)
-          end
+          params.require(:book_package).permit(:status, :note, :delivered_by)
         end
       end
     end

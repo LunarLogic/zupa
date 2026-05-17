@@ -16,7 +16,7 @@ ActiveRecord::Schema[7.0].define(version: 2026_05_17_121513) do
 
   # Custom types defined in this database.
   # Note that some types may not work with other database engines. Be careful if changing database.
-  create_enum "book_package_status_type", ["packing", "packed", "in_delivery", "delivered"]
+  create_enum "book_package_status_type", ["packing", "packed", "delivered"]
   create_enum "item_request_status_type", ["to_prepare", "prepared", "delivered", "rejected", "during_consultation", "packing"]
   create_enum "location_status_type", ["active", "pending_verification", "inactive"]
   create_enum "location_type", ["regular", "estimated"]

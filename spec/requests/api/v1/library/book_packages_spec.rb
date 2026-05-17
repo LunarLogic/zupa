@@ -91,6 +91,11 @@ RSpec.describe "Library Book Packages", type: :request do
           expect(result["note"]).to eq "OWK lubi kryminały"
           expect(result["books"].map { |b| b["id"] }).to match_array([book1.id, book2.id])
         end
+
+        it "flips each book's status to packed" do
+          expect(book1.reload.status).to eq "packed"
+          expect(book2.reload.status).to eq "packed"
+        end
       end
 
       response(422, "invalid") do
@@ -103,6 +108,36 @@ RSpec.describe "Library Book Packages", type: :request do
         it "returns validation errors" do
           result = JSON.parse(response.body)
           expect(result["errors"]).to include("receiver")
+        end
+      end
+
+      response(422, "receiver_id does not exist") do
+        let(:book_package_data) { {book_package: {receiver_id: 999_999}} }
+
+        before do |example|
+          submit_request(example.metadata)
+        end
+
+        it "returns validation errors" do
+          result = JSON.parse(response.body)
+          expect(result["errors"]).to include("receiver")
+        end
+      end
+
+      response(422, "one book_id does not exist (atomic rollback)") do
+        let(:book1) { FactoryBot.create(:book, title: "Lalka") }
+        let(:book_package_data) {
+          {book_package: {receiver_id: receiver.id, book_ids: [book1.id, 999_999]}}
+        }
+
+        before do |example|
+          submit_request(example.metadata)
+        end
+
+        it "returns 422 and persists nothing" do
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(BookPackage.where(note: nil, receiver: receiver).count).to eq 1
+          expect(book1.reload.status).to eq "available"
         end
       end
     end
@@ -248,6 +283,10 @@ RSpec.describe "Library Book Packages", type: :request do
           result = JSON.parse(response.body)
           expect(result["books"].map { |b| b["id"] }).to include book.id
         end
+
+        it "flips book status to packed" do
+          expect(book.reload.status).to eq "packed"
+        end
       end
 
       response(422, "duplicate book") do
@@ -262,6 +301,20 @@ RSpec.describe "Library Book Packages", type: :request do
 
         it "returns 422" do |example|
           assert_response_matches_metadata(example.metadata)
+        end
+      end
+
+      response(422, "book_id does not exist") do
+        let(:id) { book_package.id }
+        let(:item_data) { {book_id: 999_999} }
+
+        before do |example|
+          submit_request(example.metadata)
+        end
+
+        it "returns validation errors" do
+          result = JSON.parse(response.body)
+          expect(result["errors"]).to include("book")
         end
       end
     end
@@ -286,6 +339,10 @@ RSpec.describe "Library Book Packages", type: :request do
 
         it "removes the item" do
           expect(book_package.reload.books).not_to include(book)
+        end
+
+        it "flips book status back to available" do
+          expect(book.reload.status).to eq "available"
         end
       end
     end
