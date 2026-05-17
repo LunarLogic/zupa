@@ -4,6 +4,10 @@ pl:
     packed: Przygotowana
     packing: W trakcie pakowania
     delivered: Dostarczona
+  book_package_statuses:
+    packing: W trakcie pakowania
+    packed: Spakowana
+    delivered: Dostarczona
   requests_statuses:
     green: Zielony
     yellow: Żółty
