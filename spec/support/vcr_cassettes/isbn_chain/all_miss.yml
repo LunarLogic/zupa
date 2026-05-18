@@ -1,0 +1,101 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://data.bn.org.pl/api/networks/bibs.json?isbnIssn=9788373271005&limit=1
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - openresty
+      Date:
+      - Mon, 18 May 2026 08:50:14 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Content-Length:
+      - '35'
+      Connection:
+      - keep-alive
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      Etag:
+      - W/"37ac802feee7ac8bfd08c97feec8c3d1"
+      Referrer-Policy:
+      - strict-origin-when-cross-origin
+      Strict-Transport-Security:
+      - max-age=63072000; includeSubDomains
+      Vary:
+      - Accept-Encoding
+      X-Cache:
+      - miss
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      X-Request-Id:
+      - f6d6b474-9238-4488-8748-2d2ee54fe23a
+      X-Runtime:
+      - '0.012019'
+      X-Xss-Protection:
+      - '0'
+      X-Served-By:
+      - data.bn.org.pl
+    body:
+      encoding: UTF-8
+      string: |
+        {
+          "nextPage": "",
+          "bibs": []
+        }
+  recorded_at: Mon, 18 May 2026 08:46:32 GMT
+- request:
+    method: get
+    uri: https://openlibrary.org/api/books?bibkeys=ISBN:9788373271005&format=json&jscmd=data
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.30.0
+      Date:
+      - Mon, 18 May 2026 08:46:33 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '2'
+      Connection:
+      - keep-alive
+      X-Served-By:
+      - FastAPI
+      Referrer-Policy:
+      - no-referrer-when-downgrade
+    body:
+      encoding: UTF-8
+      string: "{}"
+  recorded_at: Mon, 18 May 2026 08:46:33 GMT
+recorded_with: VCR 6.2.0
