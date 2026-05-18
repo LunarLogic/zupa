@@ -1,4 +1,4 @@
-Trestle.resource(:book_packages) do
+Trestle.resource(:book_packages, readonly: true) do
   menu do
     item :book_packages, icon: "fa fa-gift", priority: 41, badge: BookPackage.count, group: :library
   end
@@ -38,38 +38,11 @@ Trestle.resource(:book_packages) do
     column :location do |bp|
       bp.location&.name
     end
-    column :books, header: "Książki" do |bp|
+    column :books do |bp|
       bp.books.size
     end
     column :packed_at, align: :center
     column :delivered_at, align: :center
     column :delivered_by
-    actions
-  end
-
-  form do |book_package|
-    text_field :note
-
-    statuses = BookPackage.statuses.keys.map { |s| [I18n.t(s, scope: :book_package_statuses), s] }
-    collection_radio_buttons :status, statuses, :second, :first
-
-    text_field :delivered_by
-
-    unless book_package.new_record?
-      card do
-        concat content_tag(:h4, "Książki w paczce")
-        if book_package.books.any?
-          concat content_tag(:ul, safe_join(book_package.books.map { |b|
-            content_tag(:li, "#{b.title} — #{b.author}")
-          }))
-        else
-          concat content_tag(:p, "Brak książek", class: "text-muted")
-        end
-      end
-    end
-  end
-
-  params do |params|
-    params.require(:book_package).permit(:status, :note, :delivered_by)
   end
 end

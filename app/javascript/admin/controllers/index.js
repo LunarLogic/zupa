@@ -4,6 +4,8 @@
 import { application } from "./application";
 import ErrorController from "./error_controller";
 import TripPreviewController from "./trip_preview_controller";
+import CoverPreviewController from "./cover_preview_controller";
 
 application.register("error", ErrorController);
 application.register("trip-preview", TripPreviewController);
+application.register("cover-preview", CoverPreviewController);

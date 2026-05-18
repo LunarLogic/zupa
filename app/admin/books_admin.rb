@@ -3,15 +3,30 @@ Trestle.resource(:books) do
     item :books, icon: "fa fa-book", priority: 40, badge: Book.count, group: :library
   end
 
+  collection do
+    Book.with_attached_cover_photo
+  end
+
   search do |query|
+    scope = Book.with_attached_cover_photo
     if query
-      Book.where("title ILIKE ? OR author ILIKE ?", "%#{query}%", "%#{query}%")
+      scope.where("title ILIKE ? OR author ILIKE ?", "%#{query}%", "%#{query}%")
     else
-      Book.all
+      scope
     end
   end
 
   table do
+    column :cover_photo, header: false, align: :center do |book|
+      if book.cover_photo.attached?
+        image_tag(
+          Rails.application.routes.url_helpers.rails_blob_path(book.cover_photo),
+          style: "height: 56px; width: auto; border-radius: 2px; box-shadow: 0 1px 3px rgba(0,0,0,0.15);"
+        )
+      else
+        content_tag(:span, "—", class: "text-muted")
+      end
+    end
     column :title
     column :author
     column :isbn
@@ -30,17 +45,12 @@ Trestle.resource(:books) do
   end
 
   form do |book|
-    unless book.new_record?
-      card do
-        content_tag :h2, book.title, class: "text-center text-black", style: "font-weight: bold; margin-bottom: 0;"
-      end
-      divider
-    end
-
     row do
       col(md: 8) do
-        text_field :title
-        text_field :author
+        row do
+          col(md: 7) { text_field :title }
+          col(md: 5) { text_field :author }
+        end
 
         row do
           col(md: 6) { text_field :isbn }
@@ -48,9 +58,9 @@ Trestle.resource(:books) do
         end
 
         row do
-          col(md: 4) { text_field :publisher }
+          col(md: 5) { text_field :publisher }
           col(md: 4) { number_field :pub_year }
-          col(md: 4) { number_field :length }
+          col(md: 3) { number_field :length }
         end
 
         text_area :description, rows: 4
@@ -64,27 +74,31 @@ Trestle.resource(:books) do
       end
 
       col(md: 4) do
-        card do
-          concat content_tag(:h4, I18n.t("admin.books.cover", default: "Okładka"), style: "margin-bottom: 1rem;")
+        has_cover = book.cover_photo.attached?
+        img_src = has_cover ? Rails.application.routes.url_helpers.rails_blob_path(book.cover_photo) : ""
+        img_style = "max-width: 100%; height: auto; border-radius: 4px; box-shadow: 0 2px 6px rgba(0,0,0,0.15);"
+        img_style += " display: none;" unless has_cover
 
-          if book.cover_photo.attached?
-            concat content_tag(
-              :div,
-              image_tag(Rails.application.routes.url_helpers.rails_blob_path(book.cover_photo),
-                style: "max-width: 100%; height: auto; border-radius: 4px; box-shadow: 0 2px 6px rgba(0,0,0,0.15);"),
-              style: "text-align: center; margin-bottom: 1rem;"
-            )
-          else
-            concat content_tag(
-              :div,
-              I18n.t("admin.books.no_cover", default: "Brak okładki"),
-              class: "text-muted",
-              style: "text-align: center; padding: 2.5rem 1rem; background: #f5f3ed; border-radius: 4px; margin-bottom: 1rem; border: 2px dashed #c0b190;"
-            )
-          end
+        placeholder_style = "text-align: center; padding: 2.5rem 1rem; background: #f5f3ed; border-radius: 4px; margin-bottom: 1rem; border: 2px dashed #c0b190;"
+        placeholder_style += " display: none;" if has_cover
 
-          file_field :cover_photo
-        end
+        image_block = content_tag(
+          :div,
+          image_tag(img_src, style: img_style, data: {cover_preview_target: "image"}),
+          style: "text-align: center; margin-bottom: 1rem;"
+        )
+
+        placeholder_block = content_tag(
+          :div,
+          I18n.t("admin.books.no_cover", default: "Brak okładki"),
+          class: "text-muted",
+          style: placeholder_style,
+          data: {cover_preview_target: "placeholder"}
+        )
+
+        input_block = capture { file_field :cover_photo, data: {cover_preview_target: "input", action: "change->cover-preview#preview"} }
+
+        concat content_tag(:div, safe_join([image_block, placeholder_block, input_block]), data: {controller: "cover-preview"})
       end
     end
   end

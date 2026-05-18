@@ -19,22 +19,24 @@
   background: #fff;
   margin-bottom: 20px;
 }
-.column {
-  display: flex;
-  flex-direction: column;
-  width: 450px;
-  position: relative;
-  margin: 0 0.4rem;
-}
+.packages-container {
+  .column {
+    display: flex;
+    flex-direction: column;
+    width: 450px;
+    position: relative;
+    margin: 0 0.4rem;
+  }
 
-.row {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: #191919;
-  margin: 0;
-  padding: 1.25rem;
-  position: relative;
+  .row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #191919;
+    margin: 0;
+    padding: 1.25rem;
+    position: relative;
+  }
 }
 
 .to-pack__column-gradient {

@@ -75,6 +75,7 @@ pl:
         trips: Wyjazdy
         app_settings: Ustawienia
         books: Książki
+        book_packages: Paczki książek
       groups:
         library: 📚 Biblioteka
         configuration: ⚙️ Konfiguracja
@@ -313,6 +314,33 @@ pl:
       preparation_template:
         name: Nazwa
         default: Domyślny
+      book:
+        title: Tytuł
+        author: Autor
+        isbn: ISBN
+        publisher: Wydawnictwo
+        pub_year: Rok wydania
+        length: Liczba stron
+        description: Opis
+        extra_note: Notatka
+        status: Status
+        genres: Gatunki
+        qr_code: Kod QR
+        cover_photo: Okładka
+        created_at: Dodano
+        updated_at: Zaktualizowano
+      book_package:
+        id: Numer
+        number: Numer
+        status: Status
+        receiver: Odbiorca
+        location: Miejsce
+        books: Książki
+        note: Notatka
+        packed_at: Spakowano
+        delivered_at: Dostarczono
+        delivered_by: Dostarczona przez
+        created_at: Utworzono
     models:
       person:
         one: Osoba
@@ -362,6 +390,12 @@ pl:
       app_setting:
         one: Ustawienia
         other: Ustawienia
+      book:
+        one: Książka
+        other: Książki
+      book_package:
+        one: Paczka książek
+        other: Paczki książek
   date:
     abbr_day_names:
       - nie
