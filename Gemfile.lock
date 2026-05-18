@@ -213,6 +213,9 @@ GEM
     httpclient (2.8.3)
     i18n (1.12.0)
       concurrent-ruby (~> 1.0)
+    image_processing (1.14.0)
+      mini_magick (>= 4.9.5, < 6)
+      ruby-vips (>= 2.0.17, < 3)
     io-console (0.5.11)
     irb (1.6.0)
       reline (>= 0.3.0)
@@ -252,6 +255,8 @@ GEM
     matrix (0.4.3)
     memoist (0.16.2)
     method_source (1.0.0)
+    mini_magick (5.3.1)
+      logger
     mini_mime (1.1.2)
     minitest (5.17.0)
     msgpack (1.6.0)
@@ -381,6 +386,9 @@ GEM
       rubocop (>= 1.7.0, < 2.0)
       rubocop-ast (>= 0.4.0)
     ruby-progressbar (1.11.0)
+    ruby-vips (2.3.0)
+      ffi (~> 1.12)
+      logger
     ruby2_keywords (0.0.5)
     sanitize (6.1.0)
       crass (~> 1.0.2)
@@ -489,6 +497,7 @@ DEPENDENCIES
   flipper-active_record
   flipper-ui
   google_drive
+  image_processing (~> 1.2)
   jbuilder (~> 2.11.5)
   jsbundling-rails
   jwt
