@@ -8,19 +8,15 @@ Trestle.resource(:books) do
   end
 
   search do |query|
-    scope = Book.with_attached_cover_photo
-    if query
-      scope.where("title ILIKE ? OR author ILIKE ?", "%#{query}%", "%#{query}%")
-    else
-      scope
-    end
+    Book.with_attached_cover_photo.by_query(query)
   end
 
   table do
-    column :cover_photo, header: false, align: :center do |book|
+    column :cover_photo, header: "", align: :center do |book|
       if book.cover_photo.attached?
+        thumb = book.cover_photo.variant(resize_to_limit: [40, 56])
         image_tag(
-          Rails.application.routes.url_helpers.rails_blob_path(book.cover_photo),
+          Rails.application.routes.url_helpers.rails_representation_path(thumb),
           style: "height: 56px; width: auto; border-radius: 2px; box-shadow: 0 1px 3px rgba(0,0,0,0.15);"
         )
       else
@@ -75,16 +71,21 @@ Trestle.resource(:books) do
 
       col(md: 4) do
         has_cover = book.cover_photo.attached?
-        img_src = has_cover ? Rails.application.routes.url_helpers.rails_blob_path(book.cover_photo) : ""
+        cover_path = has_cover ? Rails.application.routes.url_helpers.rails_representation_path(book.cover_photo.variant(resize_to_limit: [400, 600])) : nil
+
         img_style = "max-width: 100%; height: auto; border-radius: 4px; box-shadow: 0 2px 6px rgba(0,0,0,0.15);"
         img_style += " display: none;" unless has_cover
 
         placeholder_style = "text-align: center; padding: 2.5rem 1rem; background: #f5f3ed; border-radius: 4px; margin-bottom: 1rem; border: 2px dashed #c0b190;"
         placeholder_style += " display: none;" if has_cover
 
+        # 1x1 transparent gif keeps the <img> element in DOM (so Stimulus can swap src
+        # on file pick) without triggering a fetch when no cover is attached.
+        blank_src = "data:image/gif;base64,R0lGODlhAQABAAAAACw="
+
         image_block = content_tag(
           :div,
-          image_tag(img_src, style: img_style, data: {cover_preview_target: "image"}),
+          image_tag(cover_path || blank_src, style: img_style, data: {cover_preview_target: "image"}),
           style: "text-align: center; margin-bottom: 1rem;"
         )
 
@@ -96,9 +97,12 @@ Trestle.resource(:books) do
           data: {cover_preview_target: "placeholder"}
         )
 
-        input_block = capture { file_field :cover_photo, data: {cover_preview_target: "input", action: "change->cover-preview#preview"} }
+        accept_types = Book::COVER_PHOTO_CONTENT_TYPES.join(",")
+        input_block = capture {
+          file_field :cover_photo, accept: accept_types, data: {cover_preview_target: "input", action: "change->cover-preview#preview"}
+        }
 
-        concat content_tag(:div, safe_join([image_block, placeholder_block, input_block]), data: {controller: "cover-preview"})
+        concat content_tag(:div, safe_join([image_block, placeholder_block, input_block]), data: {controller: "cover-preview", "cover-preview-max-size-value": Book::COVER_PHOTO_MAX_SIZE})
       end
     end
   end
