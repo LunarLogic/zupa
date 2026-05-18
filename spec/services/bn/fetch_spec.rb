@@ -117,6 +117,12 @@ RSpec.describe Bn::Fetch do
       expect(described_class.new("9788375780659").call).to be_nil
     end
 
+    it "returns nil on unexpected bib shape rather than crashing" do
+      # `bibs: [null]` — would otherwise raise NoMethodError out of normalize.
+      WebMock.stub_request(:get, /data.bn.org.pl/).to_return(status: 200, body: '{"bibs":[null]}')
+      expect(described_class.new("9788375780659").call).to be_nil
+    end
+
     it "strips non-digit characters from ISBN before querying" do
       WebMock.stub_request(:get, %r{isbnIssn=9788375780659}).to_return(status: 200, body: {bibs: []}.to_json)
       described_class.new("978-83-7578-065-9").call

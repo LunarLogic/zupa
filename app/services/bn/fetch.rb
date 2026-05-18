@@ -72,6 +72,11 @@ module Bn
       normalize(bibs.first)
     rescue *NETWORK_ERRORS
       nil
+    rescue => e
+      # Defensive net for unforeseen parse shapes — a single malformed bib
+      # should not crash the chain, just count as a miss so OpenLibrary runs.
+      Rails.logger.warn("Bn::Fetch normalize failed for #{@isbn}: #{e.class}: #{e.message}")
+      nil
     end
 
     def http_get
