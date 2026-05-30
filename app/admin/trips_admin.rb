@@ -83,6 +83,111 @@ Trestle.resource(:trips) do
       end
     end
 
+    # TEMPORARY — DB audit tab, remove after deploy verification
+    tab :db_audit, label: "Audyt DB" do
+      unless trip.new_record?
+        container do
+          fields = [
+            [:person_count, "Osoby"],
+            [:soups, "Zupy"],
+            [:sandwiches, "Kanapki"],
+            [:chocolates, "Czekolady"],
+            [:waters, "Wody"],
+            [:provisions, "Prowiant"],
+            [:books, "Książki"],
+            [:package_count, "Paczki"],
+            [:animal_count, "Zwierzęta"]
+          ]
+
+          settings = AppSetting.instance
+
+          compute_current = lambda do |location|
+            if location.estimated?
+              epc = location.estimated_person_count.to_i
+              {
+                person_count: epc,
+                soups: 0,
+                sandwiches: epc * settings.sandwiches_per_person,
+                chocolates: epc * settings.chocolates_per_person,
+                waters: epc * (settings.sparkling_water_per_person + settings.still_water_per_person),
+                provisions: 0,
+                books: 0,
+                package_count: 0,
+                animal_count: location.active_animals.size
+              }
+            else
+              people = location.active_people
+              {
+                person_count: people.size,
+                soups: people.sum(&:soups),
+                sandwiches: people.sum(&:sandwiches),
+                chocolates: people.sum(&:chocolates),
+                waters: people.sum { |p| p.sparkling_water + p.still_water },
+                provisions: people.count(&:long_term_provisions),
+                books: people.count { |p| p.book_preferences.present? },
+                package_count: people.sum(&:packed_package_count),
+                animal_count: location.active_animals.size
+              }
+            end
+          end
+
+          sections = trip.groups.map do |group|
+            destination_tables = group.trip_destinations.includes(:location).map do |td|
+              current = compute_current.call(td.location)
+
+              header_row = content_tag(:thead) do
+                content_tag(:tr) do
+                  safe_join([
+                    content_tag(:th, "Pole"),
+                    content_tag(:th, "Zapisane (DB column)"),
+                    content_tag(:th, "Obecny stan (live z Person/Animal)"),
+                    content_tag(:th, "Różnica")
+                  ])
+                end
+              end
+
+              body_rows = fields.map do |field, label|
+                stored = td.public_send(field).to_i
+                live = current[field].to_i
+                diff = live - stored
+                cell_style = (diff != 0) ? "background-color: #fff3cd;" : ""
+                diff_label = if diff == 0
+                  "—"
+                elsif diff > 0
+                  "+#{diff}"
+                else
+                  diff.to_s
+                end
+                content_tag(:tr, style: cell_style) do
+                  safe_join([
+                    content_tag(:td, label),
+                    content_tag(:td, stored.to_s),
+                    content_tag(:td, live.to_s),
+                    content_tag(:td, diff_label)
+                  ])
+                end
+              end
+
+              location_type = td.location.estimated? ? "grupowe" : "zwykłe"
+              content_tag(:h4, "#{td.name} (#{location_type})", style: "margin-top: 1.5rem;") +
+                content_tag(:table, header_row + content_tag(:tbody, safe_join(body_rows)),
+                  class: "table table-striped", style: "width: 100%;")
+            end
+
+            content_tag(:h3, "GR #{group.number}: #{Array(group.volunteers).join(", ")}", style: "margin-top: 2rem;") +
+              safe_join(destination_tables)
+          end
+
+          card do
+            content_tag(:p,
+              "Tymczasowa zakładka — porównuje zapisane wartości na trip_destinations (kolumny w DB) z tym, co byłoby teraz wyliczone z Person/Animal.",
+              style: "color: #666; margin: 1rem;") +
+              safe_join(sections)
+          end
+        end
+      end
+    end
+
     tab :ksiazki, label: I18n.t("admin.trips.tabs.ksiazki") do
       unless trip.new_record?
         container do |c|
