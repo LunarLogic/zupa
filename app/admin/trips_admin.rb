@@ -229,12 +229,7 @@ Trestle.resource(:trips) do
       if result == true
         flash[:message] = flash_message("create.success", title: "", message: "")
       else
-        flash[:error] = if result[:wrong_format].present?
-          "Niepoprawny format tabelki, sprawdź czy zgadza się liczba i kolejność kolumn:
-          GRUPA / MIEJSCA | OSOBY | LICZBA OSÓB | KANAPKI | ZUPY | PACZKA Z PROW. DŁ. | DOD. WODA MINERALNA | KSIĄŻKI | UWAGI DOD."
-        else
-          error_message(result[:not_found]).html_safe
-        end
+        flash[:error] = error_message(result[:not_found]).html_safe
       end
 
       redirect_to "/admin/trips"
@@ -251,12 +246,7 @@ Trestle.resource(:trips) do
       if result == true
         flash[:message] = flash_message("update.success", title: "", message: "")
       else
-        flash[:error] = if result[:wrong_format].present?
-          "Niepoprawny format tabelki, sprawdź czy zgadza się liczba i kolejność kolumn:
-          GRUPA / MIEJSCA | OSOBY | LICZBA OSÓB | KANAPKI | ZUPY | PACZKA Z PROW. DŁ. | DOD. WODA MINERALNA | KSIĄŻKI | UWAGI DOD."
-        else
-          error_message(result[:not_found]).html_safe
-        end
+        flash[:error] = error_message(result[:not_found]).html_safe
       end
 
       redirect_to "/admin/trips/#{params[:id]}"

@@ -37,51 +37,41 @@ describe Trips::TripData do
         rows: [
           ["GRUPA / MIEJSCA", "Osoby", "Liczba Osób", "Kanapki", "Zupy", "Prowiant", "Dod. Woda", "Książki", "Uwagi dodatkowe"],
           ["GR 1: Maciek*, Ela, Alex"],
-          ["Półłanki 76d - garaż", "Ewa", "1", "2", "2", "1", "1", "coś Jo Nesbo", "Przyczepa zaparkowana"],
-          ["Wielicka", "Ewa", "1", "2", "TAK", "3", "4", "",	"Info dodatkowe"],
-          ["Giedroycia 1 - pierkarnia", "Ewa;Andrzej;Bartek", "3", "6;Z masłem", "2;Ewa i Bartek", "Andrzej", "TAK - GAZOWANA", "2;Ewa - kryminał, Andrzej - poezja", "Info dodatkowe"],
-          ["Giedroycia 2 - pierkarnia", "Ewa;Andrzej;Bartek", "3", "6", "2", "", "", "",	""]
+          ["Półłanki 76d - garaż", nil, nil, nil, nil, nil, nil, nil, "Przyczepa zaparkowana"],
+          ["Wielicka", nil, nil, nil, nil, nil, nil, nil, "Info dodatkowe"],
+          ["Giedroycia 1 - pierkarnia"]
         ])
     }
 
-    it "wraps spreadsheet data in an object" do
+    it "exposes value, address, order, and additional_info" do
       trip_data = Trips::TripData.new(date: "2025-01-01", spreadsheet: spreadsheet)
 
-      first_group = trip_data.groups.first
-      destination1 = first_group.destinations.first
-      expect(destination1.value).to eq "Półłanki 76d - garaż"
-      expect(destination1.address).to eq "Półłanki 76d"
-      expect(destination1.sandwiches).to eq 2
-      expect(destination1.soups).to eq 2
-      expect(destination1.provisions).to eq 1
-      expect(destination1.waters).to eq 1
-      expect(destination1.books).to eq 1
-      expect(destination1.order).to eq 1
-      expect(destination1.additional_info).to eq "Przyczepa zaparkowana\nKsiążki: coś Jo Nesbo"
+      destinations = trip_data.groups.first.destinations
+      expect(destinations.map(&:value)).to eq(["Półłanki 76d - garaż", "Wielicka", "Giedroycia 1 - pierkarnia"])
+      expect(destinations.map(&:address)).to eq(["Półłanki 76d", "Wielicka", "Giedroycia 1"])
+      expect(destinations.map(&:order)).to eq([1, 2, 3])
+      expect(destinations.map(&:additional_info)).to eq([
+        "Przyczepa zaparkowana",
+        "Info dodatkowe",
+        ""
+      ])
+    end
 
-      destination2 = first_group.destinations.second
-      expect(destination2.value).to eq "Wielicka"
-      expect(destination2.address).to eq "Wielicka"
-      expect(destination2.sandwiches).to eq 2
-      expect(destination2.soups).to eq 1
-      expect(destination2.provisions).to eq 3
-      expect(destination2.waters).to eq 4
-      expect(destination2.books).to eq 0
-      expect(destination2.order).to eq 2
-      expect(destination2.additional_info).to eq "Info dodatkowe\nZupy: TAK"
+    it "ignores legacy count columns silently for backwards compatibility with old sheets" do
+      legacy_row = ["Półłanki 76d", "Ewa", "1", "2", "2", "1", "1", "Jo Nesbo", "Notes"]
+      legacy_sheet = double(:spreadsheet, rows: [
+        ["GRUPA / MIEJSCA"],
+        ["GR 1: A"],
+        legacy_row
+      ])
 
-      destination3 = first_group.destinations[2]
-      expect(destination3.sandwiches).to eq 6
-      expect(destination3.soups).to eq 2
-      expect(destination3.provisions).to eq 1
-      expect(destination3.waters).to eq 1
-      expect(destination3.books).to eq 2
-      expect(destination3.order).to eq 3
-      expect(destination3.additional_info).to eq "Info dodatkowe\nKanapki: Z masłem\nZupy: Ewa i Bartek\nProwiant: Andrzej\nWoda: TAK - GAZOWANA\nKsiążki: Ewa - kryminał, Andrzej - poezja"
+      trip_data = Trips::TripData.new(date: "2025-01-01", spreadsheet: legacy_sheet)
+      dest = trip_data.groups.first.destinations.first
 
-      destination4 = first_group.destinations[3]
-      expect(destination4.additional_info).to eq ""
-      expect(destination4.order).to eq 4
+      expect(dest.value).to eq("Półłanki 76d")
+      expect(dest.additional_info).to eq("Notes")
+      expect(dest).not_to respond_to(:sandwiches)
+      expect(dest).not_to respond_to(:soups)
     end
   end
 end

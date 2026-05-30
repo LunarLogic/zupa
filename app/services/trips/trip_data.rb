@@ -1,5 +1,7 @@
 module Trips
   class TripData
+    ADDITIONAL_INFO_COLUMN = 8
+
     attr_reader :date
 
     def initialize(date:, spreadsheet:)
@@ -11,10 +13,6 @@ module Trips
       @groups ||= build_groups
     end
 
-    def headers
-      @headers ||= build_headers
-    end
-
     private
 
     attr_reader :spreadsheet
@@ -24,10 +22,6 @@ module Trips
         groups << Group.new(data: row.first) if group_row?(row)
         groups.last.add_destination(row) if destination_row?(row)
       end
-    end
-
-    def build_headers
-      spreadsheet.rows[0]
     end
 
     def group_row?(row)
@@ -64,9 +58,8 @@ module Trips
       class Destination
         attr_reader :order
 
-        def initialize(data:, order:, parse_cell: Trips::ParseCell.new)
+        def initialize(data:, order:)
           @data = data
-          @parse_cell = parse_cell
           @order = order
         end
 
@@ -78,44 +71,8 @@ module Trips
           @data[0].strip
         end
 
-        def sandwiches
-          numberize(@data[3])
-        end
-
-        def soups
-          numberize(@data[4])
-        end
-
-        def provisions
-          numberize(@data[5])
-        end
-
-        def waters
-          numberize(@data[6])
-        end
-
-        def books
-          numberize(@data[7])
-        end
-
         def additional_info
-          info = @data[8].strip
-          info = [info, textualize(@data[3])].compact.join("\nKanapki: ")
-          info = [info, textualize(@data[4])].compact.join("\nZupy: ")
-          info = [info, textualize(@data[5])].compact.join("\nProwiant: ")
-          info = [info, textualize(@data[6])].compact.join("\nWoda: ")
-          info = [info, textualize(@data[7])].compact.join("\nKsiążki: ")
-          info.strip
-        end
-
-        private
-
-        def numberize(data)
-          @parse_cell.call(data).count
-        end
-
-        def textualize(data)
-          @parse_cell.call(data).text
+          @data[ADDITIONAL_INFO_COLUMN].to_s.strip
         end
       end
     end

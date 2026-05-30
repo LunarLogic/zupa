@@ -21,10 +21,9 @@ describe Trips::UpdateTrip do
         number: "1",
         volunteers: ["Jerzy*", "Basia", "Gordon"],
         destinations: [
-          double(value: "Tents", address: "Tents", sandwiches: 10, soups: 88, waters: 0, books: 0, provisions: 0, additional_info: 0, order: 1),
-          double(value: "Mall", address: "Mall", sandwiches: 11, soups: 99, waters: 0, books: 0, provisions: 0, additional_info: 0, order: 2)
-        ])],
-      headers: ["", "", "", "kanapki", "zupy", "prow", "woda", "książki", "uwagi"])
+          double(value: "Tents", address: "Tents", additional_info: "", order: 1),
+          double(value: "Mall", address: "Mall", additional_info: "", order: 2)
+        ])])
 
     expect(build_trip_data).to receive(:call).and_return(trip_data)
 
@@ -42,8 +41,9 @@ describe Trips::UpdateTrip do
     expect(trip.source_spreadsheet_url).to eq("https://new.com")
     expect(trip.groups.first.number).to eq(1)
     expect(trip.groups.first.volunteers).to eq(["Jerzy*", "Basia", "Gordon"])
-    expect(trip.groups.first.locations.pluck(:name)).to eq(["Tents", "Mall"])
-    expect(trip.groups.first.trip_destinations.pluck(:soups)).to eq([88, 99])
-    expect(trip.groups.first.trip_destinations.pluck(:sandwiches)).to eq([10, 11])
+    destinations = trip.groups.first.trip_destinations.order(:order)
+    expect(destinations.map(&:name)).to eq(["Tents", "Mall"])
+    expect(destinations.pluck(:soups)).to eq([88, 99])
+    expect(destinations.pluck(:sandwiches)).to eq([10, 11])
   end
 end
