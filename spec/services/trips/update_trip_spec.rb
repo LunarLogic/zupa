@@ -41,8 +41,9 @@ describe Trips::UpdateTrip do
     expect(trip.source_spreadsheet_url).to eq("https://new.com")
     expect(trip.groups.first.number).to eq(1)
     expect(trip.groups.first.volunteers).to eq(["Jerzy*", "Basia", "Gordon"])
-    expect(trip.groups.first.locations.pluck(:name)).to eq(["Tents", "Mall"])
-    expect(trip.groups.first.trip_destinations.pluck(:soups)).to eq([88, 99])
-    expect(trip.groups.first.trip_destinations.pluck(:sandwiches)).to eq([10, 11])
+    destinations = trip.groups.first.trip_destinations.order(:order)
+    expect(destinations.map(&:name)).to eq(["Tents", "Mall"])
+    expect(destinations.pluck(:soups)).to eq([88, 99])
+    expect(destinations.pluck(:sandwiches)).to eq([10, 11])
   end
 end
