@@ -30,18 +30,14 @@ class TripRepository
         destination.value,
         includes: [:active_people, :active_animals]
       )
-      TripDestination.create!(
+      trip_destination = TripDestination.create!(
         trip_group: group,
         location: location,
-        sandwiches: destination.sandwiches,
-        soups: destination.soups,
-        provisions: destination.provisions,
-        waters: destination.waters,
-        books: destination.books,
         additional_info: destination.additional_info,
         order: destination.order,
         location_snapshot: Trips::BuildLocationSnapshot.new.call(location:)
       )
+      Trips::SnapshotPeople.new.call(trip_destination: trip_destination)
     end
   end
 
