@@ -42,7 +42,8 @@ const TripLocationCard: FC<TripLocationCardProps> = ({
     .map((person) => `${person.firstName}: ${person.bookPreferences}`)
     .join("\n");
 
-  const combinedInfo = [additionalInfo, bookPreferencesText].filter(Boolean).join("\n");
+  const bookSection = bookPreferencesText ? `Książki:\n${bookPreferencesText}` : "";
+  const combinedInfo = [additionalInfo, bookSection].filter(Boolean).join("\n\n");
 
   const cardContent = () => (
     <>
