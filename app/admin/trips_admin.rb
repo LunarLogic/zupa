@@ -121,7 +121,7 @@ Trestle.resource(:trips) do
                       var content = document.getElementById('books-content').innerHTML;
                       var w = window.open('', '_blank');
                       w.document.write('<html><head><title>#{I18n.t("admin.trips.ksiazki.print_title")}</title><style>' +
-                        '@page { size: A4 portrait; margin: 1cm; }' +
+                        '@page { size: A4 landscape; margin: 1cm; }' +
                         'body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; margin: 0; padding: 1cm; }' +
                         'h3 { margin-top: 1.5em; }' +
                         'table { width: 100%; border-collapse: collapse; margin: 0.5em 0; page-break-inside: avoid; }' +
