@@ -10,8 +10,10 @@ describe Trips::UpdateTrip do
     create(:trip_destination,
       location: create(:location, name: "Vacant building"),
       trip_group: trip_group)
-    create(:location, name: "Tents")
-    create(:location, name: "Mall")
+    tents = create(:location, name: "Tents")
+    mall = create(:location, name: "Mall")
+    create(:person, location: tents, active: true, soups: 88, sandwiches: 10)
+    create(:person, location: mall, active: true, soups: 99, sandwiches: 11)
 
     build_trip_data = double(:build_trip_data)
     trip_data = instance_double(Trips::TripData,

@@ -76,9 +76,9 @@ Trestle.resource(:trips) do
         container do |c|
           groups_with_rows = trip.groups.map do |group|
             rows = group.trip_destinations.flat_map do |td|
-              td.location.active_people
-                .select { |p| p.book_preferences.present? }
-                .map { |p| {location: td.location.name, person: p, preferences: p.book_preferences} }
+              td.trip_destination_people
+                .where.not(book_preferences: [nil, ""])
+                .map { |p| {location: td.name, person: p, preferences: p.book_preferences} }
             end
             [TripGroupDecorator.new(group), rows]
           end.reject { |_g, rows| rows.empty? }

@@ -67,8 +67,8 @@ class TripGroupDecorator < SimpleDelegator
 
   def package_recipients
     people_across_destinations
-      .select { |p| p.packed_packages.any? }
-      .map { |p| "#{p.full_name} (#{p.packed_packages.size})" }
+      .select { |p| p.package_count > 0 }
+      .map { |p| "#{p.full_name} (#{p.package_count})" }
       .join(", ")
   end
 
@@ -80,7 +80,7 @@ class TripGroupDecorator < SimpleDelegator
         sparkling_water_count: p.sparkling_water,
         still_water_count: p.still_water,
         book_preferences: p.book_preferences,
-        has_package: p.packed_packages.any?
+        has_package: p.package_count > 0
       }
     end
   end
@@ -96,7 +96,7 @@ class TripGroupDecorator < SimpleDelegator
   end
 
   def people_across_destinations
-    @people_across_destinations ||= trip_destinations.flat_map { |td| td.active_people.includes(:packed_packages).to_a }
+    @people_across_destinations ||= trip_destinations.flat_map { |td| td.trip_destination_people.to_a }
   end
 
   def format_water_recipients(count_attr)
