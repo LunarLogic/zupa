@@ -26,7 +26,6 @@ RSpec.describe "Admin trips preparations", type: :system do
   end
 
   before do
-    Flipper.enable(:trip)
     default_template
     other_template
     trip

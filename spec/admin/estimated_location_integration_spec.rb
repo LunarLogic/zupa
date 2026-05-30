@@ -36,8 +36,8 @@ RSpec.describe "Estimated location integration" do
       expect(regular_td.chocolate_count).to eq(2)
     end
 
-    it "uses estimated_person_count * setting for soup_count on estimated locations" do
-      expect(estimated_td.soup_count).to eq(10)
+    it "always returns 0 for soup_count on estimated locations" do
+      expect(estimated_td.soup_count).to eq(0)
     end
 
     it "sums person.soups for soup_count on regular locations" do
@@ -60,8 +60,8 @@ RSpec.describe "Estimated location integration" do
       expect(decorated.chocolate_count).to eq(12)
     end
 
-    it "sums soup_count across regular and estimated destinations" do
-      expect(decorated.soup_count).to eq(12)
+    it "sums soup_count across regular and estimated destinations (estimated contributes 0)" do
+      expect(decorated.soup_count).to eq(2)
     end
   end
 
@@ -76,8 +76,8 @@ RSpec.describe "Estimated location integration" do
       expect(json["total_chocolate_count"]).to eq(12)
     end
 
-    it "includes combined soup totals" do
-      expect(json["total_soup_count"]).to eq(12)
+    it "includes combined soup totals (estimated locations contribute 0)" do
+      expect(json["total_soup_count"]).to eq(2)
     end
   end
 end
