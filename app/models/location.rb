@@ -55,6 +55,7 @@ class Location < ApplicationRecord
 
   def packing_field_total(field)
     if estimated?
+      return 0 if field == :soups
       (estimated_person_count || 0) * AppSetting.instance.public_send(:"#{field}_per_person")
     else
       active_people.sum(&field)

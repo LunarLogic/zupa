@@ -95,11 +95,11 @@ RSpec.describe Location do
       expect(location.soup_count).to eq(3)
     end
 
-    it "uses estimated_person_count * AppSetting default for estimated locations" do
-      AppSetting.instance.update!(soups_per_person: 1)
+    it "is always 0 for estimated locations regardless of AppSetting" do
+      AppSetting.instance.update!(soups_per_person: 5)
       location = create(:location, location_type: "estimated", estimated_person_count: 7)
 
-      expect(location.soup_count).to eq(7)
+      expect(location.soup_count).to eq(0)
     end
   end
 end
