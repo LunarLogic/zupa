@@ -126,6 +126,12 @@ pl:
           location: Miejsce
           person: Osoba
           preferences: Preferencje książkowe
+      refresh_snapshots:
+        button: Odśwież dane wyjazdu
+        description: "Pobierze aktualne dane osób, paczek i miejsc z bazy. Liczby i preferencje na wyjeździe zostaną nadpisane bieżącymi wartościami."
+        confirm: "Nadpisać zapisane dane wyjazdu aktualnymi z bazy?"
+        success: Dane wyjazdu odświeżone z bazy.
+        past_trip_error: Nie można odświeżyć wyjazdu z przeszłości.
     preparation_templates:
       label: Szablony przygotowań
       columns:

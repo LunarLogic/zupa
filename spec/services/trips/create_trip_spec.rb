@@ -12,9 +12,17 @@ describe Trips::CreateTrip do
     create(:location, name: "Location 10 - tunnel")
     create(:location, name: "Location 14 - clinic")
     create(:location, name: "Location 9 - new location")
-    create(:location, name: "Location 1")
+    location_1 = create(:location, name: "Location 1")
     create(:location, name: "Location 12 - vacant developer space")
     create(:location, name: "Location 2")
+
+    # Counts now come from DB Person records, not from the spreadsheet.
+    create(:person, location: location_1, active: true,
+      sandwiches: 10, soups: 5, sparkling_water: 2, still_water: 1,
+      long_term_provisions: true, book_preferences: "Kryminały")
+    create(:person, location: location_1, active: true,
+      sandwiches: 6, soups: 3, sparkling_water: 0, still_water: 0,
+      long_term_provisions: false, book_preferences: nil)
   end
 
   describe "create new trip from Google spreadsheet" do
@@ -58,7 +66,11 @@ describe Trips::CreateTrip do
       expect(first_destination.sandwiches).to eq 16
       expect(first_destination.soups).to eq 8
       expect(first_destination.provisions).to eq 1
+      expect(first_destination.books).to eq 1
       expect(first_destination.waters).to eq 3
+      expect(first_destination.chocolates).to eq first_destination.trip_destination_people.sum(:chocolates)
+      expect(first_destination.person_count).to eq 2
+      expect(first_destination.trip_destination_people.count).to eq 2
       expect(first_destination.additional_info).to eq "Lorem ipsum dolor sit amet, consectetur adipiscing elit\nProwiant: tak\nKsiążki: Trzebor - filozofia, historia"
       expect(first_destination.location_snapshot["name"]).to eq("Location 1")
     end

@@ -7,6 +7,7 @@ Trestle.resource(:trips) do
 
   routes do
     patch :select_template, on: :member
+    patch :refresh_snapshots, on: :member
   end
 
   menu do
@@ -36,6 +37,17 @@ Trestle.resource(:trips) do
       url_field :source_spreadsheet_url, disabled: trip.past_date?
       select :admin_user_id, AdminUser.all,
         selected: trip.admin_user_id || current_user.id, disabled: trip.past_date?
+
+      unless trip.new_record? || trip.past_date?
+        concat content_tag(:div, class: "form-group", style: "margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid #eee;") {
+          content_tag(:p, I18n.t("admin.trips.refresh_snapshots.description"), style: "color: #666;") +
+            link_to(I18n.t("admin.trips.refresh_snapshots.button"),
+              "/admin/trips/#{trip.id}/refresh_snapshots",
+              method: :patch,
+              class: "btn btn-warning",
+              data: {confirm: I18n.t("admin.trips.refresh_snapshots.confirm")})
+        }
+      end
     end
 
     tab :preview, label: I18n.t("admin.trip_preview.tab") do
@@ -76,9 +88,9 @@ Trestle.resource(:trips) do
         container do |c|
           groups_with_rows = trip.groups.map do |group|
             rows = group.trip_destinations.flat_map do |td|
-              td.location.active_people
-                .select { |p| p.book_preferences.present? }
-                .map { |p| {location: td.location.name, person: p, preferences: p.book_preferences} }
+              td.trip_destination_people
+                .where.not(book_preferences: [nil, ""])
+                .map { |p| {location: td.name, person: p, preferences: p.book_preferences} }
             end
             [TripGroupDecorator.new(group), rows]
           end.reject { |_g, rows| rows.empty? }
@@ -248,6 +260,17 @@ Trestle.resource(:trips) do
       end
 
       redirect_to "/admin/trips/#{params[:id]}"
+    end
+
+    def refresh_snapshots
+      trip = Trip.find(params[:id])
+      if trip.past_date?
+        flash[:error] = I18n.t("admin.trips.refresh_snapshots.past_trip_error")
+      else
+        Trips::RefreshSnapshots.new.call(trip: trip)
+        flash[:message] = I18n.t("admin.trips.refresh_snapshots.success")
+      end
+      redirect_to "/admin/trips/#{trip.id}"
     end
 
     def select_template

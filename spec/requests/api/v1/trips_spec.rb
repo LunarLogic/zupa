@@ -4,11 +4,16 @@ RSpec.describe "Trips", :requires_auth, type: :request do
   let!(:trip) { FactoryBot.create(:trip) }
   let!(:trip_group) { FactoryBot.create(:trip_group, trip: trip) }
   let!(:location) { FactoryBot.create(:location, name: "Second Location") }
-  let!(:person) { FactoryBot.create(:person, location: location, sandwiches: 10, soups: 1, chocolates: 1) }
+  let!(:person) {
+    FactoryBot.create(:person, location: location,
+      sandwiches: 10, soups: 1, chocolates: 1,
+      sparkling_water: 3, still_water: 1,
+      long_term_provisions: true, book_preferences: "Kryminały")
+  }
   let!(:animal) { FactoryBot.create(:animal, active: true, location: location) }
   let!(:package) { FactoryBot.create(:package, :packed, receiver: person) }
   let!(:trip_destination) {
-    FactoryBot.create(:trip_destination, trip_group: trip_group, location: location, sandwiches: 10, soups: 1, provisions: 2, books: 3, waters: 4, additional_info: "text", order: 2)
+    FactoryBot.create(:trip_destination, trip_group: trip_group, location: location, additional_info: "text", order: 2)
   }
 
   path "/api/v1/trips/{id}" do
@@ -61,8 +66,8 @@ RSpec.describe "Trips", :requires_auth, type: :request do
           expect(location_json["person_count"]).to eq 1
           expect(location_json["soup_count"]).to eq 1
           expect(location_json["sandwich_count"]).to eq 10
-          expect(location_json["provision_count"]).to eq 2
-          expect(location_json["book_count"]).to eq 3
+          expect(location_json["provision_count"]).to eq 1
+          expect(location_json["book_count"]).to eq 1
           expect(location_json["water_count"]).to eq 4
           expect(location_json["package_count"]).to eq 1
           expect(location_json["animal_count"]).to eq 1
@@ -78,7 +83,8 @@ RSpec.describe "Trips", :requires_auth, type: :request do
           expect(location_json["has_chocolates"]).to be_truthy
           expect(location_json["active_animals"].first["species"]).to eq("cat")
           expect(location_json["people"].count).to eq(1)
-          expect(location_json["people"].first["active"]).to be true
+          expect(location_json["people"].first["first_name"]).to eq person.first_name
+          expect(location_json["people"].first["book_preferences"]).to eq "Kryminały"
         end
 
         it "returns destinations in order" do
@@ -140,8 +146,8 @@ RSpec.describe "Trips", :requires_auth, type: :request do
           expect(location_json["longitude"]).to eq destination.longitude.to_s
           expect(location_json["person_count"]).to eq 1
           expect(location_json["soup_count"]).to eq 1
-          expect(location_json["provision_count"]).to eq 2
-          expect(location_json["book_count"]).to eq 3
+          expect(location_json["provision_count"]).to eq 1
+          expect(location_json["book_count"]).to eq 1
           expect(location_json["water_count"]).to eq 4
           expect(location_json["package_count"]).to eq 1
           expect(location_json["additional_info"]).to eq "text"
