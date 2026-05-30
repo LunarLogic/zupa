@@ -24,7 +24,8 @@ module Trips
         waters: people.sum { |p| p.sparkling_water + p.still_water },
         provisions: people.count(&:long_term_provisions),
         books: people.count { |p| p.book_preferences.present? },
-        person_count: people.size
+        person_count: people.size,
+        package_count: people.sum(&:packed_package_count)
       )
     end
 
@@ -39,7 +40,8 @@ module Trips
         waters: epc * (settings.sparkling_water_per_person + settings.still_water_per_person),
         provisions: 0,
         books: 0,
-        person_count: epc
+        person_count: epc,
+        package_count: 0
       )
     end
 

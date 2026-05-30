@@ -8,7 +8,10 @@ FactoryBot.define do
     end
 
     after(:create) do |td, evaluator|
-      Trips::SnapshotPeople.new.call(trip_destination: td) unless evaluator.skip_snapshot
+      unless evaluator.skip_snapshot
+        Trips::SnapshotPeople.new.call(trip_destination: td)
+        Trips::SnapshotAnimals.new.call(trip_destination: td)
+      end
     end
   end
 end

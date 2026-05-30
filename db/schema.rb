@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2026_05_30_120002) do
+ActiveRecord::Schema[7.0].define(version: 2026_05_30_120006) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -275,6 +275,17 @@ ActiveRecord::Schema[7.0].define(version: 2026_05_30_120002) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "trip_destination_animals", force: :cascade do |t|
+    t.bigint "trip_destination_id", null: false
+    t.bigint "animal_id"
+    t.string "name", default: "", null: false
+    t.string "species", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["animal_id"], name: "index_trip_destination_animals_on_animal_id"
+    t.index ["trip_destination_id"], name: "index_trip_destination_animals_on_trip_destination_id"
+  end
+
   create_table "trip_destination_people", force: :cascade do |t|
     t.bigint "trip_destination_id", null: false
     t.bigint "person_id"
@@ -309,6 +320,8 @@ ActiveRecord::Schema[7.0].define(version: 2026_05_30_120002) do
     t.integer "order"
     t.integer "chocolates", default: 0, null: false
     t.integer "person_count", default: 0, null: false
+    t.integer "package_count", default: 0, null: false
+    t.integer "animal_count", default: 0, null: false
     t.index ["location_id"], name: "index_trip_destinations_on_location_id"
     t.index ["trip_group_id", "location_id"], name: "index_trip_destinations_on_trip_group_id_and_location_id", unique: true
     t.index ["trip_group_id", "order"], name: "index_trip_destinations_on_trip_group_id_and_order", unique: true
@@ -363,6 +376,8 @@ ActiveRecord::Schema[7.0].define(version: 2026_05_30_120002) do
   add_foreign_key "people_visit_summaries", "visit_summaries", on_delete: :cascade
   add_foreign_key "person_sizes", "item_categories"
   add_foreign_key "person_sizes", "people"
+  add_foreign_key "trip_destination_animals", "animals", on_delete: :nullify
+  add_foreign_key "trip_destination_animals", "trip_destinations"
   add_foreign_key "trip_destination_people", "people", on_delete: :nullify
   add_foreign_key "trip_destination_people", "trip_destinations"
   add_foreign_key "trip_destinations", "locations"

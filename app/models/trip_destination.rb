@@ -2,8 +2,8 @@ class TripDestination < ApplicationRecord
   belongs_to :trip_group
   belongs_to :location
   has_many :trip_destination_people, dependent: :destroy
+  has_many :trip_destination_animals, dependent: :destroy
 
-  delegate :animal_count, :active_animals, to: :location
   delegate :id, to: :location, prefix: true
 
   alias_attribute :sandwich_count, :sandwiches
@@ -12,6 +12,8 @@ class TripDestination < ApplicationRecord
   alias_attribute :water_count, :waters
   alias_attribute :provision_count, :provisions
   alias_attribute :book_count, :books
+  # package_count and animal_count are columns populated by SnapshotPeople / SnapshotAnimals.
+  # Reading them avoids a SQL aggregate per call.
 
   def name
     location_snapshot&.dig("name") || location.name
@@ -50,14 +52,14 @@ class TripDestination < ApplicationRecord
   end
   alias_method :has_books, :books?
 
-  def package_count
-    trip_destination_people.sum(:package_count)
-  end
-
   def packages?
     package_count > 0
   end
   alias_method :has_packages, :packages?
+
+  def active_animals
+    trip_destination_animals
+  end
 
   def animals?
     animal_count > 0

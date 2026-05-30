@@ -13,6 +13,7 @@ RSpec.describe "Trip snapshot immutability", :requires_auth, type: :request do
       soups: 1, sandwiches: 3, chocolates: 5,
       book_preferences: "kryminały")
   end
+  let!(:animal) { create(:animal, location: location, active: true, name: "Mila", species: "cat") }
   let!(:destination) do
     app_setting.update!(
       sandwiches_per_person: 2, soups_per_person: 1, chocolates_per_person: 1,
@@ -41,7 +42,9 @@ RSpec.describe "Trip snapshot immutability", :requires_auth, type: :request do
       water_count: json["water_count"],
       book_count: json["book_count"],
       provision_count: json["provision_count"],
-      people: json["people"].map { |p| p.slice("first_name", "book_preferences") }
+      people: json["people"].map { |p| p.slice("first_name", "book_preferences") },
+      animal_count: json["animal_count"],
+      active_animals: json["active_animals"].map { |a| a["species"] }.sort
     }
   end
 
@@ -63,6 +66,8 @@ RSpec.describe "Trip snapshot immutability", :requires_auth, type: :request do
     create(:person, location: location, active: true,
       first_name: "Nowa", last_name: "Osoba",
       long_term_provisions: true, sparkling_water: 5, sandwiches: 50)
+    animal.update!(active: false, name: "Changed", species: "dog")
+    create(:animal, location: location, active: true, name: "Nowy", species: "dog")
     app_setting.update!(sandwiches_per_person: 99, soups_per_person: 99, chocolates_per_person: 99)
 
     after_snapshot = fetch_destination_json

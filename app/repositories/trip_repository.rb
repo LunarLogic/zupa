@@ -38,6 +38,7 @@ class TripRepository
         location_snapshot: Trips::BuildLocationSnapshot.new.call(location:)
       )
       Trips::SnapshotPeople.new.call(trip_destination: trip_destination)
+      Trips::SnapshotAnimals.new.call(trip_destination: trip_destination)
     end
   end
 
