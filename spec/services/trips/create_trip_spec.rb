@@ -71,7 +71,7 @@ describe Trips::CreateTrip do
       expect(first_destination.chocolates).to eq first_destination.trip_destination_people.sum(:chocolates)
       expect(first_destination.person_count).to eq 2
       expect(first_destination.trip_destination_people.count).to eq 2
-      expect(first_destination.additional_info).to eq "Lorem ipsum dolor sit amet, consectetur adipiscing elit\nProwiant: tak\nKsiążki: Trzebor - filozofia, historia"
+      expect(first_destination.additional_info).to eq "Lorem ipsum dolor sit amet, consectetur adipiscing elit"
       expect(first_destination.location_snapshot["name"]).to eq("Location 1")
     end
   end
