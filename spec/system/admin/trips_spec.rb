@@ -162,11 +162,12 @@ RSpec.describe "Admin trips preparations", type: :system do
       click_link "Książki"
 
       within("#books-content") do
-        expect(page).to have_content("Czytelnik Pierwszy")
+        expect(page).to have_content("Czytelnik")
+        expect(page).not_to have_content("Pierwszy")
+        expect(page).not_to have_content("Drugi")
         expect(page).to have_content("Lokacja A")
         expect(page).to have_content("Kryminały")
 
-        expect(page).to have_content("Czytelnik Drugi")
         expect(page).to have_content("Lokacja B")
         expect(page).to have_content("Fantastyka")
       end
