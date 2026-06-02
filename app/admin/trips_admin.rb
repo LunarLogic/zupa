@@ -115,7 +115,7 @@ Trestle.resource(:trips) do
                     content_tag(:tr) do
                       safe_join([
                         content_tag(:td, r[:location]),
-                        content_tag(:td, admin_link_to(r[:person].full_name, r[:person], admin: :people)),
+                        content_tag(:td, admin_link_to(r[:person].first_name, r[:person], admin: :people)),
                         content_tag(:td, simple_format(r[:preferences]))
                       ])
                     end
