@@ -18,3 +18,12 @@ export function simpleNormalize(text: string): string {
     .map((char) => charMap[char] || char)
     .join("");
 }
+
+export function escapeHtml(text: string): string {
+  return text
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
