@@ -85,6 +85,8 @@ RSpec.describe "Trips", :requires_auth, type: :request do
           expect(location_json["people"].count).to eq(1)
           expect(location_json["people"].first["first_name"]).to eq person.first_name
           expect(location_json["people"].first["book_preferences"]).to eq "Kryminały"
+          expect(location_json["people"].first["sparkling_water"]).to eq 3
+          expect(location_json["people"].first["still_water"]).to eq 1
         end
 
         it "returns destinations in order" do

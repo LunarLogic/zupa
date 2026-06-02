@@ -37,13 +37,55 @@ const TripLocationCard: FC<TripLocationCardProps> = ({
   const needsWithoutHasAnimals: TripNeeds = { ...needs, hasAnimals: false };
   const needsList = prepareNeedsList(needsWithoutHasAnimals, needsCount);
 
-  const bookPreferencesText = people
-    .filter((person) => person.bookPreferences)
-    .map((person) => `${person.firstName}: ${person.bookPreferences}`)
-    .join("\n");
+  const esc = (s: string) =>
+    s
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#39;");
 
-  const bookSection = bookPreferencesText ? `Książki:\n${bookPreferencesText}` : "";
-  const combinedInfo = [additionalInfo, bookSection].filter(Boolean).join("\n\n");
+  const waterLines = people
+    .map((person) => {
+      const sparkling = person.sparklingWater ?? 0;
+      const still = person.stillWater ?? 0;
+      const parts = [
+        sparkling > 0 ? `${sparkling} gazowana` : null,
+        still > 0 ? `${still} niegazowana` : null,
+      ].filter(Boolean);
+      return parts.length ? `${esc(person.firstName)}: ${parts.join(", ")}` : null;
+    })
+    .filter((line): line is string => Boolean(line));
+
+  const bookLines = people
+    .filter((person) => person.bookPreferences)
+    .map((person) => `${esc(person.firstName)}: ${esc(person.bookPreferences as string)}`);
+
+  const sections: string[] = [];
+  if (additionalInfo) {
+    sections.push(`<strong>Uwagi:</strong>\n${esc(additionalInfo)}`);
+  }
+  if (waterLines.length > 0) {
+    sections.push(`<strong>Woda:</strong>\n${waterLines.join("\n")}`);
+  }
+  if (bookLines.length > 0) {
+    sections.push(`<strong>Książki:</strong>\n${bookLines.join("\n")}`);
+  }
+  const combinedHtml = sections.join("\n");
+
+  const truncate = (s: string) => (s.length > 85 ? `${s.slice(0, 85)}...` : s);
+
+  let previewHtml = "";
+  if (additionalInfo) {
+    previewHtml = `<strong>Uwagi:</strong>\n${esc(truncate(additionalInfo))}`;
+  } else if (waterLines.length > 0) {
+    previewHtml = `<strong>Woda:</strong>\n${truncate(waterLines.join("\n"))}`;
+  } else if (bookLines.length > 0) {
+    previewHtml = `<strong>Książki:</strong>\n${truncate(bookLines.join("\n"))}`;
+  }
+
+  const showCollapsible = combinedHtml.length > 0;
+  const needsToggle = combinedHtml !== previewHtml && combinedHtml.length > 0;
 
   const cardContent = () => (
     <>
@@ -56,9 +98,14 @@ const TripLocationCard: FC<TripLocationCardProps> = ({
         </div>
       )}
       <TagWithNeedsIcons needs={needsList} className="trip-location-card__tag" />
-      {combinedInfo && (
+      {showCollapsible && (
         <div onClick={(e) => e.stopPropagation()} className="trip-location-card__info">
-          <ExpandableContent content={combinedInfo} isRow={false} />
+          <ExpandableContent
+            content={combinedHtml}
+            previewHtml={needsToggle ? previewHtml : undefined}
+            isHtml
+            isRow={false}
+          />
         </div>
       )}
     </>
