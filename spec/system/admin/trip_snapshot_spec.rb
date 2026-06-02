@@ -29,7 +29,8 @@ RSpec.describe "Admin trip snapshot", type: :system do
       click_link "Książki"
 
       within("#books-content") do
-        expect(page).to have_content("Helena Kowalska")
+        expect(page).to have_content("Helena")
+        expect(page).not_to have_content("Kowalska")
         expect(page).to have_content("Reportaż")
       end
 
@@ -39,7 +40,8 @@ RSpec.describe "Admin trip snapshot", type: :system do
       click_link "Książki"
 
       within("#books-content") do
-        expect(page).to have_content("Helena Kowalska")
+        expect(page).to have_content("Helena")
+        expect(page).not_to have_content("Kowalska")
         expect(page).to have_content("Reportaż")
       end
     end
