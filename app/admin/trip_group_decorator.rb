@@ -14,11 +14,15 @@ class TripGroupDecorator < SimpleDelegator
   end
 
   def tea
-    if person_count > AppSetting.instance.persons_per_thermos
-      "dwa duże termosy"
-    else
-      "jeden duży termos"
-    end
+    capacity = AppSetting.instance.persons_per_thermos
+    count = (person_count.to_f / capacity).ceil
+    return "brak" if count.zero?
+    return "1 duży termos" if count == 1
+
+    last_digit = count % 10
+    last_two = count % 100
+    plural_form = (last_digit.between?(2, 4) && !last_two.between?(12, 14)) ? "duże termosy" : "dużych termosów"
+    "#{count} #{plural_form}"
   end
 
   def has_cat_food
