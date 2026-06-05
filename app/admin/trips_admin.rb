@@ -338,6 +338,9 @@ Trestle.resource(:trips) do
       end
 
       redirect_to "/admin/trips"
+    rescue Trips::SpreadsheetAccessError => e
+      flash[:error] = e.message
+      redirect_to "/admin/trips"
     end
 
     def update
@@ -354,6 +357,9 @@ Trestle.resource(:trips) do
         flash[:error] = error_message(result[:not_found]).html_safe
       end
 
+      redirect_to "/admin/trips/#{params[:id]}"
+    rescue Trips::SpreadsheetAccessError => e
+      flash[:error] = e.message
       redirect_to "/admin/trips/#{params[:id]}"
     end
 

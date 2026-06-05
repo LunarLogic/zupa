@@ -11,4 +11,13 @@ describe Trips::ParseGoogleSpreadsheet do
     expect(spreadsheet.rows[7].first).to eq("GR 2: Elżbieta Łinsdor*, Miłorad Jackiewicz, Trzebiesława Drewniakowska")
     expect(spreadsheet.rows[13].first).to eq("GR 3: Alan Wake*, Książe Persii, Bezimienny")
   end
+
+  it "raises a friendly error when the sheet is not accessible" do
+    allow(GoogleDrive::Session).to receive(:from_service_account_key)
+      .and_raise(Google::Apis::ClientError.new("forbidden"))
+
+    expect {
+      described_class.new.call(spreadsheet_url: "https://docs.google.com/spreadsheets/d/abc/edit")
+    }.to raise_error(Trips::SpreadsheetAccessError, /udostępniony/)
+  end
 end
