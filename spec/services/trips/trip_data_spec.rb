@@ -29,6 +29,42 @@ describe Trips::TripData do
       expect(second_group.volunteers).to eq(["Jurek*", "Kiełbasa", "Ogórek"])
       expect(second_group.destinations.map(&:value)).to eq(["Hallera 30", "Giedroycia 1 - garaż"])
     end
+
+    it "parses two-digit group numbers" do
+      sheet = double(:spreadsheet, rows: [["GRUPA / MIEJSCA"], ["GR 10: Maciek*, Ela"]])
+      group = Trips::TripData.new(date: "2025-01-01", spreadsheet: sheet).groups.first
+
+      expect(group.number).to eq("10")
+      expect(group.volunteers).to eq(["Maciek*", "Ela"])
+    end
+
+    it "tolerates a missing space after the colon" do
+      sheet = double(:spreadsheet, rows: [["GRUPA / MIEJSCA"], ["GR 1:Maciek*, Ela, Alex"]])
+      group = Trips::TripData.new(date: "2025-01-01", spreadsheet: sheet).groups.first
+
+      expect(group.number).to eq("1")
+      expect(group.volunteers).to eq(["Maciek*", "Ela", "Alex"])
+    end
+
+    it "splits volunteers glued together without spaces after commas" do
+      sheet = double(:spreadsheet, rows: [["GRUPA / MIEJSCA"], ["GR 1: Maciek*,Ela,Alex"]])
+      group = Trips::TripData.new(date: "2025-01-01", spreadsheet: sheet).groups.first
+
+      expect(group.volunteers).to eq(["Maciek*", "Ela", "Alex"])
+    end
+
+    it "tolerates a wrong separator after the group number" do
+      dot = double(:spreadsheet, rows: [["GRUPA / MIEJSCA"], ["GR 1. Maciek*, Ela"]])
+      paren = double(:spreadsheet, rows: [["GRUPA / MIEJSCA"], ["GR 2) Jurek*, Ogórek"]])
+      comma = double(:spreadsheet, rows: [["GRUPA / MIEJSCA"], ["GRUPA 3, Alex*, Ela"]])
+
+      expect(Trips::TripData.new(date: "2025-01-01", spreadsheet: dot).groups.first.volunteers)
+        .to eq(["Maciek*", "Ela"])
+      expect(Trips::TripData.new(date: "2025-01-01", spreadsheet: paren).groups.first.volunteers)
+        .to eq(["Jurek*", "Ogórek"])
+      expect(Trips::TripData.new(date: "2025-01-01", spreadsheet: comma).groups.first.volunteers)
+        .to eq(["Alex*", "Ela"])
+    end
   end
 
   describe "Single row details parsing" do

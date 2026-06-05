@@ -1,5 +1,11 @@
 module Trips
+  class SpreadsheetAccessError < StandardError; end
+
   class ParseGoogleSpreadsheet
+    ACCESS_ERROR_MESSAGE =
+      "Nie udało się otworzyć arkusza. Upewnij się, że arkusz jest udostępniony do odczytu " \
+      "oraz że link jest poprawny."
+
     def call(spreadsheet_url:)
       google_spreadsheet(spreadsheet_url).rows.each_with_object(Spreadsheet.new) do |row, sheet|
         sheet.add_row(row)
@@ -12,6 +18,8 @@ module Trips
       session = GoogleDrive::Session.from_service_account_key(StringIO.new(google_drive_config))
 
       session.spreadsheet_by_key(spreadsheet_id(url)).worksheets[0]
+    rescue Google::Apis::ClientError, Google::Apis::AuthorizationError
+      raise SpreadsheetAccessError, ACCESS_ERROR_MESSAGE
     end
 
     def spreadsheet_id(url)

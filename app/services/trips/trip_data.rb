@@ -35,17 +35,19 @@ module Trips
     class Group
       attr_reader :destinations
 
+      GROUP_PREFIX = /\A\s*(?:GR\.?|GRUPA)\s*\d+\s*[:.,)]\s*/i
+
       def initialize(data:)
         @data = data
         @destinations = []
       end
 
       def number
-        @data[/\d/]
+        @data[/\d+/]
       end
 
       def volunteers
-        @data.split(": ").second.split(", ")
+        @data.sub(GROUP_PREFIX, "").split(/\s*,\s*/).map(&:strip).reject(&:blank?)
       end
 
       def add_destination(destination_data)
