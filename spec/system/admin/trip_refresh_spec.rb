@@ -15,7 +15,7 @@ RSpec.describe "Admin trip refresh button", type: :system do
   context "future-dated trip" do
     let(:trip) do
       t = create(:trip, date: Date.tomorrow, organiser: admin_user)
-      g = create(:trip_group, trip: t, number: 1, volunteers: ["Ola"])
+      g = create(:trip_group, trip: t, number: 1, volunteer_names: ["Ola"])
       create(:trip_destination, trip_group: g, location: location)
       t
     end
@@ -47,7 +47,7 @@ RSpec.describe "Admin trip refresh button", type: :system do
   context "past-dated trip" do
     let(:past_trip) do
       t = create(:trip, date: Date.yesterday, organiser: admin_user)
-      g = create(:trip_group, trip: t, number: 1, volunteers: ["Ola"])
+      g = create(:trip_group, trip: t, number: 1, volunteer_names: ["Ola"])
       create(:trip_destination, trip_group: g, location: location)
       t
     end

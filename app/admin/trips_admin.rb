@@ -312,7 +312,7 @@ Trestle.resource(:trips) do
                   class: "table table-striped", style: "width: 100%;")
             end
 
-            content_tag(:h3, "GR #{group.number}: #{Array(group.volunteers).join(", ")}", style: "margin-top: 2rem;") +
+            content_tag(:h3, "GR #{group.number}: #{group.all_volunteer_names.join(", ")}", style: "margin-top: 2rem;") +
               safe_join(destination_tables)
           end
 

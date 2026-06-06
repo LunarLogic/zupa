@@ -43,12 +43,12 @@ describe TripRepository do
       expect(groups.count).to eq(2)
 
       expect(groups.first.number).to eq(1)
-      expect(groups.first.volunteers).to eq(["Maciek*", "Ela", "Alex"])
+      expect(groups.first.volunteer_names).to eq(["Maciek*", "Ela", "Alex"])
       expect(groups.first.locations.count).to eq(2)
       expect(groups.first.locations.first.name).to eq("pustostan")
 
       expect(groups.second.number).to eq(2)
-      expect(groups.second.volunteers).to eq(["Jurek*", "Kiełbasa", "Ogórek"])
+      expect(groups.second.volunteer_names).to eq(["Jurek*", "Kiełbasa", "Ogórek"])
       expect(groups.second.locations.first.name).to eq("galeria")
 
       destinations = groups.first.trip_destinations

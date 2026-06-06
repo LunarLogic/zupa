@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2026_05_30_120006) do
+ActiveRecord::Schema[7.0].define(version: 2026_06_05_120007) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -329,7 +329,7 @@ ActiveRecord::Schema[7.0].define(version: 2026_05_30_120006) do
   end
 
   create_table "trip_groups", force: :cascade do |t|
-    t.string "volunteers", null: false, array: true
+    t.string "volunteer_names", array: true
     t.bigint "trip_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -337,8 +337,23 @@ ActiveRecord::Schema[7.0].define(version: 2026_05_30_120006) do
     t.index ["trip_id"], name: "index_trip_groups_on_trip_id"
   end
 
+  create_table "trip_groups_drivers", id: false, force: :cascade do |t|
+    t.bigint "trip_group_id", null: false
+    t.bigint "volunteer_id", null: false
+    t.index ["trip_group_id", "volunteer_id"], name: "index_tgd_on_trip_group_and_volunteer", unique: true
+    t.index ["trip_group_id"], name: "index_trip_groups_drivers_on_trip_group_id"
+    t.index ["volunteer_id"], name: "index_trip_groups_drivers_on_volunteer_id"
+  end
+
+  create_table "trip_groups_volunteers", id: false, force: :cascade do |t|
+    t.bigint "trip_group_id", null: false
+    t.bigint "volunteer_id", null: false
+    t.index ["trip_group_id", "volunteer_id"], name: "index_tgv_on_trip_group_and_volunteer", unique: true
+    t.index ["volunteer_id"], name: "index_trip_groups_volunteers_on_volunteer_id"
+  end
+
   create_table "trips", force: :cascade do |t|
-    t.string "source_spreadsheet_url", null: false
+    t.string "source_spreadsheet_url"
     t.date "date", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -346,8 +361,10 @@ ActiveRecord::Schema[7.0].define(version: 2026_05_30_120006) do
     t.boolean "active", default: false
     t.text "preparations_html"
     t.bigint "preparation_template_id"
+    t.string "source", default: "sheet", null: false
     t.index ["admin_user_id"], name: "index_trips_on_admin_user_id"
     t.index ["preparation_template_id"], name: "index_trips_on_preparation_template_id"
+    t.index ["source"], name: "index_trips_on_source"
   end
 
   create_table "visit_summaries", force: :cascade do |t|
@@ -358,6 +375,15 @@ ActiveRecord::Schema[7.0].define(version: 2026_05_30_120006) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["location_id"], name: "index_visit_summaries_on_location_id"
+  end
+
+  create_table "volunteers", force: :cascade do |t|
+    t.string "first_name", null: false
+    t.string "last_name", null: false
+    t.boolean "active", default: true, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["first_name", "last_name"], name: "index_volunteers_on_first_name_and_last_name", unique: true
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
@@ -383,6 +409,10 @@ ActiveRecord::Schema[7.0].define(version: 2026_05_30_120006) do
   add_foreign_key "trip_destinations", "locations"
   add_foreign_key "trip_destinations", "trip_groups"
   add_foreign_key "trip_groups", "trips"
+  add_foreign_key "trip_groups_drivers", "trip_groups", on_delete: :cascade
+  add_foreign_key "trip_groups_drivers", "volunteers", on_delete: :restrict
+  add_foreign_key "trip_groups_volunteers", "trip_groups", on_delete: :cascade
+  add_foreign_key "trip_groups_volunteers", "volunteers", on_delete: :restrict
   add_foreign_key "trips", "admin_users"
   add_foreign_key "trips", "preparation_templates"
 end

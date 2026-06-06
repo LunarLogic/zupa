@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe TripGroupDecorator do
   let(:admin_user) { create(:admin_user) }
   let(:trip) { create(:trip, organiser: admin_user) }
-  let(:group) { create(:trip_group, trip: trip, number: 1, volunteers: ["Anna"]) }
+  let(:group) { create(:trip_group, trip: trip, number: 1, volunteer_names: ["Anna"]) }
   subject(:decorated) { described_class.new(group) }
 
   describe "#tea" do

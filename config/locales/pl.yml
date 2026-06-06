@@ -73,6 +73,7 @@ pl:
         reports: Raporty
         visit_summaries: Relacje
         trips: Wyjazdy
+        volunteers: Wolontariusze
         app_settings: Ustawienia
         books: Książki
         book_packages: Paczki książek
@@ -82,6 +83,9 @@ pl:
         trips: 🚙 Wyjazdy
         content: 📰 Treści
         wardrobe: 🧥 Magazyn Ciepła
+    volunteers:
+      errors:
+        cannot_delete_assigned: Nie można usunąć wolontariusza przypisanego do wyjazdu.
     error_messages:
       phone_length_error: Numer telefonu musi mieć 9 cyfr
       empty_package: "Paczka nie może być pusta"
@@ -238,6 +242,10 @@ pl:
         sparkling_water: Woda gazowana (szt.)
         still_water: Woda niegazowana (szt.)
         book_preferences: Preferencje książkowe
+      volunteer:
+        first_name: Imię
+        last_name: Nazwisko
+        active: Aktywny
       app_setting:
         persons_per_thermos: Liczba osób na duży termos
         soups_per_person: Zup na osobę
@@ -390,6 +398,9 @@ pl:
       trip:
         one: Wyjazd
         other: Wyjazdy
+      volunteer:
+        one: Wolontariusz
+        other: Wolontariusze
       preparation_template:
         one: Szablon
         other: Szablony

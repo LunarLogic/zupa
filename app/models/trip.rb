@@ -1,4 +1,8 @@
 class Trip < ApplicationRecord
+  SOURCES = {sheet: "sheet", manual: "manual"}.freeze
+
+  enum source: SOURCES
+
   has_many :groups, class_name: "TripGroup", dependent: :destroy
   belongs_to :organiser, foreign_key: :admin_user_id, class_name: "AdminUser"
   belongs_to :preparation_template, optional: true

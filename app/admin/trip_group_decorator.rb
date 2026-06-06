@@ -96,7 +96,7 @@ class TripGroupDecorator < SimpleDelegator
   end
 
   def volunteers
-    super.join(", ")
+    all_volunteer_names.join(", ")
   end
 
   def people_across_destinations
