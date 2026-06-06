@@ -10,7 +10,7 @@ class TripGroup < ApplicationRecord
   # trips carry free-text names in the volunteer_names array column.
   def all_volunteer_names
     if trip&.manual?
-      drivers.map { |d| "*#{d.full_name}" } + volunteers.map(&:full_name)
+      drivers.map { |d| "#{d.full_name}*" } + volunteers.map(&:full_name)
     else
       volunteer_names || []
     end

@@ -19,7 +19,7 @@ RSpec.describe TripGroup, type: :model do
     end
 
     context "for a manual trip" do
-      it "lists drivers prefixed with * followed by helpers" do
+      it "lists drivers marked with a trailing * followed by helpers" do
         trip = create(:trip, :manual)
         group = create(:trip_group, trip: trip, volunteer_names: nil)
         driver = create(:volunteer, first_name: "Ola", last_name: "Driver")
@@ -27,7 +27,7 @@ RSpec.describe TripGroup, type: :model do
         group.drivers << driver
         group.volunteers << helper
 
-        expect(group.all_volunteer_names).to eq(["*Ola Driver", "Ela Helper"])
+        expect(group.all_volunteer_names).to eq(["Ola Driver*", "Ela Helper"])
       end
     end
   end
