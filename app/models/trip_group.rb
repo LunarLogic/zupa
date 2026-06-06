@@ -1,6 +1,6 @@
 class TripGroup < ApplicationRecord
   belongs_to :trip
-  has_many :trip_destinations, dependent: :destroy
+  has_many :trip_destinations, -> { order(:order) }, dependent: :destroy
   has_many :locations, through: :trip_destinations
   has_and_belongs_to_many :volunteers, join_table: "trip_groups_volunteers"
   has_and_belongs_to_many :drivers, class_name: "Volunteer",
