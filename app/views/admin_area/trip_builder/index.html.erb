@@ -1,0 +1,41 @@
+<% content_for(:title, "Nowy wyjazd") %>
+
+<%
+  locations = LocationRepository.new.active_with_recency.map do |row|
+    loc = row[:location]
+    {
+      id: loc.id,
+      name: loc.name,
+      recent_rank: row[:recent_rank],
+      last_scheduled_at: row[:last_scheduled_at]&.iso8601
+    }
+  end
+
+  volunteers = Volunteer.active.order(:last_name, :first_name).map do |volunteer|
+    {id: volunteer.id, name: volunteer.full_name}
+  end
+
+  admin_users = AdminUser.order(:email).map do |user|
+    {id: user.id, name: user.full_name}
+  end
+
+  bootstrap = {
+    locations: locations,
+    volunteers: volunteers,
+    adminUsers: admin_users,
+    currentUserId: current_user.id,
+    csrfToken: form_authenticity_token,
+    createUrl: "/admin_area/trip_builder"
+  }
+%>
+
+<div class="main-content-area">
+  <div class="main-content-container">
+    <div id="trip-builder-root"></div>
+    <script type="application/json" id="trip-builder-data">
+      <%= raw bootstrap.to_json %>
+    </script>
+  </div>
+</div>
+
+<%= javascript_include_tag "trip_builder", defer: true %>
