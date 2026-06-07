@@ -727,17 +727,19 @@ function Step3Groups({
               <div style={{ padding: "0.6rem", color: "#999" }}>Wszystko przypisane</div>
             )}
           </div>
-        </aside>
 
-        {mapAvailable && showMap && (
-          <LocationMap
-            apiKey={mapsApiKey}
-            locations={mapLocations}
-            colorFor={colorForLocation}
-            onToggle={toggleLocationOnMap}
-            height={320}
-          />
-        )}
+          {mapAvailable && showMap && (
+            <div style={{ marginTop: "0.75rem" }}>
+              <LocationMap
+                apiKey={mapsApiKey}
+                locations={mapLocations}
+                colorFor={colorForLocation}
+                onToggle={toggleLocationOnMap}
+                height={320}
+              />
+            </div>
+          )}
+        </aside>
 
         <aside style={poolPanel}>
           <h4 style={{ marginTop: 0 }}>Wolontariusze</h4>
