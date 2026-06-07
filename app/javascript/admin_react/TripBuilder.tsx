@@ -613,6 +613,7 @@ function Step3Groups({
   const [locationQuery, setLocationQuery] = useState("");
   const [volunteerQuery, setVolunteerQuery] = useState("");
   const [showMap, setShowMap] = useState(false);
+  const [showList, setShowList] = useState(true);
   const mapAvailable = mapsApiKey !== "";
 
   const assignedLocationIds = useMemo(
@@ -675,58 +676,68 @@ function Step3Groups({
 
   return (
     <div style={{ display: "flex", gap: "1.25rem", alignItems: "flex-start", flexWrap: "wrap" }}>
-      <div style={{ width: 384, display: "flex", flexDirection: "column", gap: "1.25rem" }}>
+      <div
+        style={{
+          width: 384,
+          display: "flex",
+          flexDirection: "column",
+          gap: "1.25rem",
+          position: "sticky",
+          top: "1rem",
+          alignSelf: "flex-start",
+          maxHeight: "calc(100vh - 2rem)",
+          overflowY: "auto",
+        }}
+      >
         <aside id="location-pool" style={poolPanel}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
             <h4 style={{ marginTop: 0 }}>Miejsca</h4>
-            {mapAvailable && (
-              <button
-                type="button"
-                onClick={() => setShowMap((s) => !s)}
-                style={{
-                  border: "none",
-                  background: "transparent",
-                  color: "#2c6cb0",
-                  cursor: "pointer",
-                  fontSize: "0.8rem",
-                  padding: 0,
-                }}
-              >
-                {showMap ? "Ukryj mapę" : "Pokaż mapę"}
+            <span style={{ display: "flex", gap: "0.75rem" }}>
+              <button type="button" onClick={() => setShowList((s) => !s)} style={toggleLink}>
+                {showList ? "Ukryj listę" : "Pokaż listę"}
               </button>
-            )}
+              {mapAvailable && (
+                <button type="button" onClick={() => setShowMap((s) => !s)} style={toggleLink}>
+                  {showMap ? "Ukryj mapę" : "Pokaż mapę"}
+                </button>
+              )}
+            </span>
           </div>
-          <input
-            type="text"
-            className="form-control"
-            placeholder="Szukaj miejsca…"
-            value={locationQuery}
-            onChange={(e) => setLocationQuery(e.target.value)}
-            style={{ marginBottom: "0.5rem" }}
-          />
-          <div style={{ ...poolList, height: 220 }}>
-            {locationPool.map((l) => (
-              <button
-                key={l.id}
-                type="button"
-                style={poolItem}
-                onClick={() =>
-                  updateGroup(targetGroup, {
-                    locationIds: [...groups[targetGroup].locationIds, l.id],
-                  })
-                }
-              >
-                <span style={{ flex: 1, textAlign: "left" }}>{l.name}</span>
-                <span style={{ color: "#666", fontSize: "0.8rem" }}>
-                  {l.person_count} {peopleWord(l.person_count)}
-                </span>
-                <RecencyBadge rank={l.recent_rank} />
-              </button>
-            ))}
-            {locationPool.length === 0 && (
-              <div style={{ padding: "0.6rem", color: "#999" }}>Wszystko przypisane</div>
-            )}
-          </div>
+          {showList && (
+            <input
+              type="text"
+              className="form-control"
+              placeholder="Szukaj miejsca…"
+              value={locationQuery}
+              onChange={(e) => setLocationQuery(e.target.value)}
+              style={{ marginBottom: "0.5rem" }}
+            />
+          )}
+          {showList && (
+            <div style={{ ...poolList, height: 220 }}>
+              {locationPool.map((l) => (
+                <button
+                  key={l.id}
+                  type="button"
+                  style={poolItem}
+                  onClick={() =>
+                    updateGroup(targetGroup, {
+                      locationIds: [...groups[targetGroup].locationIds, l.id],
+                    })
+                  }
+                >
+                  <span style={{ flex: 1, textAlign: "left" }}>{l.name}</span>
+                  <span style={{ color: "#666", fontSize: "0.8rem" }}>
+                    {l.person_count} {peopleWord(l.person_count)}
+                  </span>
+                  <RecencyBadge rank={l.recent_rank} />
+                </button>
+              ))}
+              {locationPool.length === 0 && (
+                <div style={{ padding: "0.6rem", color: "#999" }}>Wszystko przypisane</div>
+              )}
+            </div>
+          )}
 
           {mapAvailable && showMap && (
             <div style={{ marginTop: "0.75rem" }}>
@@ -1229,6 +1240,15 @@ const cardGrid: React.CSSProperties = {
   display: "flex",
   flexWrap: "wrap",
   gap: "0.6rem",
+};
+
+const toggleLink: React.CSSProperties = {
+  border: "none",
+  background: "transparent",
+  color: "#2c6cb0",
+  cursor: "pointer",
+  fontSize: "0.8rem",
+  padding: 0,
 };
 
 const clampedNote: React.CSSProperties = {
