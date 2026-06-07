@@ -1,6 +1,8 @@
 export interface LocationOption {
   id: number;
   name: string;
+  lat: number | null;
+  lng: number | null;
   recent_rank: number | null;
   last_scheduled_at: string | null;
   person_count: number;
@@ -41,6 +43,7 @@ export interface Bootstrap {
   currentUserId: number;
   csrfToken: string;
   createUrl: string;
+  mapsApiKey: string;
   rotationLocationIds: number[];
   rotationTripDate: string | null;
   existingTrip: ExistingTrip | null;

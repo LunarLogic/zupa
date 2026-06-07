@@ -7,6 +7,8 @@
     {
       id: loc.id,
       name: loc.name,
+      lat: loc.latitude&.to_f,
+      lng: loc.longitude&.to_f,
       recent_rank: recent_rank,
       last_scheduled_at: last_scheduled_at,
       person_count: loc.person_count,
@@ -74,6 +76,7 @@
     currentUserId: current_user.id,
     csrfToken: form_authenticity_token,
     createUrl: "/admin_area/trip_builder",
+    mapsApiKey: ENV["REACT_APP_GOOGLE_MAPS_API_KEY"].to_s,
     rotationLocationIds: location_repository.second_to_last_trip_location_ids,
     rotationTripDate: rotation_trip&.date&.iso8601,
     existingTrip: existing_trip,

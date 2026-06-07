@@ -26,7 +26,8 @@ RSpec.describe "Admin trip builder", type: :system do
     find("button[aria-label='Kierowca: Ola Kierowca']").click
     click_button "Dalej", exact: false
 
-    # Step 3 — place into a group
+    # Step 3 — place into a group (no maps key in test → no map toggle)
+    expect(page).not_to have_button("Mapa")
     within("#location-pool") { click_button "Miejsce Alfa" }
     click_button "Ola Kierowca"
     click_button "Ela Pomocnik"
