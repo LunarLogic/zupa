@@ -677,7 +677,25 @@ function Step3Groups({
     <div style={{ display: "flex", gap: "1.25rem", alignItems: "flex-start", flexWrap: "wrap" }}>
       <div style={{ width: 384, display: "flex", flexDirection: "column", gap: "1.25rem" }}>
         <aside id="location-pool" style={poolPanel}>
-          <h4 style={{ marginTop: 0 }}>Miejsca</h4>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
+            <h4 style={{ marginTop: 0 }}>Miejsca</h4>
+            {mapAvailable && (
+              <button
+                type="button"
+                onClick={() => setShowMap((s) => !s)}
+                style={{
+                  border: "none",
+                  background: "transparent",
+                  color: "#2c6cb0",
+                  cursor: "pointer",
+                  fontSize: "0.8rem",
+                  padding: 0,
+                }}
+              >
+                {showMap ? "Ukryj mapę" : "Pokaż mapę"}
+              </button>
+            )}
+          </div>
           <input
             type="text"
             className="form-control"
@@ -686,7 +704,7 @@ function Step3Groups({
             onChange={(e) => setLocationQuery(e.target.value)}
             style={{ marginBottom: "0.5rem" }}
           />
-          <div style={poolList}>
+          <div style={{ ...poolList, height: 220 }}>
             {locationPool.map((l) => (
               <button
                 key={l.id}
@@ -711,16 +729,6 @@ function Step3Groups({
           </div>
         </aside>
 
-        {mapAvailable && (
-          <button
-            type="button"
-            className="btn btn-default btn-sm"
-            onClick={() => setShowMap((s) => !s)}
-            style={{ alignSelf: "flex-start" }}
-          >
-            {showMap ? "Ukryj mapę" : "Pokaż mapę"}
-          </button>
-        )}
         {mapAvailable && showMap && (
           <LocationMap
             apiKey={mapsApiKey}
