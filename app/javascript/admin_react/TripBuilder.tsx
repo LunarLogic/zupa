@@ -234,7 +234,7 @@ export default function TripBuilder({ data }: { data: Bootstrap }) {
   };
 
   return (
-    <div>
+    <div style={{ padding: "1.5rem" }}>
       {errors.length > 0 && (
         <div className="alert alert-danger" style={{ marginBottom: "1rem" }}>
           <ul style={{ margin: 0, paddingLeft: "1.2rem" }}>
