@@ -7,7 +7,7 @@ RSpec.describe LocationRepository do
     it "returns active locations ordered by name with recency rank and last scheduled date" do
       recent = create(:location, name: "Aaa", status: "active")
       older = create(:location, name: "Bbb", status: "active")
-      never = create(:location, name: "Ccc", status: "active")
+      create(:location, name: "Ccc", status: "active")
       create(:location, name: "Zzz inactive", status: "inactive")
 
       # most recent trip visits `recent`
