@@ -118,7 +118,7 @@ export default function TripBuilder({ data }: { data: Bootstrap }) {
         (l) =>
           !assignedLocationIds.has(l.id) &&
           (q === "" || l.name.toLowerCase().includes(q)) &&
-          (!hideRecentLocations || l.recent_rank == null)
+          (!hideRecentLocations || l.recent_rank !== 0)
       )
       .sort((a, b) => {
         // overdue first: never-visited, then oldest last_scheduled_at, then name
@@ -318,7 +318,7 @@ export default function TripBuilder({ data }: { data: Bootstrap }) {
                 checked={hideRecentLocations}
                 onChange={(e) => setHideRecentLocations(e.target.checked)}
               />
-              Ukryj ostatnio odwiedzone
+              Ukryj odwiedzone na ostatnim wyjeździe
             </label>
             <div style={poolList}>
               {pool.map((l) => (

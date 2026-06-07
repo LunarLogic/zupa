@@ -51,7 +51,7 @@ RSpec.describe "Admin trip builder", type: :system do
 
     within("#location-pool") do
       expect(page).to have_button("Miejsce Alfa")
-      check "Ukryj ostatnio odwiedzone"
+      check "Ukryj odwiedzone na ostatnim wyjeździe"
       expect(page).not_to have_button("Miejsce Alfa")
       expect(page).to have_button("Miejsce Beta")
     end
