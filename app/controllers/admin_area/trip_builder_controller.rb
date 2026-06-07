@@ -46,13 +46,22 @@ module AdminArea
         {
           location_ids: int_ids(group, :location_ids),
           driver_ids: int_ids(group, :driver_ids),
-          volunteer_ids: int_ids(group, :volunteer_ids)
+          volunteer_ids: int_ids(group, :volunteer_ids),
+          additional_info: parse_notes(group),
+          group_additional_info: (group[:group_additional_info] || group["group_additional_info"]).to_s
         }
       end
     end
 
     def int_ids(group, key)
       Array(group[key] || group[key.to_s]).map(&:to_i)
+    end
+
+    # { "<location_id>" => "note" } → { location_id(int) => note(string) }
+    def parse_notes(group)
+      raw = group[:additional_info] || group["additional_info"]
+      raw = raw.to_unsafe_h if raw.respond_to?(:to_unsafe_h)
+      (raw || {}).each_with_object({}) { |(id, text), acc| acc[id.to_i] = text.to_s }
     end
   end
 end

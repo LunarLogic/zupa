@@ -22,6 +22,8 @@ const STEPS = ["Miejsca", "Wolontariusze", "Grupy"];
 interface WizardGroup {
   locationIds: number[];
   volunteerIds: number[];
+  notes: Record<string, string>; // location id → additional info
+  groupNote: string; // additional info for the whole group
 }
 
 interface DraftState {
@@ -50,7 +52,7 @@ function defaultDraft(data: Bootstrap): DraftState {
     preselectedLocationIds: [],
     roster: [],
     rosterDriverIds: [],
-    groups: [{ locationIds: [], volunteerIds: [] }],
+    groups: [{ locationIds: [], volunteerIds: [], notes: {}, groupNote: "" }],
   };
 }
 
@@ -66,10 +68,20 @@ function sanitizeDraft(raw: string | null, data: Bootstrap): DraftState | null {
     const preselected = (parsed.preselectedLocationIds || []).filter((id) => locationIds.has(id));
     const roster = (parsed.roster || []).filter((id) => volunteerIds.has(id));
     const rosterDriverIds = (parsed.rosterDriverIds || []).filter((id) => roster.includes(id));
-    const groups = (parsed.groups || []).map((g) => ({
-      locationIds: (g.locationIds || []).filter((id) => preselected.includes(id)),
-      volunteerIds: (g.volunteerIds || []).filter((id) => roster.includes(id)),
-    }));
+    const groups = (parsed.groups || []).map((g) => {
+      const locationIds = (g.locationIds || []).filter((id) => preselected.includes(id));
+      const notes: Record<string, string> = {};
+      locationIds.forEach((id) => {
+        const note = g.notes?.[id];
+        if (note) notes[id] = note;
+      });
+      return {
+        locationIds,
+        volunteerIds: (g.volunteerIds || []).filter((id) => roster.includes(id)),
+        notes,
+        groupNote: g.groupNote ?? "",
+      };
+    });
 
     return {
       date: parsed.date || nextThursdayISO(),
@@ -80,7 +92,10 @@ function sanitizeDraft(raw: string | null, data: Bootstrap): DraftState | null {
       preselectedLocationIds: preselected,
       roster,
       rosterDriverIds,
-      groups: groups.length > 0 ? groups : [{ locationIds: [], volunteerIds: [] }],
+      groups:
+        groups.length > 0
+          ? groups
+          : [{ locationIds: [], volunteerIds: [], notes: {}, groupNote: "" }],
     };
   } catch {
     return null;
@@ -104,7 +119,15 @@ function editDraft(e: ExistingTrip, currentUserId: number): DraftState {
     preselectedLocationIds: e.preselectedLocationIds,
     roster: e.roster,
     rosterDriverIds: e.rosterDriverIds,
-    groups: e.groups.length > 0 ? e.groups : [{ locationIds: [], volunteerIds: [] }],
+    groups:
+      e.groups.length > 0
+        ? e.groups.map((g) => ({
+            locationIds: g.locationIds,
+            volunteerIds: g.volunteerIds,
+            notes: g.notes ?? {},
+            groupNote: g.groupNote ?? "",
+          }))
+        : [{ locationIds: [], volunteerIds: [], notes: {}, groupNote: "" }],
   };
 }
 
@@ -210,6 +233,8 @@ export default function TripBuilder({ data }: { data: Bootstrap }) {
               location_ids: g.locationIds,
               volunteer_ids: g.volunteerIds,
               driver_ids: g.volunteerIds.filter((id) => rosterDriverIds.includes(id)),
+              additional_info: g.notes,
+              group_additional_info: g.groupNote,
             })),
         }),
       });
@@ -728,14 +753,17 @@ function Step3Groups({
                 {groups.length > 1 && (
                   <button
                     type="button"
-                    className="btn btn-sm btn-danger"
+                    title="Usuń grupę"
+                    aria-label={`Usuń grupę ${index + 1}`}
+                    style={removeChip}
                     onClick={(e) => {
                       e.stopPropagation();
+                      if (!window.confirm("Usunąć grupę?")) return;
                       setGroups((prev) => prev.filter((_, i) => i !== index));
                       setActiveGroup((prev) => Math.max(0, prev >= index ? prev - 1 : prev));
                     }}
                   >
-                    Usuń grupę
+                    ✕
                   </button>
                 )}
               </div>
@@ -758,6 +786,10 @@ function Step3Groups({
                     <LocationCard
                       key={id}
                       loc={locationsById.get(id)}
+                      note={group.notes[id] ?? ""}
+                      onNoteChange={(value) =>
+                        updateGroup(index, { notes: { ...group.notes, [id]: value } })
+                      }
                       onRemove={() =>
                         updateGroup(index, {
                           locationIds: group.locationIds.filter((x) => x !== id),
@@ -791,6 +823,19 @@ function Step3Groups({
                   ))}
                 </div>
               )}
+
+              <strong style={{ display: "block", marginTop: "1.15rem" }}>
+                Informacje dla grupy
+              </strong>
+              <textarea
+                className="form-control"
+                placeholder="Dodatkowe informacje dla całej grupy…"
+                value={group.groupNote}
+                rows={2}
+                onClick={(e) => e.stopPropagation()}
+                onChange={(e) => updateGroup(index, { groupNote: e.target.value })}
+                style={{ marginTop: "0.4rem", fontSize: "0.85rem", maxWidth: 420 }}
+              />
             </section>
           );
         })}
@@ -799,7 +844,10 @@ function Step3Groups({
           type="button"
           className="btn btn-secondary"
           onClick={() => {
-            setGroups((prev) => [...prev, { locationIds: [], volunteerIds: [] }]);
+            setGroups((prev) => [
+              ...prev,
+              { locationIds: [], volunteerIds: [], notes: {}, groupNote: "" },
+            ]);
             setActiveGroup(groups.length);
           }}
         >
@@ -815,20 +863,29 @@ function LocationCard({
   onClick,
   onRemove,
   selected,
+  note,
+  onNoteChange,
 }: {
   loc?: LocationOption;
   onClick?: () => void;
   onRemove?: () => void;
   selected?: boolean;
+  note?: string;
+  onNoteChange?: (value: string) => void;
 }) {
+  const [open, setOpen] = useState(false);
+  const editable = !!onNoteChange;
+  const hasNote = (note ?? "") !== "";
+  const handleClick = onClick ?? (editable ? () => setOpen(true) : undefined);
+
   return (
     <div
-      onClick={onClick}
-      role={onClick ? "button" : undefined}
+      onClick={handleClick}
+      role={handleClick ? "button" : undefined}
       aria-label={onClick ? loc?.name : undefined}
       style={{
         ...locationCard,
-        cursor: onClick ? "pointer" : "default",
+        cursor: handleClick ? "pointer" : "default",
         borderColor: selected ? "#27ae60" : "#e0e0e0",
         background: selected ? "#f3fbf5" : "#fafafa",
       }}
@@ -873,6 +930,35 @@ function LocationCard({
           🐾 {loc.animals.map((a) => `${a.name} (${speciesLabel(a.species)})`).join(", ")}
         </div>
       )}
+      {editable &&
+        (open ? (
+          <textarea
+            className="form-control"
+            placeholder="Dodatkowe informacje…"
+            value={note ?? ""}
+            autoFocus
+            rows={2}
+            onClick={(e) => e.stopPropagation()}
+            onBlur={() => setOpen(false)}
+            onChange={(e) => onNoteChange?.(e.target.value)}
+            style={{ marginTop: "0.4rem", fontSize: "0.8rem" }}
+          />
+        ) : hasNote ? (
+          <div
+            style={{
+              marginTop: "0.25rem",
+              fontSize: "0.8rem",
+              color: "#555",
+              whiteSpace: "pre-wrap",
+            }}
+          >
+            📝 {note}
+          </div>
+        ) : (
+          <div style={{ color: "#2c6cb0", fontSize: "0.75rem", marginTop: "0.25rem" }}>
+            + dodatkowe informacje
+          </div>
+        ))}
     </div>
   );
 }

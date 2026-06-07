@@ -26,7 +26,12 @@ export interface ExistingTrip {
   preselectedLocationIds: number[];
   roster: number[];
   rosterDriverIds: number[];
-  groups: { locationIds: number[]; volunteerIds: number[] }[];
+  groups: {
+    locationIds: number[];
+    volunteerIds: number[];
+    notes?: Record<string, string>;
+    groupNote?: string;
+  }[];
 }
 
 export interface Bootstrap {

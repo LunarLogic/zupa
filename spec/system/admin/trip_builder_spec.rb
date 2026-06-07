@@ -30,6 +30,12 @@ RSpec.describe "Admin trip builder", type: :system do
     within("#location-pool") { click_button "Miejsce Alfa" }
     click_button "Ola Kierowca"
     click_button "Ela Pomocnik"
+
+    # add a per-location note (click the group's location card to reveal the input)
+    find("strong", text: "Miejsce Alfa").click
+    fill_in "Dodatkowe informacje…", with: "Kod do bramy 1234"
+    find("input[type=date]").click # blur the note field before submitting
+
     click_button "Utwórz wyjazd"
 
     expect(page).to have_current_path(%r{/admin/trips/\d+}, wait: 5)
@@ -39,6 +45,7 @@ RSpec.describe "Admin trip builder", type: :system do
     expect(trip.date).to eq(Date.new(2026, 7, 1))
     group = trip.groups.first
     expect(group.trip_destinations.map { |d| d.location.name }).to eq(["Miejsce Alfa"])
+    expect(group.trip_destinations.first.additional_info).to eq("Kod do bramy 1234")
     expect(group.drivers.map(&:full_name)).to eq(["Ola Kierowca"])
     expect(group.volunteers.map(&:full_name)).to eq(["Ela Pomocnik"])
   end

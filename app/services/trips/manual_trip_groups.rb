@@ -7,19 +7,24 @@ module Trips
 
     def build_groups(trip, groups)
       non_empty_groups(groups).each_with_index do |group_data, index|
-        group = TripGroup.create!(trip: trip, number: index + 1)
+        group = TripGroup.create!(
+          trip: trip,
+          number: index + 1,
+          additional_info: group_data[:group_additional_info].to_s
+        )
         assign_volunteers(group, group_data)
         create_destinations(group, group_data)
       end
     end
 
     def create_destinations(group, group_data)
+      notes = group_data[:additional_info] || {}
       location_ids(group_data).each_with_index do |location_id, position|
         location = Location.find(location_id)
         repository.create_destination!(
           group: group,
           location: location,
-          additional_info: group_data[:additional_info].to_s,
+          additional_info: notes[location_id].to_s,
           order: position + 1
         )
       end

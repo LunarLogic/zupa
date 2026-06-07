@@ -28,6 +28,15 @@ RSpec.describe Trips::CreateManualTrip do
     expect(group.trip_destinations.map(&:location)).to eq([location_a, location_b])
   end
 
+  it "stores per-location additional info" do
+    groups = [{location_ids: [location_a.id, location_b.id], additional_info: {location_a.id => "Kod do bramy"}}]
+    result = described_class.new.call(date: Date.new(2026, 7, 1), organiser: admin, groups: groups)
+
+    destinations = result.value!.groups.first.trip_destinations
+    expect(destinations.find_by(location: location_a).additional_info).to eq("Kod do bramy")
+    expect(destinations.find_by(location: location_b).additional_info).to eq("")
+  end
+
   it "freezes a per-person snapshot at creation" do
     result = described_class.new.call(date: Date.new(2026, 7, 1), organiser: admin, groups: valid_groups)
     destination = result.value!.groups.first.trip_destinations.find_by(location: location_a)

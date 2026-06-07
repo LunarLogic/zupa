@@ -38,7 +38,9 @@
     groups_data = @edit_trip.groups.map do |group|
       {
         locationIds: group.trip_destinations.map(&:location_id),
-        volunteerIds: group.volunteers.map(&:id) + group.drivers.map(&:id)
+        volunteerIds: group.volunteers.map(&:id) + group.drivers.map(&:id),
+        notes: group.trip_destinations.each_with_object({}) { |d, h| h[d.location_id] = d.additional_info if d.additional_info.present? },
+        groupNote: group.additional_info.to_s
       }
     end
     preselected = groups_data.flat_map { |g| g[:locationIds] }.uniq
