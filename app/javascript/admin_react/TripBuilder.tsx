@@ -1241,31 +1241,37 @@ function MemberChip({
 }) {
   const name = volunteer?.name ?? "?";
   return (
-    <span style={memberChip}>
+    <span
+      style={{ ...memberChip, cursor: onToggleDriver ? "pointer" : "default" }}
+      role={onToggleDriver ? "button" : undefined}
+      aria-label={onToggleDriver ? `Kierowca: ${name}` : undefined}
+      title={
+        onToggleDriver
+          ? isDriver
+            ? "Kierowca — kliknij, by cofnąć"
+            : "Kliknij, aby oznaczyć kierowcę"
+          : undefined
+      }
+      onClick={onToggleDriver}
+    >
       <span aria-hidden="true">{personIcon(volunteer?.gender)}</span>
       <span>{name}</span>
-      {onToggleDriver ? (
-        <button
-          type="button"
-          aria-label={`Kierowca: ${name}`}
-          title={isDriver ? "Kierowca — kliknij, by cofnąć" : "Oznacz jako kierowcę"}
-          onClick={onToggleDriver}
-          style={{
-            ...driverToggle,
-            filter: isDriver ? "none" : "grayscale(1)",
-            opacity: isDriver ? 1 : 0.4,
-          }}
+      {(onToggleDriver || isDriver) && (
+        <span
+          aria-hidden="true"
+          style={{ filter: isDriver ? "none" : "grayscale(1)", opacity: isDriver ? 1 : 0.4 }}
         >
           🚗
-        </button>
-      ) : (
-        isDriver && <span aria-hidden="true">🚗</span>
+        </span>
       )}
       <button
         type="button"
         className="tb-x"
         aria-label={`Usuń: ${name}`}
-        onClick={onRemove}
+        onClick={(e) => {
+          e.stopPropagation();
+          onRemove();
+        }}
         style={removeChip}
       >
         ✕
@@ -1397,15 +1403,6 @@ const memberChip: React.CSSProperties = {
   borderRadius: 14,
   padding: "0.15rem 0.5rem",
   fontSize: "0.85rem",
-};
-
-const driverToggle: React.CSSProperties = {
-  border: "none",
-  background: "transparent",
-  cursor: "pointer",
-  padding: 0,
-  fontSize: "0.85rem",
-  lineHeight: 1,
 };
 
 const removeChip: React.CSSProperties = {

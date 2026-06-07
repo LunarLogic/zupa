@@ -23,7 +23,7 @@ RSpec.describe "Admin trip builder", type: :system do
     # Step 2 — roster + mark a driver
     click_button "Ola Kierowca"
     click_button "Ela Pomocnik"
-    find("button[aria-label='Kierowca: Ola Kierowca']").click
+    find("[aria-label='Kierowca: Ola Kierowca']").click
     click_button "Dalej", exact: false
 
     # Step 3 — place into a group (no maps key in test → no map toggle)
