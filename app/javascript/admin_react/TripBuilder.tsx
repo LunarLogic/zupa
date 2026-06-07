@@ -614,6 +614,7 @@ function Step3Groups({
   const [volunteerQuery, setVolunteerQuery] = useState("");
   const [showMap, setShowMap] = useState(false);
   const [showList, setShowList] = useState(true);
+  const [showVolunteers, setShowVolunteers] = useState(true);
   const mapAvailable = mapsApiKey !== "";
 
   const assignedLocationIds = useMemo(
@@ -751,39 +752,48 @@ function Step3Groups({
         </aside>
 
         <aside style={poolPanel}>
-          <h4 style={{ marginTop: 0 }}>Wolontariusze</h4>
-          <input
-            type="text"
-            className="form-control"
-            placeholder="Szukaj wolontariusza…"
-            value={volunteerQuery}
-            onChange={(e) => setVolunteerQuery(e.target.value)}
-            style={{ marginBottom: "0.5rem" }}
-          />
-          <div style={poolList}>
-            {volunteerPool.map((id) => {
-              const v = volunteersById.get(id);
-              return (
-                <button
-                  key={id}
-                  type="button"
-                  style={poolItem}
-                  onClick={() =>
-                    updateGroup(targetGroup, {
-                      volunteerIds: [...groups[targetGroup].volunteerIds, id],
-                    })
-                  }
-                >
-                  <span aria-hidden="true">{personIcon(v?.gender)}</span>
-                  <span style={{ flex: 1, textAlign: "left" }}>{v?.name ?? id}</span>
-                  {rosterDriverIds.includes(id) && <span aria-hidden="true">🚗</span>}
-                </button>
-              );
-            })}
-            {volunteerPool.length === 0 && (
-              <div style={{ padding: "0.6rem", color: "#999" }}>Wszyscy przypisani</div>
-            )}
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
+            <h4 style={{ marginTop: 0 }}>Wolontariusze</h4>
+            <button type="button" onClick={() => setShowVolunteers((s) => !s)} style={toggleLink}>
+              {showVolunteers ? "Ukryj listę" : "Pokaż listę"}
+            </button>
           </div>
+          {showVolunteers && (
+            <>
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Szukaj wolontariusza…"
+                value={volunteerQuery}
+                onChange={(e) => setVolunteerQuery(e.target.value)}
+                style={{ marginBottom: "0.5rem" }}
+              />
+              <div style={poolList}>
+                {volunteerPool.map((id) => {
+                  const v = volunteersById.get(id);
+                  return (
+                    <button
+                      key={id}
+                      type="button"
+                      style={poolItem}
+                      onClick={() =>
+                        updateGroup(targetGroup, {
+                          volunteerIds: [...groups[targetGroup].volunteerIds, id],
+                        })
+                      }
+                    >
+                      <span aria-hidden="true">{personIcon(v?.gender)}</span>
+                      <span style={{ flex: 1, textAlign: "left" }}>{v?.name ?? id}</span>
+                      {rosterDriverIds.includes(id) && <span aria-hidden="true">🚗</span>}
+                    </button>
+                  );
+                })}
+                {volunteerPool.length === 0 && (
+                  <div style={{ padding: "0.6rem", color: "#999" }}>Wszyscy przypisani</div>
+                )}
+              </div>
+            </>
+          )}
         </aside>
       </div>
 
