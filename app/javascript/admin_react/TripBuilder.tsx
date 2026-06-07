@@ -185,17 +185,8 @@ export default function TripBuilder({ data }: { data: Bootstrap }) {
     setErrors([]);
   };
 
-  const groupTotals = (group: GroupState) =>
-    group.locationIds.reduce(
-      (acc, id) => {
-        const loc = locationsById.get(id);
-        return {
-          people: acc.people + (loc?.person_count ?? 0),
-          sandwiches: acc.sandwiches + (loc?.sandwich_count ?? 0),
-        };
-      },
-      { people: 0, sandwiches: 0 }
-    );
+  const groupPeople = (group: GroupState) =>
+    group.locationIds.reduce((sum, id) => sum + (locationsById.get(id)?.person_count ?? 0), 0);
 
   const canSubmit =
     date !== "" && organiserId != null && groups.some((g) => g.locationIds.length > 0);
@@ -354,7 +345,7 @@ export default function TripBuilder({ data }: { data: Bootstrap }) {
           {groups.map((group, index) => {
             const color = PALETTE[index % PALETTE.length];
             const isActive = index === activeGroup;
-            const totals = groupTotals(group);
+            const peopleTotal = groupPeople(group);
             return (
               <section
                 key={index}
@@ -393,13 +384,13 @@ export default function TripBuilder({ data }: { data: Bootstrap }) {
                 </div>
 
                 <p style={{ color: "#555", margin: "0.5rem 0 0.75rem" }}>
-                  Σ {totals.people} os · {totals.sandwiches} kanapek
+                  Σ {peopleTotal} os
                 </p>
 
                 <strong>Miejsca</strong>
                 {group.locationIds.length === 0 ? (
                   <p style={{ color: "#999", margin: "0.25rem 0 0.75rem" }}>
-                    Brak lokacji — kliknij lokację z puli po lewej.
+                    Brak miejsc — kliknij lokację z puli po lewej.
                   </p>
                 ) : (
                   <div
