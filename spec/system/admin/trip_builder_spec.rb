@@ -13,7 +13,7 @@ RSpec.describe "Admin trip builder", type: :system do
 
   it "builds a manual trip from the pool and lands on the created trip" do
     visit "/admin/trip_builder"
-    expect(page).to have_content("Lokacje")
+    expect(page).to have_content("Miejsca")
 
     find("input[type=date]").set("2026-07-01")
 

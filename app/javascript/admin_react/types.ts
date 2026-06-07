@@ -7,6 +7,8 @@ export interface LocationOption {
   animal_count: number;
   sandwich_count: number;
   location_type: "regular" | "estimated";
+  people: { name: string }[];
+  animals: { name: string; species: string }[];
 }
 
 export interface Option {

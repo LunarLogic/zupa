@@ -24,7 +24,9 @@ class LocationRepository
         person_count: location.person_count,
         animal_count: location.animal_count,
         sandwich_count: location.sandwich_count,
-        location_type: location.location_type
+        location_type: location.location_type,
+        people: location.active_people.map { |person| {name: person.first_name} },
+        animals: location.active_animals.map { |animal| {name: animal.name, species: animal.species} }
       }
     end
   end

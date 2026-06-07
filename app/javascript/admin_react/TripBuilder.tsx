@@ -287,64 +287,68 @@ export default function TripBuilder({ data }: { data: Bootstrap }) {
       </section>
 
       <div style={{ display: "flex", gap: "1.25rem", alignItems: "flex-start", flexWrap: "wrap" }}>
-        <aside id="location-pool" style={poolPanel}>
-          <h4 style={{ marginTop: 0 }}>Lokacje</h4>
-          <input
-            type="text"
-            className="form-control"
-            placeholder="Szukaj lokacji…"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            style={{ marginBottom: "0.5rem" }}
-          />
-          <div style={poolList}>
-            {pool.map((l) => (
-              <button
-                key={l.id}
-                type="button"
-                style={poolItem}
-                onClick={() => assignLocation(l.id)}
-              >
-                <span style={{ flex: 1, textAlign: "left" }}>{l.name}</span>
-                <span style={{ color: "#666", fontSize: "0.8rem" }}>{l.person_count} os.</span>
-                <RecencyBadge rank={l.recent_rank} />
-              </button>
-            ))}
-            {pool.length === 0 && (
-              <div style={{ padding: "0.6rem", color: "#999" }}>
-                {query ? "Brak wyników" : "Wszystko przypisane"}
-              </div>
-            )}
-          </div>
+        <div style={{ width: 384, display: "flex", flexDirection: "column", gap: "1.25rem" }}>
+          <aside id="location-pool" style={poolPanel}>
+            <h4 style={{ marginTop: 0 }}>Miejsca</h4>
+            <input
+              type="text"
+              className="form-control"
+              placeholder="Szukaj miejsca…"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              style={{ marginBottom: "0.5rem" }}
+            />
+            <div style={poolList}>
+              {pool.map((l) => (
+                <button
+                  key={l.id}
+                  type="button"
+                  style={poolItem}
+                  onClick={() => assignLocation(l.id)}
+                >
+                  <span style={{ flex: 1, textAlign: "left" }}>{l.name}</span>
+                  <span style={{ color: "#666", fontSize: "0.8rem" }}>{l.person_count} os.</span>
+                  <RecencyBadge rank={l.recent_rank} />
+                </button>
+              ))}
+              {pool.length === 0 && (
+                <div style={{ padding: "0.6rem", color: "#999" }}>
+                  {query ? "Brak wyników" : "Wszystko przypisane"}
+                </div>
+              )}
+            </div>
+          </aside>
 
-          <h4 style={{ marginTop: "1.5rem" }}>Wolontariusze</h4>
-          <input
-            type="text"
-            className="form-control"
-            placeholder="Szukaj wolontariusza…"
-            value={volunteerQuery}
-            onChange={(e) => setVolunteerQuery(e.target.value)}
-            style={{ marginBottom: "0.5rem" }}
-          />
-          <div style={poolList}>
-            {volunteerPool.map((v) => (
-              <button
-                key={v.id}
-                type="button"
-                style={poolItem}
-                onClick={() => addMember(activeGroup, v.id)}
-              >
-                <span aria-hidden="true">{personIcon(v.gender)}</span>
-                <span style={{ flex: 1, textAlign: "left" }}>{v.name}</span>
-              </button>
-            ))}
-            {volunteerPool.length === 0 && (
-              <div style={{ padding: "0.6rem", color: "#999" }}>
-                {volunteerQuery ? "Brak wyników" : "Wszyscy przypisani"}
-              </div>
-            )}
-          </div>
-        </aside>
+          <aside style={poolPanel}>
+            <h4 style={{ marginTop: 0 }}>Wolontariusze</h4>
+            <input
+              type="text"
+              className="form-control"
+              placeholder="Szukaj wolontariusza…"
+              value={volunteerQuery}
+              onChange={(e) => setVolunteerQuery(e.target.value)}
+              style={{ marginBottom: "0.5rem" }}
+            />
+            <div style={poolList}>
+              {volunteerPool.map((v) => (
+                <button
+                  key={v.id}
+                  type="button"
+                  style={poolItem}
+                  onClick={() => addMember(activeGroup, v.id)}
+                >
+                  <span aria-hidden="true">{personIcon(v.gender)}</span>
+                  <span style={{ flex: 1, textAlign: "left" }}>{v.name}</span>
+                </button>
+              ))}
+              {volunteerPool.length === 0 && (
+                <div style={{ padding: "0.6rem", color: "#999" }}>
+                  {volunteerQuery ? "Brak wyników" : "Wszyscy przypisani"}
+                </div>
+              )}
+            </div>
+          </aside>
+        </div>
 
         <div style={{ flex: 1, minWidth: 320 }}>
           {groups.map((group, index) => {
@@ -432,9 +436,26 @@ export default function TripBuilder({ data }: { data: Bootstrap }) {
                           <div style={{ color: "#888", fontSize: "0.75rem" }}>
                             {locationTypeLabel(loc?.location_type)}
                           </div>
-                          <div style={{ color: "#555", fontSize: "0.8rem", marginTop: "0.25rem" }}>
-                            👤 {loc?.person_count ?? 0} os · 🐾 {loc?.animal_count ?? 0} zw.
-                          </div>
+                          {loc && (loc.people.length > 0 || loc.person_count > 0) && (
+                            <div
+                              style={{ color: "#555", fontSize: "0.8rem", marginTop: "0.25rem" }}
+                            >
+                              👤{" "}
+                              {loc.people.length > 0
+                                ? loc.people.map((p) => p.name).join(", ")
+                                : loc.person_count}
+                            </div>
+                          )}
+                          {loc && loc.animals.length > 0 && (
+                            <div
+                              style={{ color: "#555", fontSize: "0.8rem", marginTop: "0.15rem" }}
+                            >
+                              🐾{" "}
+                              {loc.animals
+                                .map((a) => `${a.name} (${speciesLabel(a.species)})`)
+                                .join(", ")}
+                            </div>
+                          )}
                         </div>
                       );
                     })}
@@ -552,6 +573,12 @@ function locationTypeLabel(type?: string): string {
   return "";
 }
 
+function speciesLabel(species: string): string {
+  return (
+    { cat: "kot", dog: "pies", rat: "szczur", bird: "ptak", other: "inny" }[species] ?? species
+  );
+}
+
 function personIcon(gender?: string | null): string {
   if (gender === "female") return "👩";
   if (gender === "male") return "👨";
@@ -578,10 +605,8 @@ const field: React.CSSProperties = {
 
 const poolPanel: React.CSSProperties = {
   ...card,
-  width: 384,
-  position: "sticky",
-  top: "1rem",
-  alignSelf: "flex-start",
+  width: "100%",
+  marginBottom: 0,
 };
 
 const poolList: React.CSSProperties = {

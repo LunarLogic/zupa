@@ -33,8 +33,8 @@ RSpec.describe LocationRepository do
     it "annotates person and sandwich counts for regular and estimated locations" do
       AppSetting.instance.update!(sandwiches_per_person: 2)
       regular = create(:location, name: "Regularna", status: "active")
-      create(:person, location: regular, active: true, sandwiches: 5)
-      create(:animal, location: regular, active: true)
+      create(:person, location: regular, active: true, sandwiches: 5, first_name: "Ola")
+      create(:animal, location: regular, active: true, name: "Mila", species: "cat")
       create(:location, name: "Grupowa", status: "active",
         location_type: "estimated", estimated_person_count: 10)
 
@@ -44,6 +44,8 @@ RSpec.describe LocationRepository do
       expect(rows["Regularna"][:sandwich_count]).to eq(5)
       expect(rows["Regularna"][:animal_count]).to eq(1)
       expect(rows["Regularna"][:location_type]).to eq("regular")
+      expect(rows["Regularna"][:people].map { |p| p[:name] }).to eq(["Ola"])
+      expect(rows["Regularna"][:animals]).to eq([{name: "Mila", species: "cat"}])
       expect(rows["Grupowa"][:person_count]).to eq(10)
       expect(rows["Grupowa"][:sandwich_count]).to eq(20)
       expect(rows["Grupowa"][:location_type]).to eq("estimated")
