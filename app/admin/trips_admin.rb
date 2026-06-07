@@ -32,6 +32,12 @@ Trestle.resource(:trips) do
     instance.past_date? ? admin.actions.delete(:destroy) : admin.actions.push(:destroy)
 
     tab :trip do
+      if trip.persisted? && trip.manual? && !trip.past_date?
+        concat content_tag(:div, class: "form-group") {
+          link_to("Edytuj w kreatorze", "/admin/trip_builder?trip_id=#{trip.id}", class: "btn btn-primary")
+        }
+      end
+
       check_box :active
       date_field :date, disabled: trip.past_date?
       url_field :source_spreadsheet_url, disabled: trip.past_date?

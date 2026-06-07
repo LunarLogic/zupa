@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 
-import type { Bootstrap, LocationOption, Option } from "./types";
+import type { Bootstrap, ExistingTrip, LocationOption, Option } from "./types";
 
 const PALETTE = [
   "#e74c3c",
@@ -96,9 +96,26 @@ function overdueFirst(a: LocationOption, b: LocationOption): number {
   return a.name.localeCompare(b.name);
 }
 
+function editDraft(e: ExistingTrip, currentUserId: number): DraftState {
+  return {
+    date: e.date ?? nextThursdayISO(),
+    organiserId: e.organiserId ?? currentUserId,
+    step: 3,
+    preselectedLocationIds: e.preselectedLocationIds,
+    roster: e.roster,
+    rosterDriverIds: e.rosterDriverIds,
+    groups: e.groups.length > 0 ? e.groups : [{ locationIds: [], volunteerIds: [] }],
+  };
+}
+
 export default function TripBuilder({ data }: { data: Bootstrap }) {
+  const editing = data.existingTrip != null;
+
   const initial = useMemo(
-    () => sanitizeDraft(window.localStorage.getItem(DRAFT_KEY), data) ?? defaultDraft(data),
+    () =>
+      data.existingTrip
+        ? editDraft(data.existingTrip, data.currentUserId)
+        : sanitizeDraft(window.localStorage.getItem(DRAFT_KEY), data) ?? defaultDraft(data),
     [data]
   );
 
@@ -127,6 +144,7 @@ export default function TripBuilder({ data }: { data: Bootstrap }) {
   }, [data.volunteers]);
 
   useEffect(() => {
+    if (editing) return; // edit mode always reflects the server trip; no draft
     const draft: DraftState = {
       date,
       organiserId,
@@ -137,11 +155,13 @@ export default function TripBuilder({ data }: { data: Bootstrap }) {
       groups,
     };
     window.localStorage.setItem(DRAFT_KEY, JSON.stringify(draft));
-  }, [date, organiserId, step, preselectedLocationIds, roster, rosterDriverIds, groups]);
+  }, [editing, date, organiserId, step, preselectedLocationIds, roster, rosterDriverIds, groups]);
 
   const reset = () => {
-    window.localStorage.removeItem(DRAFT_KEY);
-    const d = defaultDraft(data);
+    const d = data.existingTrip
+      ? editDraft(data.existingTrip, data.currentUserId)
+      : defaultDraft(data);
+    if (!editing) window.localStorage.removeItem(DRAFT_KEY);
     setStep(d.step);
     setDate(d.date);
     setOrganiserId(d.organiserId);
@@ -174,8 +194,8 @@ export default function TripBuilder({ data }: { data: Bootstrap }) {
     setSubmitting(true);
     setErrors([]);
     try {
-      const response = await fetch(data.createUrl, {
-        method: "POST",
+      const response = await fetch(editing ? (data.updateUrl as string) : data.createUrl, {
+        method: editing ? "PATCH" : "POST",
         headers: {
           "Content-Type": "application/json",
           "X-CSRF-Token": data.csrfToken,
@@ -196,7 +216,7 @@ export default function TripBuilder({ data }: { data: Bootstrap }) {
 
       const payload = await response.json();
       if (response.ok && payload.redirect_to) {
-        window.localStorage.removeItem(DRAFT_KEY);
+        if (!editing) window.localStorage.removeItem(DRAFT_KEY);
         window.location.href = payload.redirect_to;
       } else {
         setErrors(payload.errors || ["Nie udało się utworzyć wyjazdu."]);
@@ -324,7 +344,7 @@ export default function TripBuilder({ data }: { data: Bootstrap }) {
             disabled={!canSubmit || submitting}
             onClick={submit}
           >
-            {submitting ? "Tworzę…" : "Utwórz wyjazd"}
+            {submitting ? "Zapisuję…" : editing ? "Zapisz zmiany" : "Utwórz wyjazd"}
           </button>
         )}
       </div>

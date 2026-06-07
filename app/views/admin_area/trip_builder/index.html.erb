@@ -1,39 +1,69 @@
-<% content_for(:title, "Nowy wyjazd") %>
+<% content_for(:title, @edit_trip ? "Edytuj wyjazd" : "Nowy wyjazd") %>
 
 <%
   location_repository = LocationRepository.new
-  locations = location_repository.active_with_recency.map do |row|
-    loc = row[:location]
+
+  location_row = ->(loc, recent_rank: nil, last_scheduled_at: nil) {
     {
       id: loc.id,
       name: loc.name,
-      recent_rank: row[:recent_rank],
-      last_scheduled_at: row[:last_scheduled_at]&.iso8601,
-      person_count: row[:person_count],
-      animal_count: row[:animal_count],
-      sandwich_count: row[:sandwich_count],
-      location_type: row[:location_type],
-      region: row[:region],
-      people: row[:people],
-      animals: row[:animals]
+      recent_rank: recent_rank,
+      last_scheduled_at: last_scheduled_at,
+      person_count: loc.person_count,
+      animal_count: loc.animal_count,
+      sandwich_count: loc.sandwich_count,
+      location_type: loc.location_type,
+      region: loc.region_name,
+      people: loc.active_people.map { |p| {name: p.first_name} },
+      animals: loc.active_animals.map { |a| {name: a.name, species: a.species} }
     }
+  }
+
+  locations = location_repository.active_with_recency.map do |row|
+    location_row.call(row[:location], recent_rank: row[:recent_rank], last_scheduled_at: row[:last_scheduled_at]&.iso8601)
   end
 
   recent_volunteer_ids = Volunteer.ids_on_recent_trips.to_set
-  volunteers = Volunteer.active.order(:last_name, :first_name).map do |volunteer|
-    {
-      id: volunteer.id,
-      name: volunteer.full_name,
-      gender: volunteer.gender,
-      on_recent_trips: recent_volunteer_ids.include?(volunteer.id)
-    }
-  end
+  volunteer_row = ->(v) {
+    {id: v.id, name: v.full_name, gender: v.gender, on_recent_trips: recent_volunteer_ids.include?(v.id)}
+  }
+  volunteers = Volunteer.active.order(:last_name, :first_name).map { |v| volunteer_row.call(v) }
 
-  admin_users = AdminUser.order(:email).map do |user|
-    {id: user.id, name: user.full_name}
-  end
+  admin_users = AdminUser.order(:email).map { |user| {id: user.id, name: user.full_name} }
 
   rotation_trip = Trip.order(date: :desc).second
+
+  existing_trip = nil
+  if @edit_trip
+    groups_data = @edit_trip.groups.map do |group|
+      {
+        locationIds: group.trip_destinations.map(&:location_id),
+        volunteerIds: group.volunteers.map(&:id) + group.drivers.map(&:id)
+      }
+    end
+    preselected = groups_data.flat_map { |g| g[:locationIds] }.uniq
+    roster = groups_data.flat_map { |g| g[:volunteerIds] }.uniq
+    driver_ids = @edit_trip.groups.flat_map { |group| group.drivers.map(&:id) }.uniq
+
+    # Include trip-referenced locations/volunteers that are no longer active so
+    # their cards/chips still render in the wizard.
+    extra_location_ids = preselected - locations.map { |l| l[:id] }
+    Location.where(id: extra_location_ids).includes(:region, :active_people, :active_animals).each do |loc|
+      locations << location_row.call(loc)
+    end
+    extra_volunteer_ids = roster - volunteers.map { |v| v[:id] }
+    Volunteer.where(id: extra_volunteer_ids).each { |v| volunteers << volunteer_row.call(v) }
+
+    existing_trip = {
+      id: @edit_trip.id,
+      date: @edit_trip.date&.iso8601,
+      organiserId: @edit_trip.admin_user_id,
+      preselectedLocationIds: preselected,
+      roster: roster,
+      rosterDriverIds: driver_ids,
+      groups: groups_data
+    }
+  end
 
   bootstrap = {
     locations: locations,
@@ -43,7 +73,9 @@
     csrfToken: form_authenticity_token,
     createUrl: "/admin_area/trip_builder",
     rotationLocationIds: location_repository.second_to_last_trip_location_ids,
-    rotationTripDate: rotation_trip&.date&.iso8601
+    rotationTripDate: rotation_trip&.date&.iso8601,
+    existingTrip: existing_trip,
+    updateUrl: (@edit_trip ? "/admin_area/trip_builder/#{@edit_trip.id}" : nil)
   }
 %>
 

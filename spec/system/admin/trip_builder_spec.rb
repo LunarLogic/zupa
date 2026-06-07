@@ -69,4 +69,32 @@ RSpec.describe "Admin trip builder", type: :system do
     expect(page).to have_content("Wybrane (1)")
     within("#location-pool") { expect(page).not_to have_css("[aria-label='Miejsce Alfa']") }
   end
+
+  it "opens an existing manual trip at Step 3 and saves changes" do
+    alfa = Location.find_by(name: "Miejsce Alfa")
+    trip = Trips::CreateManualTrip.new.call(
+      date: Date.new(2026, 7, 1), organiser: admin_user,
+      groups: [{location_ids: [alfa.id], driver_ids: [], volunteer_ids: []}]
+    ).value!
+
+    visit "/admin/trip_builder?trip_id=#{trip.id}"
+
+    # lands on Step 3 with Alfa already in the group
+    expect(page).to have_button("Zapisz zmiany")
+    expect(page).to have_content("Miejsce Alfa")
+
+    # back to Step 1 to preselect Beta, then forward and assign it
+    click_button "Wstecz", exact: false
+    click_button "Wstecz", exact: false
+    within("#location-pool") { find("[aria-label='Miejsce Beta']").click }
+    click_button "Dalej", exact: false
+    click_button "Dalej", exact: false
+    within("#location-pool") { click_button "Miejsce Beta" }
+    click_button "Zapisz zmiany"
+
+    expect(page).to have_current_path(%r{/admin/trips/#{trip.id}}, wait: 5)
+    trip.reload
+    expect(trip.groups.flat_map { |g| g.trip_destinations.map { |d| d.location.name } })
+      .to contain_exactly("Miejsce Alfa", "Miejsce Beta")
+  end
 end

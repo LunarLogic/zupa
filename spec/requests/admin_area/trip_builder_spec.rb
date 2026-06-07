@@ -52,4 +52,44 @@ RSpec.describe "AdminArea::TripBuilder", type: :request do
       expect(JSON.parse(response.body)["errors"]).to be_present
     end
   end
+
+  describe "PATCH /admin_area/trip_builder/:id" do
+    let(:other_location) { create(:location, name: "Miejsce B", status: "active") }
+
+    def manual_trip
+      Trips::CreateManualTrip.new.call(
+        date: Date.new(2026, 7, 1), organiser: admin_user,
+        groups: [{location_ids: [location.id], driver_ids: [], volunteer_ids: []}]
+      ).value!
+    end
+
+    it "replaces the trip and returns a redirect target" do
+      trip = manual_trip
+
+      patch "/admin_area/trip_builder/#{trip.id}",
+        params: {
+          date: "2026-07-08",
+          admin_user_id: admin_user.id,
+          groups: [{location_ids: [other_location.id], driver_ids: [driver.id], volunteer_ids: [helper.id]}]
+        },
+        as: :json
+
+      expect(response).to have_http_status(:ok)
+      expect(JSON.parse(response.body)["redirect_to"]).to eq("/admin/trips/#{trip.id}")
+      trip.reload
+      expect(trip.date).to eq(Date.new(2026, 7, 8))
+      expect(trip.groups.first.trip_destinations.map { |d| d.location }).to eq([other_location])
+    end
+
+    it "returns 422 for a past trip" do
+      trip = manual_trip
+      trip.update_column(:date, Date.yesterday)
+
+      patch "/admin_area/trip_builder/#{trip.id}",
+        params: {date: "2026-07-08", admin_user_id: admin_user.id, groups: [{location_ids: [other_location.id]}]},
+        as: :json
+
+      expect(response).to have_http_status(:unprocessable_entity)
+    end
+  end
 end

@@ -1,0 +1,63 @@
+require "rails_helper"
+
+RSpec.describe Trips::UpdateManualTrip do
+  let(:admin) { create(:admin_user) }
+  let(:other_admin) { create(:admin_user) }
+  let(:loc_a) { create(:location, name: "A") }
+  let(:loc_b) { create(:location, name: "B") }
+  let!(:person_b) { create(:person, location: loc_b, active: true, sandwiches: 3) }
+  let(:driver) { create(:volunteer) }
+  let(:helper) { create(:volunteer) }
+
+  def create_trip
+    Trips::CreateManualTrip.new.call(
+      date: Date.new(2026, 7, 1),
+      organiser: admin,
+      groups: [{location_ids: [loc_a.id], driver_ids: [], volunteer_ids: []}]
+    ).value!
+  end
+
+  it "replaces groups, updates basics, and re-freezes snapshots" do
+    trip = create_trip
+
+    result = described_class.new.call(
+      trip: trip,
+      date: Date.new(2026, 7, 8),
+      organiser: other_admin,
+      groups: [{location_ids: [loc_b.id], driver_ids: [driver.id], volunteer_ids: [helper.id]}]
+    )
+
+    expect(result).to be_success
+    trip.reload
+    expect(trip.date).to eq(Date.new(2026, 7, 8))
+    expect(trip.organiser).to eq(other_admin)
+    expect(trip.groups.count).to eq(1)
+
+    group = trip.groups.first
+    expect(group.trip_destinations.map { |d| d.location.name }).to eq(["B"])
+    expect(group.trip_destinations.first.trip_destination_people.count).to eq(1) # snapshot refreshed
+    expect(group.drivers).to contain_exactly(driver)
+    expect(group.volunteers).to contain_exactly(helper)
+  end
+
+  it "rejects a past trip" do
+    trip = create_trip
+    trip.update_column(:date, Date.yesterday)
+
+    result = described_class.new.call(
+      trip: trip, date: Date.tomorrow, organiser: admin,
+      groups: [{location_ids: [loc_b.id]}]
+    )
+    expect(result).to be_failure
+  end
+
+  it "rejects a sheet trip" do
+    sheet_trip = create(:trip, organiser: admin, date: Date.new(2026, 7, 1))
+
+    result = described_class.new.call(
+      trip: sheet_trip, date: Date.new(2026, 7, 8), organiser: admin,
+      groups: [{location_ids: [loc_b.id]}]
+    )
+    expect(result).to be_failure
+  end
+end

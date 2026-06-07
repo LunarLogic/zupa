@@ -19,6 +19,16 @@ export interface Option {
   on_recent_trips?: boolean;
 }
 
+export interface ExistingTrip {
+  id: number;
+  date: string | null;
+  organiserId: number;
+  preselectedLocationIds: number[];
+  roster: number[];
+  rosterDriverIds: number[];
+  groups: { locationIds: number[]; volunteerIds: number[] }[];
+}
+
 export interface Bootstrap {
   locations: LocationOption[];
   volunteers: Option[];
@@ -28,6 +38,8 @@ export interface Bootstrap {
   createUrl: string;
   rotationLocationIds: number[];
   rotationTripDate: string | null;
+  existingTrip: ExistingTrip | null;
+  updateUrl: string | null;
 }
 
 export interface GroupState {
