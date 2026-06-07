@@ -288,10 +288,7 @@ export default function TripBuilder({ data }: { data: Bootstrap }) {
 
       <div style={{ display: "flex", gap: "1.25rem", alignItems: "flex-start", flexWrap: "wrap" }}>
         <aside id="location-pool" style={poolPanel}>
-          <h4 style={{ marginTop: 0 }}>Nieprzypisane lokacje ({pool.length})</h4>
-          <p style={{ color: "#888", fontSize: "0.85rem", margin: "0 0 0.5rem" }}>
-            Klikasz → Grupa {activeGroup + 1}
-          </p>
+          <h4 style={{ marginTop: 0 }}>Lokacje</h4>
           <input
             type="text"
             className="form-control"
@@ -320,10 +317,7 @@ export default function TripBuilder({ data }: { data: Bootstrap }) {
             )}
           </div>
 
-          <h4 style={{ marginTop: "1.5rem" }}>Wolontariusze ({volunteerPool.length})</h4>
-          <p style={{ color: "#888", fontSize: "0.85rem", margin: "0 0 0.5rem" }}>
-            Klikasz → Grupa {activeGroup + 1}
-          </p>
+          <h4 style={{ marginTop: "1.5rem" }}>Wolontariusze</h4>
           <input
             type="text"
             className="form-control"
@@ -360,10 +354,12 @@ export default function TripBuilder({ data }: { data: Bootstrap }) {
             return (
               <section
                 key={index}
+                onClick={() => setActiveGroup(index)}
                 style={{
                   ...card,
                   maxWidth: 760,
-                  borderLeft: `4px solid ${color}`,
+                  cursor: "pointer",
+                  borderLeft: `4px solid ${isActive ? color : "#d5d5d5"}`,
                   outline: isActive ? `2px solid ${color}` : "none",
                 }}
               >
@@ -372,11 +368,9 @@ export default function TripBuilder({ data }: { data: Bootstrap }) {
                     display: "flex",
                     justifyContent: "space-between",
                     alignItems: "center",
-                    cursor: "pointer",
                   }}
-                  onClick={() => setActiveGroup(index)}
                 >
-                  <h3 style={{ ...heading, color, marginBottom: 0 }}>
+                  <h3 style={{ ...heading, color: isActive ? color : "#aaa", marginBottom: 0 }}>
                     Grupa {index + 1}
                     {isActive && <span style={activeTag}>aktywna</span>}
                   </h3>
