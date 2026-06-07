@@ -612,7 +612,7 @@ function Step3Groups({
   const [activeGroup, setActiveGroup] = useState(0);
   const [locationQuery, setLocationQuery] = useState("");
   const [volunteerQuery, setVolunteerQuery] = useState("");
-  const [viewMode, setViewMode] = useState<"list" | "map">("list");
+  const [showMap, setShowMap] = useState(false);
   const mapAvailable = mapsApiKey !== "";
 
   const assignedLocationIds = useMemo(
@@ -674,263 +674,241 @@ function Step3Groups({
   );
 
   return (
-    <div>
-      {mapAvailable && (
-        <div
-          style={{
-            display: "inline-flex",
-            marginBottom: "1rem",
-            borderRadius: 6,
-            overflow: "hidden",
-            border: "1px solid #ccc",
-          }}
-        >
-          {(["list", "map"] as const).map((mode) => (
-            <button
-              key={mode}
-              type="button"
-              onClick={() => setViewMode(mode)}
-              style={{
-                border: "none",
-                padding: "0.4rem 1rem",
-                cursor: "pointer",
-                background: viewMode === mode ? "#4d6bb2" : "#fff",
-                color: viewMode === mode ? "#fff" : "#333",
-              }}
-            >
-              {mode === "list" ? "Lista" : "Mapa"}
-            </button>
-          ))}
-        </div>
-      )}
-
-      {viewMode === "map" && mapAvailable && (
-        <LocationMap
-          apiKey={mapsApiKey}
-          locations={mapLocations}
-          activeColor={PALETTE[targetGroup % PALETTE.length]}
-          colorFor={colorForLocation}
-          onToggle={toggleLocationOnMap}
-        />
-      )}
-
-      <div style={{ display: "flex", gap: "1.25rem", alignItems: "flex-start", flexWrap: "wrap" }}>
-        <div style={{ width: 384, display: "flex", flexDirection: "column", gap: "1.25rem" }}>
-          {viewMode === "list" && (
-            <aside id="location-pool" style={poolPanel}>
-              <h4 style={{ marginTop: 0 }}>Miejsca</h4>
-              <input
-                type="text"
-                className="form-control"
-                placeholder="Szukaj miejsca…"
-                value={locationQuery}
-                onChange={(e) => setLocationQuery(e.target.value)}
-                style={{ marginBottom: "0.5rem" }}
-              />
-              <div style={poolList}>
-                {locationPool.map((l) => (
-                  <button
-                    key={l.id}
-                    type="button"
-                    style={poolItem}
-                    onClick={() =>
-                      updateGroup(targetGroup, {
-                        locationIds: [...groups[targetGroup].locationIds, l.id],
-                      })
-                    }
-                  >
-                    <span style={{ flex: 1, textAlign: "left" }}>{l.name}</span>
-                    <span style={{ color: "#666", fontSize: "0.8rem" }}>
-                      {l.person_count} {peopleWord(l.person_count)}
-                    </span>
-                    <RecencyBadge rank={l.recent_rank} />
-                  </button>
-                ))}
-                {locationPool.length === 0 && (
-                  <div style={{ padding: "0.6rem", color: "#999" }}>Wszystko przypisane</div>
-                )}
-              </div>
-            </aside>
-          )}
-
-          <aside style={poolPanel}>
-            <h4 style={{ marginTop: 0 }}>Wolontariusze</h4>
-            <input
-              type="text"
-              className="form-control"
-              placeholder="Szukaj wolontariusza…"
-              value={volunteerQuery}
-              onChange={(e) => setVolunteerQuery(e.target.value)}
-              style={{ marginBottom: "0.5rem" }}
-            />
-            <div style={poolList}>
-              {volunteerPool.map((id) => {
-                const v = volunteersById.get(id);
-                return (
-                  <button
-                    key={id}
-                    type="button"
-                    style={poolItem}
-                    onClick={() =>
-                      updateGroup(targetGroup, {
-                        volunteerIds: [...groups[targetGroup].volunteerIds, id],
-                      })
-                    }
-                  >
-                    <span aria-hidden="true">{personIcon(v?.gender)}</span>
-                    <span style={{ flex: 1, textAlign: "left" }}>{v?.name ?? id}</span>
-                    {rosterDriverIds.includes(id) && <span aria-hidden="true">🚗</span>}
-                  </button>
-                );
-              })}
-              {volunteerPool.length === 0 && (
-                <div style={{ padding: "0.6rem", color: "#999" }}>Wszyscy przypisani</div>
-              )}
-            </div>
-          </aside>
-        </div>
-
-        <div style={{ flex: 1, minWidth: 320 }}>
-          {groups.map((group, index) => {
-            const color = PALETTE[index % PALETTE.length];
-            const isActive = index === activeGroup;
-            const peopleTotal = group.locationIds.reduce(
-              (sum, id) => sum + (locationsById.get(id)?.person_count ?? 0),
-              0
-            );
-            return (
-              <section
-                key={index}
-                onClick={() => setActiveGroup(index)}
-                style={{
-                  ...card,
-                  maxWidth: 760,
-                  cursor: "pointer",
-                  borderLeft: `4px solid ${isActive ? color : "#d5d5d5"}`,
-                  outline: isActive ? `2px solid ${color}` : "none",
-                }}
+    <div style={{ display: "flex", gap: "1.25rem", alignItems: "flex-start", flexWrap: "wrap" }}>
+      <div style={{ width: 384, display: "flex", flexDirection: "column", gap: "1.25rem" }}>
+        <aside id="location-pool" style={poolPanel}>
+          <h4 style={{ marginTop: 0 }}>Miejsca</h4>
+          <input
+            type="text"
+            className="form-control"
+            placeholder="Szukaj miejsca…"
+            value={locationQuery}
+            onChange={(e) => setLocationQuery(e.target.value)}
+            style={{ marginBottom: "0.5rem" }}
+          />
+          <div style={poolList}>
+            {locationPool.map((l) => (
+              <button
+                key={l.id}
+                type="button"
+                style={poolItem}
+                onClick={() =>
+                  updateGroup(targetGroup, {
+                    locationIds: [...groups[targetGroup].locationIds, l.id],
+                  })
+                }
               >
-                <div
-                  style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}
-                >
-                  <h3 style={{ ...heading, color: isActive ? color : "#aaa", marginBottom: 0 }}>
-                    Grupa {index + 1}
-                    <span
-                      style={{
-                        marginLeft: "0.6rem",
-                        fontSize: "0.85rem",
-                        fontWeight: "normal",
-                        color: "#666",
-                      }}
-                    >
-                      👤 {peopleTotal} {peopleWord(peopleTotal)}
-                    </span>
-                  </h3>
-                  {groups.length > 1 && (
-                    <button
-                      type="button"
-                      title="Usuń grupę"
-                      aria-label={`Usuń grupę ${index + 1}`}
-                      style={removeChip}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        if (!window.confirm("Usunąć grupę?")) return;
-                        setGroups((prev) => prev.filter((_, i) => i !== index));
-                        setActiveGroup((prev) => Math.max(0, prev >= index ? prev - 1 : prev));
-                      }}
-                    >
-                      ✕
-                    </button>
-                  )}
-                </div>
+                <span style={{ flex: 1, textAlign: "left" }}>{l.name}</span>
+                <span style={{ color: "#666", fontSize: "0.8rem" }}>
+                  {l.person_count} {peopleWord(l.person_count)}
+                </span>
+                <RecencyBadge rank={l.recent_rank} />
+              </button>
+            ))}
+            {locationPool.length === 0 && (
+              <div style={{ padding: "0.6rem", color: "#999" }}>Wszystko przypisane</div>
+            )}
+          </div>
+        </aside>
 
-                <strong style={{ display: "block", marginTop: "1.15rem" }}>Miejsca</strong>
-                {group.locationIds.length === 0 ? (
-                  <p style={{ color: "#999", margin: "0.25rem 0 0.75rem" }}>
-                    Brak miejsc — kliknij miejsce z puli po lewej.
-                  </p>
-                ) : (
-                  <div
-                    style={{
-                      display: "flex",
-                      flexWrap: "wrap",
-                      gap: "0.6rem",
-                      margin: "0.5rem 0 0.75rem",
-                    }}
-                  >
-                    {group.locationIds.map((id) => (
-                      <LocationCard
-                        key={id}
-                        loc={locationsById.get(id)}
-                        note={group.notes[id] ?? ""}
-                        onNoteChange={(value) =>
-                          updateGroup(index, { notes: { ...group.notes, [id]: value } })
-                        }
-                        onRemove={() =>
-                          updateGroup(index, {
-                            locationIds: group.locationIds.filter((x) => x !== id),
-                          })
-                        }
-                      />
-                    ))}
-                  </div>
-                )}
-
-                <strong>Wolontariusze</strong>
-                {group.volunteerIds.length === 0 ? (
-                  <p style={{ color: "#999", margin: "0.25rem 0 0" }}>
-                    Brak wolontariuszy — wybierz z puli po lewej.
-                  </p>
-                ) : (
-                  <div
-                    style={{
-                      display: "flex",
-                      flexWrap: "wrap",
-                      gap: "0.4rem",
-                      margin: "0.5rem 0 0",
-                    }}
-                  >
-                    {group.volunteerIds.map((id) => (
-                      <MemberChip
-                        key={id}
-                        volunteer={volunteersById.get(id)}
-                        isDriver={rosterDriverIds.includes(id)}
-                        onRemove={() =>
-                          updateGroup(index, {
-                            volunteerIds: group.volunteerIds.filter((x) => x !== id),
-                          })
-                        }
-                      />
-                    ))}
-                  </div>
-                )}
-
-                <strong style={{ display: "block", marginTop: "1.15rem" }}>
-                  Informacje dla grupy
-                </strong>
-                <NoteField
-                  value={group.groupNote}
-                  onChange={(value) => updateGroup(index, { groupNote: value })}
-                  placeholder="Dodatkowe informacje dla całej grupy…"
-                />
-              </section>
-            );
-          })}
-
+        {mapAvailable && (
           <button
             type="button"
-            className="btn btn-secondary"
-            onClick={() => {
-              setGroups((prev) => [
-                ...prev,
-                { locationIds: [], volunteerIds: [], notes: {}, groupNote: "" },
-              ]);
-              setActiveGroup(groups.length);
-            }}
+            className="btn btn-default btn-sm"
+            onClick={() => setShowMap((s) => !s)}
+            style={{ alignSelf: "flex-start" }}
           >
-            + Dodaj grupę
+            {showMap ? "Ukryj mapę" : "Pokaż mapę"}
           </button>
-        </div>
+        )}
+        {mapAvailable && showMap && (
+          <LocationMap
+            apiKey={mapsApiKey}
+            locations={mapLocations}
+            activeColor={PALETTE[targetGroup % PALETTE.length]}
+            colorFor={colorForLocation}
+            onToggle={toggleLocationOnMap}
+            height={320}
+          />
+        )}
+
+        <aside style={poolPanel}>
+          <h4 style={{ marginTop: 0 }}>Wolontariusze</h4>
+          <input
+            type="text"
+            className="form-control"
+            placeholder="Szukaj wolontariusza…"
+            value={volunteerQuery}
+            onChange={(e) => setVolunteerQuery(e.target.value)}
+            style={{ marginBottom: "0.5rem" }}
+          />
+          <div style={poolList}>
+            {volunteerPool.map((id) => {
+              const v = volunteersById.get(id);
+              return (
+                <button
+                  key={id}
+                  type="button"
+                  style={poolItem}
+                  onClick={() =>
+                    updateGroup(targetGroup, {
+                      volunteerIds: [...groups[targetGroup].volunteerIds, id],
+                    })
+                  }
+                >
+                  <span aria-hidden="true">{personIcon(v?.gender)}</span>
+                  <span style={{ flex: 1, textAlign: "left" }}>{v?.name ?? id}</span>
+                  {rosterDriverIds.includes(id) && <span aria-hidden="true">🚗</span>}
+                </button>
+              );
+            })}
+            {volunteerPool.length === 0 && (
+              <div style={{ padding: "0.6rem", color: "#999" }}>Wszyscy przypisani</div>
+            )}
+          </div>
+        </aside>
+      </div>
+
+      <div style={{ flex: 1, minWidth: 320 }}>
+        {groups.map((group, index) => {
+          const color = PALETTE[index % PALETTE.length];
+          const isActive = index === activeGroup;
+          const peopleTotal = group.locationIds.reduce(
+            (sum, id) => sum + (locationsById.get(id)?.person_count ?? 0),
+            0
+          );
+          return (
+            <section
+              key={index}
+              onClick={() => setActiveGroup(index)}
+              style={{
+                ...card,
+                maxWidth: 760,
+                cursor: "pointer",
+                borderLeft: `4px solid ${isActive ? color : "#d5d5d5"}`,
+                outline: isActive ? `2px solid ${color}` : "none",
+              }}
+            >
+              <div
+                style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}
+              >
+                <h3 style={{ ...heading, color: isActive ? color : "#aaa", marginBottom: 0 }}>
+                  Grupa {index + 1}
+                  <span
+                    style={{
+                      marginLeft: "0.6rem",
+                      fontSize: "0.85rem",
+                      fontWeight: "normal",
+                      color: "#666",
+                    }}
+                  >
+                    👤 {peopleTotal} {peopleWord(peopleTotal)}
+                  </span>
+                </h3>
+                {groups.length > 1 && (
+                  <button
+                    type="button"
+                    title="Usuń grupę"
+                    aria-label={`Usuń grupę ${index + 1}`}
+                    style={removeChip}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (!window.confirm("Usunąć grupę?")) return;
+                      setGroups((prev) => prev.filter((_, i) => i !== index));
+                      setActiveGroup((prev) => Math.max(0, prev >= index ? prev - 1 : prev));
+                    }}
+                  >
+                    ✕
+                  </button>
+                )}
+              </div>
+
+              <strong style={{ display: "block", marginTop: "1.15rem" }}>Miejsca</strong>
+              {group.locationIds.length === 0 ? (
+                <p style={{ color: "#999", margin: "0.25rem 0 0.75rem" }}>
+                  Brak miejsc — kliknij miejsce z puli po lewej.
+                </p>
+              ) : (
+                <div
+                  style={{
+                    display: "flex",
+                    flexWrap: "wrap",
+                    gap: "0.6rem",
+                    margin: "0.5rem 0 0.75rem",
+                  }}
+                >
+                  {group.locationIds.map((id) => (
+                    <LocationCard
+                      key={id}
+                      loc={locationsById.get(id)}
+                      note={group.notes[id] ?? ""}
+                      onNoteChange={(value) =>
+                        updateGroup(index, { notes: { ...group.notes, [id]: value } })
+                      }
+                      onRemove={() =>
+                        updateGroup(index, {
+                          locationIds: group.locationIds.filter((x) => x !== id),
+                        })
+                      }
+                    />
+                  ))}
+                </div>
+              )}
+
+              <strong>Wolontariusze</strong>
+              {group.volunteerIds.length === 0 ? (
+                <p style={{ color: "#999", margin: "0.25rem 0 0" }}>
+                  Brak wolontariuszy — wybierz z puli po lewej.
+                </p>
+              ) : (
+                <div
+                  style={{
+                    display: "flex",
+                    flexWrap: "wrap",
+                    gap: "0.4rem",
+                    margin: "0.5rem 0 0",
+                  }}
+                >
+                  {group.volunteerIds.map((id) => (
+                    <MemberChip
+                      key={id}
+                      volunteer={volunteersById.get(id)}
+                      isDriver={rosterDriverIds.includes(id)}
+                      onRemove={() =>
+                        updateGroup(index, {
+                          volunteerIds: group.volunteerIds.filter((x) => x !== id),
+                        })
+                      }
+                    />
+                  ))}
+                </div>
+              )}
+
+              <strong style={{ display: "block", marginTop: "1.15rem" }}>
+                Informacje dla grupy
+              </strong>
+              <NoteField
+                value={group.groupNote}
+                onChange={(value) => updateGroup(index, { groupNote: value })}
+                placeholder="Dodatkowe informacje dla całej grupy…"
+              />
+            </section>
+          );
+        })}
+
+        <button
+          type="button"
+          className="btn btn-secondary"
+          onClick={() => {
+            setGroups((prev) => [
+              ...prev,
+              { locationIds: [], volunteerIds: [], notes: {}, groupNote: "" },
+            ]);
+            setActiveGroup(groups.length);
+          }}
+        >
+          + Dodaj grupę
+        </button>
       </div>
     </div>
   );
@@ -947,12 +925,14 @@ function LocationMap({
   activeColor,
   colorFor,
   onToggle,
+  height = 480,
 }: {
   apiKey: string;
   locations: LocationOption[];
   activeColor: string;
   colorFor: (id: number) => string;
   onToggle: (id: number) => void;
+  height?: number;
 }) {
   const { isLoaded } = useLoadScript({ googleMapsApiKey: apiKey });
 
@@ -975,7 +955,7 @@ function LocationMap({
         usuwa ją z grupy.
       </p>
       <GoogleMap
-        mapContainerStyle={{ width: "100%", height: 480, borderRadius: 6 }}
+        mapContainerStyle={{ width: "100%", height, borderRadius: 6 }}
         onLoad={fitToMarkers}
         options={{ streetViewControl: false, mapTypeControl: false }}
       >
