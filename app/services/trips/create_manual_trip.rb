@@ -7,13 +7,14 @@ module Trips
     include Dry::Monads[:result]
     include ManualTripGroups
 
-    def call(date:, organiser:, groups:)
+    def call(date:, organiser:, groups:, access_code: nil)
       errors = base_errors(date: date, organiser: organiser, groups: groups)
       return Failure(errors) if errors.any?
 
       trip = ActiveRecord::Base.transaction do
         trip = Trip.create!(date: date, organiser: organiser, source: "manual", active: true)
         build_groups(trip, groups)
+        apply_access_code(trip, access_code)
         trip
       end
       Success(trip)

@@ -5,7 +5,8 @@ module AdminArea
       result = Trips::CreateManualTrip.new.call(
         date: parse_date(params[:date]),
         organiser: organiser,
-        groups: parse_groups(params[:groups])
+        groups: parse_groups(params[:groups]),
+        access_code: params[:access_code].to_s
       )
 
       render_result(result, status: :created)
@@ -17,7 +18,8 @@ module AdminArea
         trip: trip,
         date: parse_date(params[:date]),
         organiser: AdminUser.find_by(id: params[:admin_user_id]) || @current_user,
-        groups: parse_groups(params[:groups])
+        groups: parse_groups(params[:groups]),
+        access_code: params[:access_code].to_s
       )
 
       render_result(result, status: :ok)

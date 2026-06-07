@@ -6,7 +6,7 @@ module Trips
     include Dry::Monads[:result]
     include ManualTripGroups
 
-    def call(trip:, date:, organiser:, groups:)
+    def call(trip:, date:, organiser:, groups:, access_code: nil)
       return Failure(["Można edytować tylko wyjazdy utworzone ręcznie"]) unless trip.manual?
       return Failure(["Nie można edytować przeszłego wyjazdu"]) if trip.past_date?
 
@@ -17,6 +17,7 @@ module Trips
         trip.update!(date: date, organiser: organiser)
         trip.groups.destroy_all
         build_groups(trip, groups)
+        apply_access_code(trip, access_code)
       end
       Success(trip)
     rescue ActiveRecord::RecordInvalid => e

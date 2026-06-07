@@ -62,6 +62,7 @@
       id: @edit_trip.id,
       date: @edit_trip.date&.iso8601,
       organiserId: @edit_trip.admin_user_id,
+      accessCode: @edit_trip.auth_code&.value,
       preselectedLocationIds: preselected,
       roster: roster,
       rosterDriverIds: driver_ids,

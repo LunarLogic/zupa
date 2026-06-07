@@ -37,6 +37,23 @@ RSpec.describe Trips::CreateManualTrip do
     expect(destinations.find_by(location: location_b).additional_info).to eq("")
   end
 
+  it "creates a volo access code valid until the day after the trip" do
+    result = described_class.new.call(
+      date: Date.new(2026, 7, 1), organiser: admin, groups: valid_groups, access_code: "zupa1234"
+    )
+
+    code = result.value!.auth_code
+    expect(code.value).to eq("zupa1234")
+    expect(code.expires_at.to_date).to eq(Date.new(2026, 7, 2))
+  end
+
+  it "creates no access code when blank" do
+    result = described_class.new.call(
+      date: Date.new(2026, 7, 1), organiser: admin, groups: valid_groups, access_code: ""
+    )
+    expect(result.value!.auth_code).to be_nil
+  end
+
   it "freezes a per-person snapshot at creation" do
     result = described_class.new.call(date: Date.new(2026, 7, 1), organiser: admin, groups: valid_groups)
     destination = result.value!.groups.first.trip_destinations.find_by(location: location_a)

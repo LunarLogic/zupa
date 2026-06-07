@@ -31,6 +31,7 @@ interface DraftState {
   date: string;
   organiserId: number;
   step: number;
+  accessCode: string;
   preselectedLocationIds: number[];
   roster: number[];
   rosterDriverIds: number[];
@@ -50,6 +51,7 @@ function defaultDraft(data: Bootstrap): DraftState {
     date: nextThursdayISO(),
     organiserId: data.currentUserId,
     step: 1,
+    accessCode: "",
     preselectedLocationIds: [],
     roster: [],
     rosterDriverIds: [],
@@ -90,6 +92,7 @@ function sanitizeDraft(raw: string | null, data: Bootstrap): DraftState | null {
         ? (parsed.organiserId as number)
         : data.currentUserId,
       step: [1, 2, 3].includes(parsed.step as number) ? (parsed.step as number) : 1,
+      accessCode: parsed.accessCode ?? "",
       preselectedLocationIds: preselected,
       roster,
       rosterDriverIds,
@@ -117,6 +120,7 @@ function editDraft(e: ExistingTrip, currentUserId: number): DraftState {
     date: e.date ?? nextThursdayISO(),
     organiserId: e.organiserId ?? currentUserId,
     step: 3,
+    accessCode: e.accessCode ?? "",
     preselectedLocationIds: e.preselectedLocationIds,
     roster: e.roster,
     rosterDriverIds: e.rosterDriverIds,
@@ -146,6 +150,7 @@ export default function TripBuilder({ data }: { data: Bootstrap }) {
   const [step, setStep] = useState(initial.step);
   const [date, setDate] = useState(initial.date);
   const [organiserId, setOrganiserId] = useState(initial.organiserId);
+  const [accessCode, setAccessCode] = useState(initial.accessCode);
   const [preselectedLocationIds, setPreselected] = useState<number[]>(
     initial.preselectedLocationIds
   );
@@ -173,13 +178,24 @@ export default function TripBuilder({ data }: { data: Bootstrap }) {
       date,
       organiserId,
       step,
+      accessCode,
       preselectedLocationIds,
       roster,
       rosterDriverIds,
       groups,
     };
     window.localStorage.setItem(DRAFT_KEY, JSON.stringify(draft));
-  }, [editing, date, organiserId, step, preselectedLocationIds, roster, rosterDriverIds, groups]);
+  }, [
+    editing,
+    date,
+    organiserId,
+    step,
+    accessCode,
+    preselectedLocationIds,
+    roster,
+    rosterDriverIds,
+    groups,
+  ]);
 
   const reset = () => {
     const d = data.existingTrip
@@ -189,6 +205,7 @@ export default function TripBuilder({ data }: { data: Bootstrap }) {
     setStep(d.step);
     setDate(d.date);
     setOrganiserId(d.organiserId);
+    setAccessCode(d.accessCode);
     setPreselected(d.preselectedLocationIds);
     setRoster(d.roster);
     setRosterDriverIds(d.rosterDriverIds);
@@ -228,6 +245,7 @@ export default function TripBuilder({ data }: { data: Bootstrap }) {
         body: JSON.stringify({
           date,
           admin_user_id: organiserId,
+          access_code: accessCode,
           groups: groups
             .filter((g) => g.locationIds.length > 0)
             .map((g) => ({
@@ -292,6 +310,16 @@ export default function TripBuilder({ data }: { data: Bootstrap }) {
                 </option>
               ))}
             </select>
+          </label>
+          <label style={field}>
+            <span>Kod dostępu (aplikacja wolontariusza)</span>
+            <input
+              type="text"
+              className="form-control"
+              placeholder="np. zupa1234 (min. 4 znaki)"
+              value={accessCode}
+              onChange={(e) => setAccessCode(e.target.value)}
+            />
           </label>
           <button
             type="button"
@@ -684,7 +712,7 @@ function Step3Groups({
           width: 384,
           display: "flex",
           flexDirection: "column",
-          gap: "1.25rem",
+          gap: "0.75rem",
           position: "sticky",
           top: "1rem",
           alignSelf: "flex-start",
@@ -694,17 +722,23 @@ function Step3Groups({
           type="button"
           style={{ ...toggleLink, alignSelf: "flex-end" }}
           onClick={() => {
-            const next = !(showList && showVolunteers);
+            const next = !(showList && showVolunteers && (!mapAvailable || showMap));
             setShowList(next);
             setShowVolunteers(next);
+            if (mapAvailable) setShowMap(next);
           }}
         >
-          {showList && showVolunteers ? "Ukryj wszystko" : "Pokaż wszystko"}
+          {showList && showVolunteers && (!mapAvailable || showMap)
+            ? "Ukryj wszystko"
+            : "Pokaż wszystko"}
         </button>
 
-        <aside id="location-pool" style={poolPanel}>
+        <aside
+          id="location-pool"
+          style={{ ...poolPanel, paddingBottom: showList || showMap ? "1.25rem" : "0.75rem" }}
+        >
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
-            <h4 style={{ marginTop: 0 }}>Miejsca</h4>
+            <h4 style={{ margin: 0 }}>Miejsca</h4>
             <span style={{ display: "flex", gap: "0.75rem" }}>
               <button type="button" onClick={() => setShowList((s) => !s)} style={toggleLink}>
                 {showList ? "Ukryj listę" : "Pokaż listę"}
@@ -765,9 +799,9 @@ function Step3Groups({
           )}
         </aside>
 
-        <aside style={poolPanel}>
+        <aside style={{ ...poolPanel, paddingBottom: showVolunteers ? "1.25rem" : "0.75rem" }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
-            <h4 style={{ marginTop: 0 }}>Wolontariusze</h4>
+            <h4 style={{ margin: 0 }}>Wolontariusze</h4>
             <button type="button" onClick={() => setShowVolunteers((s) => !s)} style={toggleLink}>
               {showVolunteers ? "Ukryj listę" : "Pokaż listę"}
             </button>
@@ -813,7 +847,7 @@ function Step3Groups({
 
       <div style={{ flex: 1, minWidth: 320 }}>
         {groups.length > 1 && (
-          <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: "0.5rem" }}>
+          <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: "0.75rem" }}>
             <button
               type="button"
               style={toggleLink}
@@ -843,8 +877,9 @@ function Step3Groups({
                 ...card,
                 maxWidth: 760,
                 cursor: "pointer",
-                borderLeft: `4px solid ${isActive ? color : "#d5d5d5"}`,
-                outline: isActive ? `2px solid ${color}` : "none",
+                borderColor: isActive ? color : "#e5e5e5",
+                borderLeftWidth: 4,
+                borderLeftColor: isActive ? color : "#d5d5d5",
               }}
             >
               <div

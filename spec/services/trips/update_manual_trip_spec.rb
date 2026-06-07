@@ -40,6 +40,22 @@ RSpec.describe Trips::UpdateManualTrip do
     expect(group.volunteers).to contain_exactly(helper)
   end
 
+  it "replaces the access code on update" do
+    trip = create_trip
+    Trips::UpdateManualTrip.new.call(
+      trip: trip, date: Date.new(2026, 7, 8), organiser: admin,
+      groups: [{location_ids: [loc_a.id]}], access_code: "newcode1"
+    )
+    expect(trip.reload.auth_code.value).to eq("newcode1")
+    expect(AuthCode.where(trip: trip).count).to eq(1)
+
+    Trips::UpdateManualTrip.new.call(
+      trip: trip, date: Date.new(2026, 7, 8), organiser: admin,
+      groups: [{location_ids: [loc_a.id]}], access_code: ""
+    )
+    expect(trip.reload.auth_code).to be_nil
+  end
+
   it "rejects a past trip" do
     trip = create_trip
     trip.update_column(:date, Date.yesterday)

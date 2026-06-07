@@ -25,6 +25,7 @@ export interface ExistingTrip {
   id: number;
   date: string | null;
   organiserId: number;
+  accessCode?: string | null;
   preselectedLocationIds: number[];
   roster: number[];
   rosterDriverIds: number[];
