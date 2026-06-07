@@ -404,24 +404,47 @@ export default function TripBuilder({ data }: { data: Bootstrap }) {
                     Brak lokacji — kliknij lokację z puli po lewej.
                   </p>
                 ) : (
-                  <ol style={destList}>
-                    {group.locationIds.map((id) => (
-                      <li key={id} style={destItem}>
-                        <span style={{ flex: 1 }}>{locationsById.get(id)?.name ?? id}</span>
-                        <span style={{ color: "#888", fontSize: "0.8rem" }}>
-                          {locationsById.get(id)?.person_count ?? 0} os.
-                        </span>
-                        <button
-                          type="button"
-                          style={removeChip}
-                          title="Usuń z grupy"
-                          onClick={() => unassignLocation(index, id)}
-                        >
-                          ✕
-                        </button>
-                      </li>
-                    ))}
-                  </ol>
+                  <div
+                    style={{
+                      display: "flex",
+                      flexWrap: "wrap",
+                      gap: "0.6rem",
+                      margin: "0.5rem 0 0.75rem",
+                    }}
+                  >
+                    {group.locationIds.map((id) => {
+                      const loc = locationsById.get(id);
+                      return (
+                        <div key={id} style={locationCard}>
+                          <div
+                            style={{
+                              display: "flex",
+                              justifyContent: "space-between",
+                              alignItems: "flex-start",
+                              gap: "0.5rem",
+                            }}
+                          >
+                            <strong>{loc?.name ?? id}</strong>
+                            <button
+                              type="button"
+                              style={removeChip}
+                              title="Usuń z grupy"
+                              aria-label={`Usuń lokację: ${loc?.name ?? id}`}
+                              onClick={() => unassignLocation(index, id)}
+                            >
+                              ✕
+                            </button>
+                          </div>
+                          <div style={{ color: "#888", fontSize: "0.75rem" }}>
+                            {locationTypeLabel(loc?.location_type)}
+                          </div>
+                          <div style={{ color: "#555", fontSize: "0.8rem", marginTop: "0.25rem" }}>
+                            👤 {loc?.person_count ?? 0} os · 🐾 {loc?.animal_count ?? 0} zw.
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
                 )}
 
                 <strong>Wolontariusze</strong>
@@ -529,6 +552,12 @@ function MemberChips({
   );
 }
 
+function locationTypeLabel(type?: string): string {
+  if (type === "estimated") return "Grupowe";
+  if (type === "regular") return "Zwykłe";
+  return "";
+}
+
 function personIcon(gender?: string | null): string {
   if (gender === "female") return "👩";
   if (gender === "male") return "👨";
@@ -564,7 +593,7 @@ const poolPanel: React.CSSProperties = {
 const poolList: React.CSSProperties = {
   border: "1px solid #ddd",
   borderRadius: 4,
-  maxHeight: "60vh",
+  maxHeight: 220, // ~6 rows
   overflowY: "auto",
 };
 
@@ -580,19 +609,13 @@ const poolItem: React.CSSProperties = {
   cursor: "pointer",
 };
 
-const destList: React.CSSProperties = {
-  listStyle: "decimal",
-  paddingLeft: "1.4rem",
-  margin: "0 0 0.75rem",
+const locationCard: React.CSSProperties = {
+  border: "1px solid #e0e0e0",
+  borderRadius: 6,
+  padding: "0.5rem 0.6rem",
+  width: 200,
+  background: "#fafafa",
 };
-
-const destItem: React.CSSProperties = {
-  display: "flex",
-  alignItems: "center",
-  gap: "0.5rem",
-  padding: "0.2rem 0",
-};
-
 
 const memberChip: React.CSSProperties = {
   display: "inline-flex",

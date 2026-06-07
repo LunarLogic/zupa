@@ -9,7 +9,9 @@
       recent_rank: row[:recent_rank],
       last_scheduled_at: row[:last_scheduled_at]&.iso8601,
       person_count: row[:person_count],
-      sandwich_count: row[:sandwich_count]
+      animal_count: row[:animal_count],
+      sandwich_count: row[:sandwich_count],
+      location_type: row[:location_type]
     }
   end
 

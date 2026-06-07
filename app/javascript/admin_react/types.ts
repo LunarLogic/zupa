@@ -4,7 +4,9 @@ export interface LocationOption {
   recent_rank: number | null;
   last_scheduled_at: string | null;
   person_count: number;
+  animal_count: number;
   sandwich_count: number;
+  location_type: "regular" | "estimated";
 }
 
 export interface Option {

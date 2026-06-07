@@ -16,13 +16,15 @@ class LocationRepository
       .maximum("trips.date")
     rank = recent_trip_rank_by_location(before_date)
 
-    Location.where(status: "active").includes(:active_people).order(:name).map do |location|
+    Location.where(status: "active").includes(:active_people, :active_animals).order(:name).map do |location|
       {
         location: location,
         last_scheduled_at: last_scheduled[location.id],
         recent_rank: rank[location.id],
         person_count: location.person_count,
-        sandwich_count: location.sandwich_count
+        animal_count: location.animal_count,
+        sandwich_count: location.sandwich_count,
+        location_type: location.location_type
       }
     end
   end
