@@ -277,7 +277,7 @@ export default function TripBuilder({ data }: { data: Bootstrap }) {
         </div>
       </section>
 
-      <StepBar step={step} />
+      <StepBar step={step} onBack={() => setStep((s) => Math.max(1, s - 1))} />
 
       {step === 1 && (
         <Step1Locations
@@ -352,20 +352,25 @@ export default function TripBuilder({ data }: { data: Bootstrap }) {
   );
 }
 
-function StepBar({ step }: { step: number }) {
+function StepBar({ step, onBack }: { step: number; onBack: () => void }) {
   return (
     <div style={{ display: "flex", gap: "0.5rem", margin: "0 0 1.25rem" }}>
       {STEPS.map((label, i) => {
         const n = i + 1;
         const active = n === step;
         const done = n < step;
+        const clickable = n === step - 1; // only one step back
         return (
           <div
             key={n}
+            role={clickable ? "button" : undefined}
+            onClick={clickable ? onBack : undefined}
+            title={clickable ? "Wstecz" : undefined}
             style={{
               flex: 1,
               padding: "0.5rem 0.75rem",
               borderRadius: 6,
+              cursor: clickable ? "pointer" : "default",
               fontWeight: active ? 600 : 400,
               color: active ? "#fff" : done ? "#2c6cb0" : "#888",
               background: active ? "#4d6bb2" : done ? "#eef4fb" : "#f2f2f2",
