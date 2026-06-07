@@ -82,6 +82,7 @@ export default function TripBuilder({ data }: { data: Bootstrap }) {
   const [groups, setGroups] = useState<GroupState[]>(initial.groups);
   const [activeGroup, setActiveGroup] = useState(0);
   const [query, setQuery] = useState("");
+  const [volunteerQuery, setVolunteerQuery] = useState("");
   const [errors, setErrors] = useState<string[]>([]);
   const [submitting, setSubmitting] = useState(false);
 
@@ -116,6 +117,19 @@ export default function TripBuilder({ data }: { data: Bootstrap }) {
     );
   }, [data.locations, assignedLocationIds, query]);
 
+  const assignedVolunteerIds = useMemo(() => {
+    const set = new Set<number>();
+    groups.forEach((g) => g.volunteerIds.forEach((id) => set.add(id)));
+    return set;
+  }, [groups]);
+
+  const volunteerPool = useMemo(() => {
+    const q = volunteerQuery.trim().toLowerCase();
+    return data.volunteers.filter(
+      (v) => !assignedVolunteerIds.has(v.id) && (q === "" || v.name.toLowerCase().includes(q))
+    );
+  }, [data.volunteers, assignedVolunteerIds, volunteerQuery]);
+
   const updateGroup = (index: number, patch: Partial<GroupState>) => {
     setGroups((prev) => prev.map((g, i) => (i === index ? { ...g, ...patch } : g)));
   };
@@ -149,15 +163,6 @@ export default function TripBuilder({ data }: { data: Bootstrap }) {
         ? drivers.filter((id) => id !== volunteerId)
         : [...drivers, volunteerId],
     });
-  };
-
-  // A volunteer belongs to at most one group: hide those taken by other groups.
-  const volunteersTakenElsewhere = (groupIndex: number): Set<number> => {
-    const set = new Set<number>();
-    groups.forEach((g, i) => {
-      if (i !== groupIndex) g.volunteerIds.forEach((id) => set.add(id));
-    });
-    return set;
   };
 
   const addGroup = () => {
@@ -314,6 +319,37 @@ export default function TripBuilder({ data }: { data: Bootstrap }) {
               </div>
             )}
           </div>
+
+          <h4 style={{ marginTop: "1.5rem" }}>Wolontariusze ({volunteerPool.length})</h4>
+          <p style={{ color: "#888", fontSize: "0.85rem", margin: "0 0 0.5rem" }}>
+            Klikasz → Grupa {activeGroup + 1}
+          </p>
+          <input
+            type="text"
+            className="form-control"
+            placeholder="Szukaj wolontariusza…"
+            value={volunteerQuery}
+            onChange={(e) => setVolunteerQuery(e.target.value)}
+            style={{ marginBottom: "0.5rem" }}
+          />
+          <div style={poolList}>
+            {volunteerPool.map((v) => (
+              <button
+                key={v.id}
+                type="button"
+                style={poolItem}
+                onClick={() => addMember(activeGroup, v.id)}
+              >
+                <span aria-hidden="true">{personIcon(v.gender)}</span>
+                <span style={{ flex: 1, textAlign: "left" }}>{v.name}</span>
+              </button>
+            ))}
+            {volunteerPool.length === 0 && (
+              <div style={{ padding: "0.6rem", color: "#999" }}>
+                {volunteerQuery ? "Brak wyników" : "Wszyscy przypisani"}
+              </div>
+            )}
+          </div>
         </aside>
 
         <div style={{ flex: 1, minWidth: 320 }}>
@@ -326,6 +362,7 @@ export default function TripBuilder({ data }: { data: Bootstrap }) {
                 key={index}
                 style={{
                   ...card,
+                  maxWidth: 760,
                   borderLeft: `4px solid ${color}`,
                   outline: isActive ? `2px solid ${color}` : "none",
                 }}
@@ -387,13 +424,11 @@ export default function TripBuilder({ data }: { data: Bootstrap }) {
                   </ol>
                 )}
 
-                <VolunteerPicker
-                  volunteers={data.volunteers}
-                  volunteersById={volunteersById}
+                <strong>Wolontariusze</strong>
+                <MemberChips
                   memberIds={group.volunteerIds}
                   driverIds={group.driverIds}
-                  takenElsewhere={volunteersTakenElsewhere(index)}
-                  onAdd={(id) => addMember(index, id)}
+                  volunteersById={volunteersById}
                   onRemove={(id) => removeMember(index, id)}
                   onToggleDriver={(id) => toggleDriver(index, id)}
                 />
@@ -432,99 +467,64 @@ function RecencyBadge({ rank }: { rank: number | null }) {
   return null;
 }
 
-// One searchable list to add volunteers to the group; members appear as chips,
-// each with a driver toggle. Volunteers already in another group are excluded
-// (a volunteer belongs to one group).
-function VolunteerPicker({
-  volunteers,
-  volunteersById,
+// Members assigned to a group, shown as chips. Add/remove happens from the
+// shared volunteer pool on the left; here each chip just toggles driver or
+// removes the member. The greyed/coloured car marks the driver.
+function MemberChips({
   memberIds,
   driverIds,
-  takenElsewhere,
-  onAdd,
+  volunteersById,
   onRemove,
   onToggleDriver,
 }: {
-  volunteers: Option[];
-  volunteersById: Map<number, Option>;
   memberIds: number[];
   driverIds: number[];
-  takenElsewhere: Set<number>;
-  onAdd: (id: number) => void;
+  volunteersById: Map<number, Option>;
   onRemove: (id: number) => void;
   onToggleDriver: (id: number) => void;
 }) {
-  const [query, setQuery] = useState("");
-  const available = useMemo(() => {
-    const q = query.trim().toLowerCase();
-    return volunteers.filter(
-      (v) =>
-        !memberIds.includes(v.id) &&
-        !takenElsewhere.has(v.id) &&
-        (q === "" || v.name.toLowerCase().includes(q))
+  if (memberIds.length === 0) {
+    return (
+      <p style={{ color: "#999", margin: "0.25rem 0 0" }}>
+        Brak wolontariuszy — wybierz z puli po lewej.
+      </p>
     );
-  }, [volunteers, memberIds, takenElsewhere, query]);
+  }
 
   return (
-    <div style={{ width: 360, maxWidth: "100%" }}>
-      <strong>Wolontariusze</strong>
-      {memberIds.length > 0 && (
-        <div style={{ display: "flex", flexWrap: "wrap", gap: "0.4rem", margin: "0.5rem 0" }}>
-          {memberIds.map((id) => {
-            const isDriver = driverIds.includes(id);
-            const volunteer = volunteersById.get(id);
-            const name = volunteer?.name ?? String(id);
-            return (
-              <span key={id} style={memberChip}>
-                <span aria-hidden="true">{personIcon(volunteer?.gender)}</span>
-                <span>{name}</span>
-                <button
-                  type="button"
-                  aria-label={`Kierowca: ${name}`}
-                  title={isDriver ? "Kierowca — kliknij, by cofnąć" : "Oznacz jako kierowcę"}
-                  onClick={() => onToggleDriver(id)}
-                  style={{
-                    ...driverToggle,
-                    filter: isDriver ? "none" : "grayscale(1)",
-                    opacity: isDriver ? 1 : 0.4,
-                  }}
-                >
-                  🚗
-                </button>
-                <button
-                  type="button"
-                  aria-label={`Usuń: ${name}`}
-                  onClick={() => onRemove(id)}
-                  style={removeChip}
-                >
-                  ✕
-                </button>
-              </span>
-            );
-          })}
-        </div>
-      )}
-      <input
-        type="text"
-        className="form-control"
-        placeholder="Dodaj wolontariusza…"
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
-        style={{ margin: "0.25rem 0 0.5rem" }}
-      />
-      <div style={{ ...listBox, maxHeight: 150 }}>
-        {available.map((v) => (
-          <button key={v.id} type="button" style={addItem} onClick={() => onAdd(v.id)}>
-            <span aria-hidden="true" style={{ marginRight: "0.4rem" }}>
-              {personIcon(v.gender)}
-            </span>
-            {v.name}
-          </button>
-        ))}
-        {available.length === 0 && (
-          <div style={{ padding: "0.5rem", color: "#999" }}>Brak dostępnych</div>
-        )}
-      </div>
+    <div style={{ display: "flex", flexWrap: "wrap", gap: "0.4rem", margin: "0.5rem 0 0" }}>
+      {memberIds.map((id) => {
+        const isDriver = driverIds.includes(id);
+        const volunteer = volunteersById.get(id);
+        const name = volunteer?.name ?? String(id);
+        return (
+          <span key={id} style={memberChip}>
+            <span aria-hidden="true">{personIcon(volunteer?.gender)}</span>
+            <span>{name}</span>
+            <button
+              type="button"
+              aria-label={`Kierowca: ${name}`}
+              title={isDriver ? "Kierowca — kliknij, by cofnąć" : "Oznacz jako kierowcę"}
+              onClick={() => onToggleDriver(id)}
+              style={{
+                ...driverToggle,
+                filter: isDriver ? "none" : "grayscale(1)",
+                opacity: isDriver ? 1 : 0.4,
+              }}
+            >
+              🚗
+            </button>
+            <button
+              type="button"
+              aria-label={`Usuń: ${name}`}
+              onClick={() => onRemove(id)}
+              style={removeChip}
+            >
+              ✕
+            </button>
+          </span>
+        );
+      })}
     </div>
   );
 }
@@ -555,7 +555,7 @@ const field: React.CSSProperties = {
 
 const poolPanel: React.CSSProperties = {
   ...card,
-  width: 320,
+  width: 384,
   position: "sticky",
   top: "1rem",
   alignSelf: "flex-start",
@@ -593,22 +593,6 @@ const destItem: React.CSSProperties = {
   padding: "0.2rem 0",
 };
 
-const listBox: React.CSSProperties = {
-  border: "1px solid #ddd",
-  borderRadius: 4,
-  overflowY: "auto",
-};
-
-const addItem: React.CSSProperties = {
-  display: "block",
-  width: "100%",
-  textAlign: "left",
-  padding: "0.35rem 0.6rem",
-  border: "none",
-  borderBottom: "1px solid #f0f0f0",
-  background: "transparent",
-  cursor: "pointer",
-};
 
 const memberChip: React.CSSProperties = {
   display: "inline-flex",
