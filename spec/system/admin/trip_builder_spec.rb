@@ -11,17 +11,18 @@ RSpec.describe "Admin trip builder", type: :system do
     admin_login(admin_user)
   end
 
-  it "builds a manual trip end to end and lands on the created trip" do
+  it "builds a manual trip from the pool and lands on the created trip" do
     visit "/admin/trip_builder"
-
-    expect(page).to have_content("Podstawowe informacje")
+    expect(page).to have_content("Nieprzypisane lokacje")
 
     find("input[type=date]").set("2026-07-01")
 
-    # pick a location into Grupa 1
-    find("label", text: "Miejsce Alfa").click
+    # click a pooled location into the active group (Grupa 1)
+    within("#location-pool") { click_button "Miejsce Alfa" }
 
-    # assign a driver and a helper
+    # it leaves the pool and shows under the group
+    within("#location-pool") { expect(page).not_to have_button("Miejsce Alfa") }
+
     within(:xpath, "//*[strong[text()='Kierowcy']]") { find("label", text: "Ola Kierowca").click }
     within(:xpath, "//*[strong[text()='Pomocnicy']]") { find("label", text: "Ela Pomocnik").click }
 
@@ -36,5 +37,21 @@ RSpec.describe "Admin trip builder", type: :system do
     expect(group.trip_destinations.map { |d| d.location.name }).to eq(["Miejsce Alfa"])
     expect(group.drivers.map(&:full_name)).to eq(["Ola Kierowca"])
     expect(group.volunteers.map(&:full_name)).to eq(["Ela Pomocnik"])
+  end
+
+  it "restores an in-progress trip from localStorage after a reload" do
+    visit "/admin/trip_builder"
+    within("#location-pool") { click_button "Miejsce Alfa" }
+
+    # Alfa is now assigned (out of the pool)
+    within("#location-pool") { expect(page).not_to have_button("Miejsce Alfa") }
+
+    visit "/admin/trip_builder" # reload
+
+    # draft restored: Alfa is still assigned, not back in the pool
+    within("#location-pool") do
+      expect(page).not_to have_button("Miejsce Alfa")
+      expect(page).to have_button("Miejsce Beta")
+    end
   end
 end

@@ -3,6 +3,8 @@ export interface LocationOption {
   name: string;
   recent_rank: number | null;
   last_scheduled_at: string | null;
+  person_count: number;
+  sandwich_count: number;
 }
 
 export interface Option {

@@ -7,7 +7,9 @@
       id: loc.id,
       name: loc.name,
       recent_rank: row[:recent_rank],
-      last_scheduled_at: row[:last_scheduled_at]&.iso8601
+      last_scheduled_at: row[:last_scheduled_at]&.iso8601,
+      person_count: row[:person_count],
+      sandwich_count: row[:sandwich_count]
     }
   end
 

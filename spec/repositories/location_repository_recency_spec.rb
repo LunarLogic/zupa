@@ -29,5 +29,20 @@ RSpec.describe LocationRepository do
       expect(by_name["Ccc"][:recent_rank]).to be_nil
       expect(by_name["Aaa"][:last_scheduled_at]).to eq(Date.new(2026, 6, 1))
     end
+
+    it "annotates person and sandwich counts for regular and estimated locations" do
+      AppSetting.instance.update!(sandwiches_per_person: 2)
+      regular = create(:location, name: "Regularna", status: "active")
+      create(:person, location: regular, active: true, sandwiches: 5)
+      create(:location, name: "Grupowa", status: "active",
+        location_type: "estimated", estimated_person_count: 10)
+
+      rows = described_class.new.active_with_recency.index_by { |r| r[:location].name }
+
+      expect(rows["Regularna"][:person_count]).to eq(1)
+      expect(rows["Regularna"][:sandwich_count]).to eq(5)
+      expect(rows["Grupowa"][:person_count]).to eq(10)
+      expect(rows["Grupowa"][:sandwich_count]).to eq(20)
+    end
   end
 end
