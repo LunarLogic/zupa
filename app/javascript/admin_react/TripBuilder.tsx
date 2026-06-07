@@ -685,8 +685,6 @@ function Step3Groups({
           position: "sticky",
           top: "1rem",
           alignSelf: "flex-start",
-          maxHeight: "calc(100vh - 2rem)",
-          overflowY: "auto",
         }}
       >
         <aside id="location-pool" style={poolPanel}>
