@@ -20,7 +20,7 @@ Trestle.resource(:volunteers) do
   form do |_volunteer|
     text_field :first_name
     text_field :last_name
-    select :gender, [["Kobieta", "female"], ["Mężczyzna", "male"]], include_blank: true
+    select :gender, [["Kobieta", "female"], ["Mężczyzna", "male"], ["Niebinarna", "non_binary"]], include_blank: true
     check_box :active
   end
 

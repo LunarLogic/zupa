@@ -531,7 +531,8 @@ function VolunteerPicker({
 function personIcon(gender?: string | null): string {
   if (gender === "female") return "👩";
   if (gender === "male") return "👨";
-  return "🧑";
+  if (gender === "non_binary") return "🧑";
+  return "👤"; // gender not set
 }
 
 const card: React.CSSProperties = {

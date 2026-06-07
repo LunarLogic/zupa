@@ -10,7 +10,7 @@ export interface LocationOption {
 export interface Option {
   id: number;
   name: string;
-  gender?: "female" | "male" | null;
+  gender?: "female" | "male" | "non_binary" | null;
 }
 
 export interface Bootstrap {

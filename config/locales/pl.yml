@@ -22,6 +22,7 @@ pl:
   genders:
     female: Kobieta
     male: Mężczyzna
+    non_binary: Niebinarna
   species:
     cat: Kot
     dog: Pies

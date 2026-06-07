@@ -1,5 +1,5 @@
 class Volunteer < ApplicationRecord
-  enum gender: {female: "female", male: "male"}
+  enum gender: {female: "female", male: "male", non_binary: "non_binary"}
 
   has_and_belongs_to_many :trip_groups, join_table: "trip_groups_volunteers"
   has_and_belongs_to_many :driving_groups, class_name: "TripGroup",
