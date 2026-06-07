@@ -256,6 +256,7 @@ export default function TripBuilder({ data }: { data: Bootstrap }) {
 
   return (
     <div style={{ padding: "1.5rem" }}>
+      <style>{`.tb-x:hover { color: #c0392b; }`}</style>
       {errors.length > 0 && (
         <div className="alert alert-danger" style={{ marginBottom: "1rem" }}>
           <ul style={{ margin: 0, paddingLeft: "1.2rem" }}>
@@ -615,6 +616,7 @@ function Step3Groups({
   const [showMap, setShowMap] = useState(false);
   const [showList, setShowList] = useState(true);
   const [showVolunteers, setShowVolunteers] = useState(true);
+  const [collapsedGroups, setCollapsedGroups] = useState<number[]>([]);
   const mapAvailable = mapsApiKey !== "";
 
   const assignedLocationIds = useMemo(
@@ -833,93 +835,113 @@ function Step3Groups({
                     👤 {peopleTotal} {peopleWord(peopleTotal)}
                   </span>
                 </h3>
-                {groups.length > 1 && (
+                <span style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
                   <button
                     type="button"
-                    title="Usuń grupę"
-                    aria-label={`Usuń grupę ${index + 1}`}
-                    style={removeChip}
+                    style={toggleLink}
                     onClick={(e) => {
                       e.stopPropagation();
-                      if (!window.confirm("Usunąć grupę?")) return;
-                      setGroups((prev) => prev.filter((_, i) => i !== index));
-                      setActiveGroup((prev) => Math.max(0, prev >= index ? prev - 1 : prev));
+                      setCollapsedGroups((c) =>
+                        c.includes(index) ? c.filter((x) => x !== index) : [...c, index]
+                      );
                     }}
                   >
-                    ✕
+                    {collapsedGroups.includes(index) ? "Rozwiń" : "Zwiń"}
                   </button>
-                )}
+                  {groups.length > 1 && (
+                    <button
+                      type="button"
+                      className="tb-x"
+                      title="Usuń grupę"
+                      aria-label={`Usuń grupę ${index + 1}`}
+                      style={removeChip}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        if (!window.confirm("Usunąć grupę?")) return;
+                        setGroups((prev) => prev.filter((_, i) => i !== index));
+                        setActiveGroup((prev) => Math.max(0, prev >= index ? prev - 1 : prev));
+                        setCollapsedGroups((c) => c.filter((x) => x !== index));
+                      }}
+                    >
+                      ✕
+                    </button>
+                  )}
+                </span>
               </div>
 
-              <strong style={{ display: "block", marginTop: "1.15rem" }}>Miejsca</strong>
-              {group.locationIds.length === 0 ? (
-                <p style={{ color: "#999", margin: "0.25rem 0 0.75rem" }}>
-                  Brak miejsc — kliknij miejsce z puli po lewej.
-                </p>
-              ) : (
-                <div
-                  style={{
-                    display: "flex",
-                    flexWrap: "wrap",
-                    gap: "0.6rem",
-                    margin: "0.5rem 0 0.75rem",
-                  }}
-                >
-                  {group.locationIds.map((id) => (
-                    <LocationCard
-                      key={id}
-                      loc={locationsById.get(id)}
-                      note={group.notes[id] ?? ""}
-                      onNoteChange={(value) =>
-                        updateGroup(index, { notes: { ...group.notes, [id]: value } })
-                      }
-                      onRemove={() =>
-                        updateGroup(index, {
-                          locationIds: group.locationIds.filter((x) => x !== id),
-                        })
-                      }
-                    />
-                  ))}
-                </div>
-              )}
+              {!collapsedGroups.includes(index) && (
+                <>
+                  <strong style={{ display: "block", marginTop: "1.15rem" }}>Miejsca</strong>
+                  {group.locationIds.length === 0 ? (
+                    <p style={{ color: "#999", margin: "0.25rem 0 0.75rem" }}>
+                      Brak miejsc — kliknij miejsce z puli po lewej.
+                    </p>
+                  ) : (
+                    <div
+                      style={{
+                        display: "flex",
+                        flexWrap: "wrap",
+                        gap: "0.6rem",
+                        margin: "0.5rem 0 0.75rem",
+                      }}
+                    >
+                      {group.locationIds.map((id) => (
+                        <LocationCard
+                          key={id}
+                          loc={locationsById.get(id)}
+                          note={group.notes[id] ?? ""}
+                          onNoteChange={(value) =>
+                            updateGroup(index, { notes: { ...group.notes, [id]: value } })
+                          }
+                          onRemove={() =>
+                            updateGroup(index, {
+                              locationIds: group.locationIds.filter((x) => x !== id),
+                            })
+                          }
+                        />
+                      ))}
+                    </div>
+                  )}
 
-              <strong>Wolontariusze</strong>
-              {group.volunteerIds.length === 0 ? (
-                <p style={{ color: "#999", margin: "0.25rem 0 0" }}>
-                  Brak wolontariuszy — wybierz z puli po lewej.
-                </p>
-              ) : (
-                <div
-                  style={{
-                    display: "flex",
-                    flexWrap: "wrap",
-                    gap: "0.4rem",
-                    margin: "0.5rem 0 0",
-                  }}
-                >
-                  {group.volunteerIds.map((id) => (
-                    <MemberChip
-                      key={id}
-                      volunteer={volunteersById.get(id)}
-                      isDriver={rosterDriverIds.includes(id)}
-                      onRemove={() =>
-                        updateGroup(index, {
-                          volunteerIds: group.volunteerIds.filter((x) => x !== id),
-                        })
-                      }
-                    />
-                  ))}
-                </div>
-              )}
+                  <strong>Wolontariusze</strong>
+                  {group.volunteerIds.length === 0 ? (
+                    <p style={{ color: "#999", margin: "0.25rem 0 0" }}>
+                      Brak wolontariuszy — wybierz z puli po lewej.
+                    </p>
+                  ) : (
+                    <div
+                      style={{
+                        display: "flex",
+                        flexWrap: "wrap",
+                        gap: "0.4rem",
+                        margin: "0.5rem 0 0",
+                      }}
+                    >
+                      {group.volunteerIds.map((id) => (
+                        <MemberChip
+                          key={id}
+                          volunteer={volunteersById.get(id)}
+                          isDriver={rosterDriverIds.includes(id)}
+                          onRemove={() =>
+                            updateGroup(index, {
+                              volunteerIds: group.volunteerIds.filter((x) => x !== id),
+                            })
+                          }
+                        />
+                      ))}
+                    </div>
+                  )}
 
-              <strong style={{ display: "block", marginTop: "1.15rem" }}>
-                Informacje dla grupy
-              </strong>
-              <NoteField
-                value={group.groupNote}
-                onChange={(value) => updateGroup(index, { groupNote: value })}
-                placeholder="Dodatkowe informacje dla całej grupy…"
-              />
+                  <strong style={{ display: "block", marginTop: "1.15rem" }}>
+                    Informacje dla grupy
+                  </strong>
+                  <NoteField
+                    value={group.groupNote}
+                    onChange={(value) => updateGroup(index, { groupNote: value })}
+                    placeholder="Dodatkowe informacje dla całej grupy…"
+                  />
+                </>
+              )}
             </section>
           );
         })}
@@ -1035,6 +1057,7 @@ function LocationCard({
           {onRemove && (
             <button
               type="button"
+              className="tb-x"
               style={removeChip}
               title="Usuń"
               aria-label={`Usuń: ${loc?.name ?? ""}`}
@@ -1157,7 +1180,13 @@ function MemberChip({
       ) : (
         isDriver && <span aria-hidden="true">🚗</span>
       )}
-      <button type="button" aria-label={`Usuń: ${name}`} onClick={onRemove} style={removeChip}>
+      <button
+        type="button"
+        className="tb-x"
+        aria-label={`Usuń: ${name}`}
+        onClick={onRemove}
+        style={removeChip}
+      >
         ✕
       </button>
     </span>
@@ -1301,7 +1330,7 @@ const driverToggle: React.CSSProperties = {
 const removeChip: React.CSSProperties = {
   border: "none",
   background: "transparent",
-  color: "#c0392b",
+  color: "#555",
   cursor: "pointer",
   fontSize: "0.9rem",
 };
