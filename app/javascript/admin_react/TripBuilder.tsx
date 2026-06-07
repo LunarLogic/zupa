@@ -264,12 +264,7 @@ export default function TripBuilder({ data }: { data: Bootstrap }) {
           data={data}
           locationsById={locationsById}
           preselected={preselectedLocationIds}
-          onToggle={(id) =>
-            setPreselected((prev) =>
-              prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
-            )
-          }
-          onAddMany={(ids) => setPreselected((prev) => Array.from(new Set([...prev, ...ids])))}
+          onAdd={(id) => setPreselected((prev) => [...prev, id])}
           onRemove={removeFromPreselected}
           onCopyRotation={() =>
             setPreselected(data.rotationLocationIds.filter((id) => locationsById.has(id)))
@@ -369,28 +364,19 @@ function Step1Locations({
   data,
   locationsById,
   preselected,
-  onToggle,
-  onAddMany,
+  onAdd,
   onRemove,
   onCopyRotation,
 }: {
   data: Bootstrap;
   locationsById: Map<number, LocationOption>;
   preselected: number[];
-  onToggle: (id: number) => void;
-  onAddMany: (ids: number[]) => void;
+  onAdd: (id: number) => void;
   onRemove: (id: number) => void;
   onCopyRotation: () => void;
 }) {
   const [query, setQuery] = useState("");
-  const [region, setRegion] = useState("all");
   const [hideRecent, setHideRecent] = useState(false);
-
-  const regions = useMemo(
-    () =>
-      Array.from(new Set(data.locations.map((l) => l.region).filter(Boolean) as string[])).sort(),
-    [data.locations]
-  );
 
   const candidates = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -399,50 +385,31 @@ function Step1Locations({
         (l) =>
           !preselected.includes(l.id) &&
           (q === "" || l.name.toLowerCase().includes(q)) &&
-          (region === "all" || l.region === region) &&
           (!hideRecent || l.recent_rank !== 0)
       )
       .sort(overdueFirst);
-  }, [data.locations, preselected, query, region, hideRecent]);
+  }, [data.locations, preselected, query, hideRecent]);
 
   return (
-    <div style={{ display: "flex", gap: "1.25rem", alignItems: "flex-start", flexWrap: "wrap" }}>
-      <aside id="location-pool" style={{ ...poolPanel, width: 420 }}>
-        <h4 style={{ marginTop: 0 }}>Wybierz miejsca</h4>
-        {data.rotationLocationIds.length > 0 && (
-          <button
-            type="button"
-            className="btn btn-default btn-sm"
-            style={{ marginBottom: "0.5rem" }}
-            onClick={onCopyRotation}
-          >
-            Kopiuj z wyjazdu sprzed 2 tyg.
-            {data.rotationTripDate ? ` (${data.rotationTripDate})` : ""}
-          </button>
-        )}
-        <div style={{ display: "flex", gap: "0.5rem", marginBottom: "0.5rem" }}>
-          <input
-            type="text"
-            className="form-control"
-            placeholder="Szukaj miejsca…"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-          />
-          <select
-            className="form-control"
-            style={{ maxWidth: 160 }}
-            value={region}
-            onChange={(e) => setRegion(e.target.value)}
-          >
-            <option value="all">Wszystkie regiony</option>
-            {regions.map((r) => (
-              <option key={r} value={r}>
-                {r}
-              </option>
-            ))}
-          </select>
-        </div>
-        <label style={checkboxRow}>
+    <div id="location-pool">
+      <div
+        style={{
+          display: "flex",
+          gap: "1rem",
+          flexWrap: "wrap",
+          alignItems: "center",
+          marginBottom: "1rem",
+        }}
+      >
+        <input
+          type="text"
+          className="form-control"
+          placeholder="Szukaj miejsca…"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          style={{ maxWidth: 280 }}
+        />
+        <label style={{ ...checkboxRow, margin: 0 }}>
           <input
             type="checkbox"
             checked={hideRecent}
@@ -450,43 +417,40 @@ function Step1Locations({
           />
           Ukryj odwiedzone na ostatnim wyjeździe
         </label>
-        <button
-          type="button"
-          className="btn btn-default btn-sm"
-          style={{ margin: "0 0 0.5rem" }}
-          disabled={candidates.length === 0}
-          onClick={() => onAddMany(candidates.map((l) => l.id))}
-        >
-          Zaznacz wszystkie widoczne ({candidates.length})
-        </button>
-        <div style={poolList}>
-          {candidates.map((l) => (
-            <button key={l.id} type="button" style={poolItem} onClick={() => onToggle(l.id)}>
-              <span style={{ flex: 1, textAlign: "left" }}>{l.name}</span>
-              <span style={{ color: "#666", fontSize: "0.8rem" }}>
-                {l.person_count} {peopleWord(l.person_count)}
-              </span>
-              <RecencyBadge rank={l.recent_rank} />
-            </button>
-          ))}
-          {candidates.length === 0 && (
-            <div style={{ padding: "0.6rem", color: "#999" }}>Brak miejsc</div>
-          )}
-        </div>
-      </aside>
-
-      <div style={{ flex: 1, minWidth: 320 }}>
-        <h4 style={{ marginTop: 0 }}>Wybrane miejsca ({preselected.length})</h4>
-        {preselected.length === 0 ? (
-          <p style={{ color: "#999" }}>Kliknij miejsca z listy po lewej, aby je dodać.</p>
-        ) : (
-          <div style={{ display: "flex", flexWrap: "wrap", gap: "0.6rem" }}>
-            {preselected.map((id) => (
-              <LocationCard key={id} loc={locationsById.get(id)} onRemove={() => onRemove(id)} />
-            ))}
-          </div>
+        {data.rotationLocationIds.length > 0 && (
+          <button type="button" className="btn btn-default btn-sm" onClick={onCopyRotation}>
+            Kopiuj z wyjazdu sprzed 2 tyg.
+            {data.rotationTripDate ? ` (${data.rotationTripDate})` : ""}
+          </button>
         )}
       </div>
+
+      <h4 style={{ marginTop: 0 }}>Wybrane ({preselected.length})</h4>
+      {preselected.length === 0 ? (
+        <p style={{ color: "#999" }}>Kliknij miejsce poniżej, aby je dodać do wyjazdu.</p>
+      ) : (
+        <div style={cardGrid}>
+          {preselected.map((id) => (
+            <LocationCard
+              key={id}
+              loc={locationsById.get(id)}
+              selected
+              onRemove={() => onRemove(id)}
+            />
+          ))}
+        </div>
+      )}
+
+      <h4 style={{ marginTop: "1.5rem" }}>Do wyboru ({candidates.length})</h4>
+      {candidates.length === 0 ? (
+        <p style={{ color: "#999" }}>Brak miejsc.</p>
+      ) : (
+        <div style={cardGrid}>
+          {candidates.map((l) => (
+            <LocationCard key={l.id} loc={l} onClick={() => onAdd(l.id)} />
+          ))}
+        </div>
+      )}
     </div>
   );
 }
@@ -802,9 +766,29 @@ function Step3Groups({
   );
 }
 
-function LocationCard({ loc, onRemove }: { loc?: LocationOption; onRemove: () => void }) {
+function LocationCard({
+  loc,
+  onClick,
+  onRemove,
+  selected,
+}: {
+  loc?: LocationOption;
+  onClick?: () => void;
+  onRemove?: () => void;
+  selected?: boolean;
+}) {
   return (
-    <div style={locationCard}>
+    <div
+      onClick={onClick}
+      role={onClick ? "button" : undefined}
+      aria-label={onClick ? loc?.name : undefined}
+      style={{
+        ...locationCard,
+        cursor: onClick ? "pointer" : "default",
+        borderColor: selected ? "#27ae60" : "#e0e0e0",
+        background: selected ? "#f3fbf5" : "#fafafa",
+      }}
+    >
       <div
         style={{
           display: "flex",
@@ -814,15 +798,23 @@ function LocationCard({ loc, onRemove }: { loc?: LocationOption; onRemove: () =>
         }}
       >
         <strong>{loc?.name ?? "?"}</strong>
-        <button
-          type="button"
-          style={removeChip}
-          title="Usuń"
-          aria-label={`Usuń: ${loc?.name ?? ""}`}
-          onClick={onRemove}
-        >
-          ✕
-        </button>
+        <span style={{ display: "flex", alignItems: "center", gap: "0.3rem" }}>
+          <RecencyBadge rank={loc?.recent_rank ?? null} />
+          {onRemove && (
+            <button
+              type="button"
+              style={removeChip}
+              title="Usuń"
+              aria-label={`Usuń: ${loc?.name ?? ""}`}
+              onClick={(e) => {
+                e.stopPropagation();
+                onRemove();
+              }}
+            >
+              ✕
+            </button>
+          )}
+        </span>
       </div>
       <div style={{ color: "#888", fontSize: "0.75rem" }}>
         {locationTypeLabel(loc?.location_type)}
@@ -959,6 +951,12 @@ const checkboxRow: React.CSSProperties = {
   margin: "0 0 0.5rem",
   fontSize: "0.85rem",
   color: "#555",
+};
+
+const cardGrid: React.CSSProperties = {
+  display: "flex",
+  flexWrap: "wrap",
+  gap: "0.6rem",
 };
 
 const locationCard: React.CSSProperties = {

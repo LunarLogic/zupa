@@ -15,9 +15,9 @@ RSpec.describe "Admin trip builder", type: :system do
     visit "/admin/trip_builder"
     find("input[type=date]").set("2026-07-01")
 
-    # Step 1 — preselect a location
-    within("#location-pool") { click_button "Miejsce Alfa" }
-    expect(page).to have_content("Wybrane miejsca (1)")
+    # Step 1 — preselect a location (click its card)
+    within("#location-pool") { find("[aria-label='Miejsce Alfa']").click }
+    expect(page).to have_content("Wybrane (1)")
     click_button "Dalej", exact: false
 
     # Step 2 — roster + mark a driver
@@ -52,21 +52,21 @@ RSpec.describe "Admin trip builder", type: :system do
     visit "/admin/trip_builder"
 
     within("#location-pool") do
-      expect(page).to have_button("Miejsce Alfa")
+      expect(page).to have_css("[aria-label='Miejsce Alfa']")
       check "Ukryj odwiedzone na ostatnim wyjeździe"
-      expect(page).not_to have_button("Miejsce Alfa")
-      expect(page).to have_button("Miejsce Beta")
+      expect(page).not_to have_css("[aria-label='Miejsce Alfa']")
+      expect(page).to have_css("[aria-label='Miejsce Beta']")
     end
   end
 
   it "restores the in-progress wizard from localStorage after a reload" do
     visit "/admin/trip_builder"
-    within("#location-pool") { click_button "Miejsce Alfa" }
-    expect(page).to have_content("Wybrane miejsca (1)")
+    within("#location-pool") { find("[aria-label='Miejsce Alfa']").click }
+    expect(page).to have_content("Wybrane (1)")
 
     visit "/admin/trip_builder" # reload
 
-    expect(page).to have_content("Wybrane miejsca (1)")
-    within("#location-pool") { expect(page).not_to have_button("Miejsce Alfa") }
+    expect(page).to have_content("Wybrane (1)")
+    within("#location-pool") { expect(page).not_to have_css("[aria-label='Miejsce Alfa']") }
   end
 end
