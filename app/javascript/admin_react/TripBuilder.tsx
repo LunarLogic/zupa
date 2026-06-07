@@ -556,6 +556,8 @@ function Step3Groups({
   setGroups: React.Dispatch<React.SetStateAction<WizardGroup[]>>;
 }) {
   const [activeGroup, setActiveGroup] = useState(0);
+  const [locationQuery, setLocationQuery] = useState("");
+  const [volunteerQuery, setVolunteerQuery] = useState("");
 
   const assignedLocationIds = useMemo(
     () => new Set(groups.flatMap((g) => g.locationIds)),
@@ -566,20 +568,21 @@ function Step3Groups({
     [groups]
   );
 
-  const locationPool = useMemo(
-    () =>
-      preselected
-        .filter((id) => !assignedLocationIds.has(id))
-        .map((id) => locationsById.get(id))
-        .filter((l): l is LocationOption => !!l)
-        .sort(overdueFirst),
-    [preselected, assignedLocationIds, locationsById]
-  );
+  const locationPool = useMemo(() => {
+    const q = locationQuery.trim().toLowerCase();
+    return preselected
+      .filter((id) => !assignedLocationIds.has(id))
+      .map((id) => locationsById.get(id))
+      .filter((l): l is LocationOption => !!l && (q === "" || l.name.toLowerCase().includes(q)))
+      .sort(overdueFirst);
+  }, [preselected, assignedLocationIds, locationsById, locationQuery]);
 
-  const volunteerPool = useMemo(
-    () => roster.filter((id) => !assignedVolunteerIds.has(id)),
-    [roster, assignedVolunteerIds]
-  );
+  const volunteerPool = useMemo(() => {
+    const q = volunteerQuery.trim().toLowerCase();
+    return roster
+      .filter((id) => !assignedVolunteerIds.has(id))
+      .filter((id) => q === "" || (volunteersById.get(id)?.name ?? "").toLowerCase().includes(q));
+  }, [roster, assignedVolunteerIds, volunteersById, volunteerQuery]);
 
   const updateGroup = (index: number, patch: Partial<WizardGroup>) =>
     setGroups((prev) => prev.map((g, i) => (i === index ? { ...g, ...patch } : g)));
@@ -591,6 +594,14 @@ function Step3Groups({
       <div style={{ width: 384, display: "flex", flexDirection: "column", gap: "1.25rem" }}>
         <aside id="location-pool" style={poolPanel}>
           <h4 style={{ marginTop: 0 }}>Miejsca</h4>
+          <input
+            type="text"
+            className="form-control"
+            placeholder="Szukaj miejsca…"
+            value={locationQuery}
+            onChange={(e) => setLocationQuery(e.target.value)}
+            style={{ marginBottom: "0.5rem" }}
+          />
           <div style={poolList}>
             {locationPool.map((l) => (
               <button
@@ -618,6 +629,14 @@ function Step3Groups({
 
         <aside style={poolPanel}>
           <h4 style={{ marginTop: 0 }}>Wolontariusze</h4>
+          <input
+            type="text"
+            className="form-control"
+            placeholder="Szukaj wolontariusza…"
+            value={volunteerQuery}
+            onChange={(e) => setVolunteerQuery(e.target.value)}
+            style={{ marginBottom: "0.5rem" }}
+          />
           <div style={poolList}>
             {volunteerPool.map((id) => {
               const v = volunteersById.get(id);
