@@ -1,6 +1,6 @@
 class TripGroupDecorator < SimpleDelegator
   def name
-    [prefix, volunteers].join(": ")
+    "GR #{number}"
   end
 
   def water_count
@@ -90,14 +90,6 @@ class TripGroupDecorator < SimpleDelegator
   end
 
   private
-
-  def prefix
-    "GR #{number}"
-  end
-
-  def volunteers
-    super.join(", ")
-  end
 
   def people_across_destinations
     @people_across_destinations ||= trip_destinations.flat_map { |td| td.trip_destination_people.to_a }

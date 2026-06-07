@@ -151,8 +151,8 @@ RSpec.describe "Admin trips preparations", type: :system do
       click_link "Książki"
 
       within("#books-content") do
-        expect(page).to have_css("h3", text: "GR 1: Anna")
-        expect(page).to have_css("h3", text: "GR 2: Bartek")
+        expect(page).to have_css("h3", text: "GR 1")
+        expect(page).to have_css("h3", text: "GR 2")
         expect(page).to have_css("table", count: 2)
       end
     end
@@ -220,7 +220,7 @@ RSpec.describe "Admin trips preparations", type: :system do
       click_link "Książki"
 
       within("#books-content") do
-        expect(page).to have_css("h3", text: "GR 1: Kasia")
+        expect(page).to have_css("h3", text: "GR 1")
         expect(page).not_to have_css("h3", text: "GR 2")
         expect(page).to have_css("table", count: 1)
       end
