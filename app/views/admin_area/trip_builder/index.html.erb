@@ -1,7 +1,8 @@
 <% content_for(:title, "Nowy wyjazd") %>
 
 <%
-  locations = LocationRepository.new.active_with_recency.map do |row|
+  location_repository = LocationRepository.new
+  locations = location_repository.active_with_recency.map do |row|
     loc = row[:location]
     {
       id: loc.id,
@@ -12,18 +13,27 @@
       animal_count: row[:animal_count],
       sandwich_count: row[:sandwich_count],
       location_type: row[:location_type],
+      region: row[:region],
       people: row[:people],
       animals: row[:animals]
     }
   end
 
+  recent_volunteer_ids = Volunteer.ids_on_recent_trips.to_set
   volunteers = Volunteer.active.order(:last_name, :first_name).map do |volunteer|
-    {id: volunteer.id, name: volunteer.full_name, gender: volunteer.gender}
+    {
+      id: volunteer.id,
+      name: volunteer.full_name,
+      gender: volunteer.gender,
+      on_recent_trips: recent_volunteer_ids.include?(volunteer.id)
+    }
   end
 
   admin_users = AdminUser.order(:email).map do |user|
     {id: user.id, name: user.full_name}
   end
+
+  rotation_trip = Trip.order(date: :desc).second
 
   bootstrap = {
     locations: locations,
@@ -31,7 +41,9 @@
     adminUsers: admin_users,
     currentUserId: current_user.id,
     csrfToken: form_authenticity_token,
-    createUrl: "/admin_area/trip_builder"
+    createUrl: "/admin_area/trip_builder",
+    rotationLocationIds: location_repository.second_to_last_trip_location_ids,
+    rotationTripDate: rotation_trip&.date&.iso8601
   }
 %>
 

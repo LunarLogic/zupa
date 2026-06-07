@@ -7,6 +7,7 @@ export interface LocationOption {
   animal_count: number;
   sandwich_count: number;
   location_type: "regular" | "estimated";
+  region: string | null;
   people: { name: string }[];
   animals: { name: string; species: string }[];
 }
@@ -15,6 +16,7 @@ export interface Option {
   id: number;
   name: string;
   gender?: "female" | "male" | "non_binary" | null;
+  on_recent_trips?: boolean;
 }
 
 export interface Bootstrap {
@@ -24,6 +26,8 @@ export interface Bootstrap {
   currentUserId: number;
   csrfToken: string;
   createUrl: string;
+  rotationLocationIds: number[];
+  rotationTripDate: string | null;
 }
 
 export interface GroupState {

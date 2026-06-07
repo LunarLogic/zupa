@@ -16,7 +16,7 @@ class LocationRepository
       .maximum("trips.date")
     rank = recent_trip_rank_by_location(before_date)
 
-    Location.where(status: "active").includes(:active_people, :active_animals).order(:name).map do |location|
+    Location.where(status: "active").includes(:region, :active_people, :active_animals).order(:name).map do |location|
       {
         location: location,
         last_scheduled_at: last_scheduled[location.id],
@@ -25,10 +25,26 @@ class LocationRepository
         animal_count: location.animal_count,
         sandwich_count: location.sandwich_count,
         location_type: location.location_type,
+        region: location.region_name,
         people: location.active_people.map { |person| {name: person.first_name} },
         animals: location.active_animals.map { |animal| {name: animal.name, species: animal.species} }
       }
     end
+  end
+
+  # Distinct location ids of the second-most-recent trip (the rotation partner
+  # ~2 weeks back). Powers the builder's "copy locations from 2 weeks ago" button.
+  def second_to_last_trip_location_ids(before_date: nil)
+    scope = Trip.all
+    scope = scope.where("date < ?", before_date) if before_date
+    trip = scope.order(date: :desc).second
+    return [] unless trip
+
+    TripDestination
+      .joins(:trip_group)
+      .where(trip_groups: {trip_id: trip.id})
+      .distinct
+      .pluck(:location_id)
   end
 
   private

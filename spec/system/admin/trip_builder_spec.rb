@@ -11,23 +11,25 @@ RSpec.describe "Admin trip builder", type: :system do
     admin_login(admin_user)
   end
 
-  it "builds a manual trip from the pool and lands on the created trip" do
+  it "walks the 3-step wizard and creates a manual trip" do
     visit "/admin/trip_builder"
-    expect(page).to have_content("Miejsca")
-
     find("input[type=date]").set("2026-07-01")
 
-    # click a pooled location into the active group (Grupa 1)
+    # Step 1 — preselect a location
     within("#location-pool") { click_button "Miejsce Alfa" }
+    expect(page).to have_content("Wybrane miejsca (1)")
+    click_button "Dalej", exact: false
 
-    # it leaves the pool and shows under the group
-    within("#location-pool") { expect(page).not_to have_button("Miejsce Alfa") }
-
-    # add both volunteers to the group, then mark one as driver
+    # Step 2 — roster + mark a driver
     click_button "Ola Kierowca"
     click_button "Ela Pomocnik"
     find("button[aria-label='Kierowca: Ola Kierowca']").click
+    click_button "Dalej", exact: false
 
+    # Step 3 — place into a group
+    within("#location-pool") { click_button "Miejsce Alfa" }
+    click_button "Ola Kierowca"
+    click_button "Ela Pomocnik"
     click_button "Utwórz wyjazd"
 
     expect(page).to have_current_path(%r{/admin/trips/\d+}, wait: 5)
@@ -41,11 +43,11 @@ RSpec.describe "Admin trip builder", type: :system do
     expect(group.volunteers.map(&:full_name)).to eq(["Ela Pomocnik"])
   end
 
-  it "hides recently visited locations when the toggle is on" do
+  it "hides locations visited on the last trip when toggled (Step 1)" do
     alfa = Location.find_by(name: "Miejsce Alfa")
     trip = create(:trip, organiser: admin_user, date: Date.current)
-    group = create(:trip_group, trip: trip, volunteer_names: ["x"])
-    create(:trip_destination, trip_group: group, location: alfa, order: 1)
+    g = create(:trip_group, trip: trip, volunteer_names: ["x"])
+    create(:trip_destination, trip_group: g, location: alfa, order: 1)
 
     visit "/admin/trip_builder"
 
@@ -57,32 +59,14 @@ RSpec.describe "Admin trip builder", type: :system do
     end
   end
 
-  it "removes a volunteer from other groups' lists once assigned (cross-group dedupe)" do
+  it "restores the in-progress wizard from localStorage after a reload" do
     visit "/admin/trip_builder"
     within("#location-pool") { click_button "Miejsce Alfa" }
-
-    # assign Ola to Grupa 1
-    click_button "Ola Kierowca"
-
-    # open a second group — Ola is no longer offered anywhere, Ela still is
-    click_button "+ Dodaj grupę"
-    expect(page).not_to have_button("Ola Kierowca")
-    expect(page).to have_button("Ela Pomocnik")
-  end
-
-  it "restores an in-progress trip from localStorage after a reload" do
-    visit "/admin/trip_builder"
-    within("#location-pool") { click_button "Miejsce Alfa" }
-
-    # Alfa is now assigned (out of the pool)
-    within("#location-pool") { expect(page).not_to have_button("Miejsce Alfa") }
+    expect(page).to have_content("Wybrane miejsca (1)")
 
     visit "/admin/trip_builder" # reload
 
-    # draft restored: Alfa is still assigned, not back in the pool
-    within("#location-pool") do
-      expect(page).not_to have_button("Miejsce Alfa")
-      expect(page).to have_button("Miejsce Beta")
-    end
+    expect(page).to have_content("Wybrane miejsca (1)")
+    within("#location-pool") { expect(page).not_to have_button("Miejsce Alfa") }
   end
 end

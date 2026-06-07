@@ -30,6 +30,27 @@ RSpec.describe Volunteer, type: :model do
     end
   end
 
+  describe ".ids_on_recent_trips" do
+    let(:admin) { create(:admin_user) }
+
+    it "returns ids of helpers and drivers from the last N trips" do
+      driver = create(:volunteer)
+      helper = create(:volunteer)
+      old_volunteer = create(:volunteer)
+
+      recent = create(:trip, :manual, date: Date.new(2026, 6, 8), organiser: admin)
+      g = create(:trip_group, trip: recent, volunteer_names: nil)
+      g.drivers << driver
+      g.volunteers << helper
+
+      old_trip = create(:trip, :manual, date: Date.new(2026, 1, 1), organiser: admin)
+      og = create(:trip_group, trip: old_trip, volunteer_names: nil)
+      og.volunteers << old_volunteer
+
+      expect(Volunteer.ids_on_recent_trips(trip_count: 1)).to contain_exactly(driver.id, helper.id)
+    end
+  end
+
   describe "destroy guard" do
     it "blocks deletion when assigned to a trip group" do
       volunteer = create(:volunteer)

@@ -46,9 +46,33 @@ RSpec.describe LocationRepository do
       expect(rows["Regularna"][:location_type]).to eq("regular")
       expect(rows["Regularna"][:people].map { |p| p[:name] }).to eq(["Ola"])
       expect(rows["Regularna"][:animals]).to eq([{name: "Mila", species: "cat"}])
+      expect(rows["Regularna"][:region]).to eq(regular.region.name)
       expect(rows["Grupowa"][:person_count]).to eq(10)
       expect(rows["Grupowa"][:sandwich_count]).to eq(20)
       expect(rows["Grupowa"][:location_type]).to eq("estimated")
+    end
+  end
+
+  describe "#second_to_last_trip_location_ids" do
+    let(:admin) { create(:admin_user) }
+
+    it "returns the location ids of the second-most-recent trip" do
+      loc_last = create(:location, name: "Last")
+      loc_prev = create(:location, name: "Prev")
+
+      last = create(:trip, date: Date.new(2026, 6, 8), organiser: admin)
+      g_last = create(:trip_group, trip: last, volunteer_names: ["a"])
+      create(:trip_destination, trip_group: g_last, location: loc_last, order: 1)
+
+      prev = create(:trip, date: Date.new(2026, 6, 1), organiser: admin)
+      g_prev = create(:trip_group, trip: prev, volunteer_names: ["b"])
+      create(:trip_destination, trip_group: g_prev, location: loc_prev, order: 1)
+
+      expect(described_class.new.second_to_last_trip_location_ids).to contain_exactly(loc_prev.id)
+    end
+
+    it "returns an empty array when there are fewer than two trips" do
+      expect(described_class.new.second_to_last_trip_location_ids).to eq([])
     end
   end
 end

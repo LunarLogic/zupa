@@ -13,6 +13,18 @@ class Volunteer < ApplicationRecord
 
   scope :active, -> { where(active: true) }
 
+  # Ids of volunteers (helpers or drivers) who were on any of the last N trips.
+  # Surfaces the recent crew first in the builder's roster step.
+  def self.ids_on_recent_trips(trip_count: 3)
+    recent_trip_ids = Trip.order(date: :desc).limit(trip_count).pluck(:id)
+    return [] if recent_trip_ids.empty?
+
+    TripGroup.where(trip_id: recent_trip_ids)
+      .includes(:volunteers, :drivers)
+      .flat_map { |group| group.volunteers.map(&:id) + group.drivers.map(&:id) }
+      .uniq
+  end
+
   def full_name
     "#{first_name} #{last_name}"
   end
