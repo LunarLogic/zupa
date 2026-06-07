@@ -31,8 +31,8 @@ RSpec.describe "Admin trip builder", type: :system do
     click_button "Ola Kierowca"
     click_button "Ela Pomocnik"
 
-    # add a per-location note (click the group's location card to reveal the input)
-    find("strong", text: "Miejsce Alfa").click
+    # add a per-location note (open the note field on the location card)
+    find("[aria-label='Dodatkowe informacje…']").click
     fill_in "Dodatkowe informacje…", with: "Kod do bramy 1234"
     find("input[type=date]").click # blur the note field before submitting
 

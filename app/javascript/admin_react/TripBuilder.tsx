@@ -827,14 +827,10 @@ function Step3Groups({
               <strong style={{ display: "block", marginTop: "1.15rem" }}>
                 Informacje dla grupy
               </strong>
-              <textarea
-                className="form-control"
-                placeholder="Dodatkowe informacje dla całej grupy…"
+              <NoteField
                 value={group.groupNote}
-                rows={2}
-                onClick={(e) => e.stopPropagation()}
-                onChange={(e) => updateGroup(index, { groupNote: e.target.value })}
-                style={{ marginTop: "0.4rem", fontSize: "0.85rem", maxWidth: 420 }}
+                onChange={(value) => updateGroup(index, { groupNote: value })}
+                placeholder="Dodatkowe informacje dla całej grupy…"
               />
             </section>
           );
@@ -873,19 +869,14 @@ function LocationCard({
   note?: string;
   onNoteChange?: (value: string) => void;
 }) {
-  const [open, setOpen] = useState(false);
-  const editable = !!onNoteChange;
-  const hasNote = (note ?? "") !== "";
-  const handleClick = onClick ?? (editable ? () => setOpen(true) : undefined);
-
   return (
     <div
-      onClick={handleClick}
-      role={handleClick ? "button" : undefined}
+      onClick={onClick}
+      role={onClick ? "button" : undefined}
       aria-label={onClick ? loc?.name : undefined}
       style={{
         ...locationCard,
-        cursor: handleClick ? "pointer" : "default",
+        cursor: onClick ? "pointer" : "default",
         borderColor: selected ? "#27ae60" : "#e0e0e0",
         background: selected ? "#f3fbf5" : "#fafafa",
       }}
@@ -930,35 +921,65 @@ function LocationCard({
           🐾 {loc.animals.map((a) => `${a.name} (${speciesLabel(a.species)})`).join(", ")}
         </div>
       )}
-      {editable &&
-        (open ? (
-          <textarea
-            className="form-control"
-            placeholder="Dodatkowe informacje…"
-            value={note ?? ""}
-            autoFocus
-            rows={2}
-            onClick={(e) => e.stopPropagation()}
-            onBlur={() => setOpen(false)}
-            onChange={(e) => onNoteChange?.(e.target.value)}
-            style={{ marginTop: "0.4rem", fontSize: "0.8rem" }}
-          />
-        ) : hasNote ? (
-          <div
-            style={{
-              marginTop: "0.25rem",
-              fontSize: "0.8rem",
-              color: "#555",
-              whiteSpace: "pre-wrap",
-            }}
-          >
-            📝 {note}
-          </div>
-        ) : (
-          <div style={{ color: "#2c6cb0", fontSize: "0.75rem", marginTop: "0.25rem" }}>
-            + dodatkowe informacje
-          </div>
-        ))}
+      {onNoteChange && <NoteField value={note ?? ""} onChange={onNoteChange} />}
+    </div>
+  );
+}
+
+// Collapsed "+ dodatkowe informacje" link → textarea (opens on click, collapses
+// on blur when empty) → clamped text when filled. Shared by location and group notes.
+function NoteField({
+  value,
+  onChange,
+  placeholder = "Dodatkowe informacje…",
+}: {
+  value: string;
+  onChange: (value: string) => void;
+  placeholder?: string;
+}) {
+  const [open, setOpen] = useState(false);
+
+  if (open) {
+    return (
+      <textarea
+        className="form-control"
+        placeholder={placeholder}
+        value={value}
+        autoFocus
+        rows={2}
+        onClick={(e) => e.stopPropagation()}
+        onBlur={() => setOpen(false)}
+        onChange={(e) => onChange(e.target.value)}
+        style={{ marginTop: "0.4rem", fontSize: "0.8rem" }}
+      />
+    );
+  }
+  const openNote = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setOpen(true);
+  };
+
+  if (value !== "") {
+    return (
+      <div
+        role="button"
+        aria-label={placeholder}
+        title={value}
+        onClick={openNote}
+        style={clampedNote}
+      >
+        📝 {value}
+      </div>
+    );
+  }
+  return (
+    <div
+      role="button"
+      aria-label={placeholder}
+      onClick={openNote}
+      style={{ color: "#2c6cb0", fontSize: "0.75rem", marginTop: "0.25rem", cursor: "pointer" }}
+    >
+      + dodatkowe informacje
     </div>
   );
 }
@@ -1087,6 +1108,17 @@ const cardGrid: React.CSSProperties = {
   display: "flex",
   flexWrap: "wrap",
   gap: "0.6rem",
+};
+
+const clampedNote: React.CSSProperties = {
+  marginTop: "0.25rem",
+  fontSize: "0.8rem",
+  color: "#555",
+  cursor: "pointer",
+  display: "-webkit-box",
+  WebkitLineClamp: 2,
+  WebkitBoxOrient: "vertical",
+  overflow: "hidden",
 };
 
 const locationCard: React.CSSProperties = {
