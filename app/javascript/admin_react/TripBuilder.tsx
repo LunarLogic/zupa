@@ -466,7 +466,7 @@ function VolunteerPicker({
   }, [volunteers, memberIds, takenElsewhere, query]);
 
   return (
-    <div>
+    <div style={{ width: 360, maxWidth: "100%" }}>
       <strong>Wolontariusze</strong>
       {memberIds.length > 0 && (
         <div style={{ display: "flex", flexWrap: "wrap", gap: "0.4rem", margin: "0.5rem 0" }}>
@@ -475,7 +475,7 @@ function VolunteerPicker({
             const volunteer = volunteersById.get(id);
             const name = volunteer?.name ?? String(id);
             return (
-              <span key={id} style={isDriver ? driverChip : memberChip}>
+              <span key={id} style={memberChip}>
                 <span aria-hidden="true">{personIcon(volunteer?.gender)}</span>
                 <span>{name}</span>
                 <button
@@ -504,25 +504,26 @@ function VolunteerPicker({
           })}
         </div>
       )}
-      <div style={{ maxWidth: 360 }}>
-        <input
-          type="text"
-          className="form-control"
-          placeholder="Dodaj wolontariusza…"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          style={{ margin: "0.25rem 0 0.5rem" }}
-        />
-        <div style={{ ...listBox, maxHeight: 150 }}>
-          {available.map((v) => (
-            <button key={v.id} type="button" style={addItem} onClick={() => onAdd(v.id)}>
-              {v.name}
-            </button>
-          ))}
-          {available.length === 0 && (
-            <div style={{ padding: "0.5rem", color: "#999" }}>Brak dostępnych</div>
-          )}
-        </div>
+      <input
+        type="text"
+        className="form-control"
+        placeholder="Dodaj wolontariusza…"
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
+        style={{ margin: "0.25rem 0 0.5rem" }}
+      />
+      <div style={{ ...listBox, maxHeight: 150 }}>
+        {available.map((v) => (
+          <button key={v.id} type="button" style={addItem} onClick={() => onAdd(v.id)}>
+            <span aria-hidden="true" style={{ marginRight: "0.4rem" }}>
+              {personIcon(v.gender)}
+            </span>
+            {v.name}
+          </button>
+        ))}
+        {available.length === 0 && (
+          <div style={{ padding: "0.5rem", color: "#999" }}>Brak dostępnych</div>
+        )}
       </div>
     </div>
   );
@@ -618,13 +619,6 @@ const memberChip: React.CSSProperties = {
   borderRadius: 14,
   padding: "0.15rem 0.5rem",
   fontSize: "0.85rem",
-};
-
-const driverChip: React.CSSProperties = {
-  ...memberChip,
-  background: "#fdf0d5",
-  border: "1px solid #e0b96b",
-  fontWeight: 600,
 };
 
 const driverToggle: React.CSSProperties = {
