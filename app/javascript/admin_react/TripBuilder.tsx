@@ -82,6 +82,7 @@ export default function TripBuilder({ data }: { data: Bootstrap }) {
   const [groups, setGroups] = useState<GroupState[]>(initial.groups);
   const [activeGroup, setActiveGroup] = useState(0);
   const [query, setQuery] = useState("");
+  const [hideRecentLocations, setHideRecentLocations] = useState(false);
   const [volunteerQuery, setVolunteerQuery] = useState("");
   const [errors, setErrors] = useState<string[]>([]);
   const [submitting, setSubmitting] = useState(false);
@@ -112,10 +113,23 @@ export default function TripBuilder({ data }: { data: Bootstrap }) {
 
   const pool = useMemo(() => {
     const q = query.trim().toLowerCase();
-    return data.locations.filter(
-      (l) => !assignedLocationIds.has(l.id) && (q === "" || l.name.toLowerCase().includes(q))
-    );
-  }, [data.locations, assignedLocationIds, query]);
+    return data.locations
+      .filter(
+        (l) =>
+          !assignedLocationIds.has(l.id) &&
+          (q === "" || l.name.toLowerCase().includes(q)) &&
+          (!hideRecentLocations || l.recent_rank == null)
+      )
+      .sort((a, b) => {
+        // overdue first: never-visited, then oldest last_scheduled_at, then name
+        if (a.last_scheduled_at !== b.last_scheduled_at) {
+          if (a.last_scheduled_at == null) return -1;
+          if (b.last_scheduled_at == null) return 1;
+          return a.last_scheduled_at < b.last_scheduled_at ? -1 : 1;
+        }
+        return a.name.localeCompare(b.name);
+      });
+  }, [data.locations, assignedLocationIds, query, hideRecentLocations]);
 
   const assignedVolunteerIds = useMemo(() => {
     const set = new Set<number>();
@@ -289,6 +303,23 @@ export default function TripBuilder({ data }: { data: Bootstrap }) {
               onChange={(e) => setQuery(e.target.value)}
               style={{ marginBottom: "0.5rem" }}
             />
+            <label
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "0.4rem",
+                margin: "0 0 0.5rem",
+                fontSize: "0.85rem",
+                color: "#555",
+              }}
+            >
+              <input
+                type="checkbox"
+                checked={hideRecentLocations}
+                onChange={(e) => setHideRecentLocations(e.target.checked)}
+              />
+              Ukryj ostatnio odwiedzone
+            </label>
             <div style={poolList}>
               {pool.map((l) => (
                 <button

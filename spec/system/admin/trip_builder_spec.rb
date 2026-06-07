@@ -41,6 +41,22 @@ RSpec.describe "Admin trip builder", type: :system do
     expect(group.volunteers.map(&:full_name)).to eq(["Ela Pomocnik"])
   end
 
+  it "hides recently visited locations when the toggle is on" do
+    alfa = Location.find_by(name: "Miejsce Alfa")
+    trip = create(:trip, organiser: admin_user, date: Date.current)
+    group = create(:trip_group, trip: trip, volunteer_names: ["x"])
+    create(:trip_destination, trip_group: group, location: alfa, order: 1)
+
+    visit "/admin/trip_builder"
+
+    within("#location-pool") do
+      expect(page).to have_button("Miejsce Alfa")
+      check "Ukryj ostatnio odwiedzone"
+      expect(page).not_to have_button("Miejsce Alfa")
+      expect(page).to have_button("Miejsce Beta")
+    end
+  end
+
   it "removes a volunteer from other groups' lists once assigned (cross-group dedupe)" do
     visit "/admin/trip_builder"
     within("#location-pool") { click_button "Miejsce Alfa" }
