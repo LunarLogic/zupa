@@ -737,7 +737,14 @@ function Step3Groups({
           id="location-pool"
           style={{ ...poolPanel, paddingBottom: showList || showMap ? "1.25rem" : "0.75rem" }}
         >
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "baseline",
+              marginBottom: showList || showMap ? "0.5rem" : 0,
+            }}
+          >
             <h4 style={{ margin: 0 }}>Miejsca</h4>
             <span style={{ display: "flex", gap: "0.75rem" }}>
               <button type="button" onClick={() => setShowList((s) => !s)} style={toggleLink}>
@@ -800,7 +807,14 @@ function Step3Groups({
         </aside>
 
         <aside style={{ ...poolPanel, paddingBottom: showVolunteers ? "1.25rem" : "0.75rem" }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "baseline",
+              marginBottom: showVolunteers ? "0.5rem" : 0,
+            }}
+          >
             <h4 style={{ margin: 0 }}>Wolontariusze</h4>
             <button type="button" onClick={() => setShowVolunteers((s) => !s)} style={toggleLink}>
               {showVolunteers ? "Ukryj listę" : "Pokaż listę"}
