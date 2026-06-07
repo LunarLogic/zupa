@@ -597,7 +597,7 @@ function Step2Volunteers({
       <div style={{ flex: 1, minWidth: 320 }}>
         <h4 style={{ marginTop: 0 }}>Skład wyjazdu ({roster.length})</h4>
         <p style={{ color: "#888", fontSize: "0.85rem", marginTop: 0 }}>
-          Kliknij 🚗, aby oznaczyć kierowcę.
+          Kliknij wolontariusza, aby oznaczyć go jako kierowcę (🚗).
         </p>
         {roster.length === 0 ? (
           <p style={{ color: "#999" }}>Dodaj wolontariuszy z listy po lewej.</p>
