@@ -13,7 +13,9 @@ const PALETTE = [
   "#34495e",
 ];
 
-const DRAFT_KEY = "zupa.tripBuilder.v2";
+// v3: volunteerIds now holds ALL group members; driverIds is the subset marked
+// as drivers. (v2 drafts used a drivers/helpers split and are discarded.)
+const DRAFT_KEY = "zupa.tripBuilder.v3";
 
 interface DraftState {
   date: string;
@@ -89,6 +91,12 @@ export default function TripBuilder({ data }: { data: Bootstrap }) {
     return map;
   }, [data.locations]);
 
+  const volunteersById = useMemo(() => {
+    const map = new Map<number, Option>();
+    data.volunteers.forEach((v) => map.set(v.id, v));
+    return map;
+  }, [data.volunteers]);
+
   // Autosave the in-progress trip so an accidental reload doesn't lose it.
   useEffect(() => {
     const draft: DraftState = { date, organiserId, groups };
@@ -121,6 +129,35 @@ export default function TripBuilder({ data }: { data: Bootstrap }) {
     updateGroup(groupIndex, {
       locationIds: groups[groupIndex].locationIds.filter((id) => id !== locationId),
     });
+  };
+
+  const addMember = (groupIndex: number, volunteerId: number) => {
+    updateGroup(groupIndex, { volunteerIds: [...groups[groupIndex].volunteerIds, volunteerId] });
+  };
+
+  const removeMember = (groupIndex: number, volunteerId: number) => {
+    updateGroup(groupIndex, {
+      volunteerIds: groups[groupIndex].volunteerIds.filter((id) => id !== volunteerId),
+      driverIds: groups[groupIndex].driverIds.filter((id) => id !== volunteerId),
+    });
+  };
+
+  const toggleDriver = (groupIndex: number, volunteerId: number) => {
+    const drivers = groups[groupIndex].driverIds;
+    updateGroup(groupIndex, {
+      driverIds: drivers.includes(volunteerId)
+        ? drivers.filter((id) => id !== volunteerId)
+        : [...drivers, volunteerId],
+    });
+  };
+
+  // A volunteer belongs to at most one group: hide those taken by other groups.
+  const volunteersTakenElsewhere = (groupIndex: number): Set<number> => {
+    const set = new Set<number>();
+    groups.forEach((g, i) => {
+      if (i !== groupIndex) g.volunteerIds.forEach((id) => set.add(id));
+    });
+    return set;
   };
 
   const addGroup = () => {
@@ -349,25 +386,16 @@ export default function TripBuilder({ data }: { data: Bootstrap }) {
                   </ol>
                 )}
 
-                <div style={{ display: "flex", gap: "1.5rem", flexWrap: "wrap" }}>
-                  <PeoplePicker
-                    title="Kierowcy"
-                    people={data.volunteers}
-                    selected={group.driverIds}
-                    onChange={(ids) =>
-                      updateGroup(index, {
-                        driverIds: ids,
-                        volunteerIds: group.volunteerIds.filter((v) => !ids.includes(v)),
-                      })
-                    }
-                  />
-                  <PeoplePicker
-                    title="Pomocnicy"
-                    people={data.volunteers.filter((v) => !group.driverIds.includes(v.id))}
-                    selected={group.volunteerIds}
-                    onChange={(ids) => updateGroup(index, { volunteerIds: ids })}
-                  />
-                </div>
+                <VolunteerPicker
+                  volunteers={data.volunteers}
+                  volunteersById={volunteersById}
+                  memberIds={group.volunteerIds}
+                  driverIds={group.driverIds}
+                  takenElsewhere={volunteersTakenElsewhere(index)}
+                  onAdd={(id) => addMember(index, id)}
+                  onRemove={(id) => removeMember(index, id)}
+                  onToggleDriver={(id) => toggleDriver(index, id)}
+                />
               </section>
             );
           })}
@@ -403,37 +431,91 @@ function RecencyBadge({ rank }: { rank: number | null }) {
   return null;
 }
 
-function PeoplePicker({
-  title,
-  people,
-  selected,
-  onChange,
+// One searchable list to add volunteers to the group; members appear as chips,
+// each with a driver toggle. Volunteers already in another group are excluded
+// (a volunteer belongs to one group).
+function VolunteerPicker({
+  volunteers,
+  volunteersById,
+  memberIds,
+  driverIds,
+  takenElsewhere,
+  onAdd,
+  onRemove,
+  onToggleDriver,
 }: {
-  title: string;
-  people: Option[];
-  selected: number[];
-  onChange: (ids: number[]) => void;
+  volunteers: Option[];
+  volunteersById: Map<number, Option>;
+  memberIds: number[];
+  driverIds: number[];
+  takenElsewhere: Set<number>;
+  onAdd: (id: number) => void;
+  onRemove: (id: number) => void;
+  onToggleDriver: (id: number) => void;
 }) {
-  const toggle = (id: number) => {
-    onChange(selected.includes(id) ? selected.filter((x) => x !== id) : [...selected, id]);
-  };
+  const [query, setQuery] = useState("");
+  const available = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    return volunteers.filter(
+      (v) =>
+        !memberIds.includes(v.id) &&
+        !takenElsewhere.has(v.id) &&
+        (q === "" || v.name.toLowerCase().includes(q))
+    );
+  }, [volunteers, memberIds, takenElsewhere, query]);
 
   return (
-    <div style={{ flex: 1, minWidth: 220 }}>
-      <strong>{title}</strong>
+    <div>
+      <strong>Wolontariusze</strong>
+      {memberIds.length > 0 && (
+        <div style={{ display: "flex", flexWrap: "wrap", gap: "0.4rem", margin: "0.5rem 0" }}>
+          {memberIds.map((id) => {
+            const isDriver = driverIds.includes(id);
+            const name = volunteersById.get(id)?.name ?? String(id);
+            return (
+              <span key={id} style={isDriver ? driverChip : memberChip}>
+                <button
+                  type="button"
+                  aria-label={`Kierowca: ${name}`}
+                  title={isDriver ? "Kierowca — kliknij, by cofnąć" : "Oznacz jako kierowcę"}
+                  onClick={() => onToggleDriver(id)}
+                  style={driverToggle}
+                >
+                  🚗
+                </button>
+                <span>
+                  {name}
+                  {isDriver && " (kierowca)"}
+                </span>
+                <button
+                  type="button"
+                  aria-label={`Usuń: ${name}`}
+                  onClick={() => onRemove(id)}
+                  style={removeChip}
+                >
+                  ✕
+                </button>
+              </span>
+            );
+          })}
+        </div>
+      )}
+      <input
+        type="text"
+        className="form-control"
+        placeholder="Dodaj wolontariusza…"
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
+        style={{ margin: "0.25rem 0 0.5rem" }}
+      />
       <div style={{ ...listBox, maxHeight: 150 }}>
-        {people.map((p) => (
-          <label key={p.id} style={listItem}>
-            <input
-              type="checkbox"
-              checked={selected.includes(p.id)}
-              onChange={() => toggle(p.id)}
-            />
-            <span>{p.name}</span>
-          </label>
+        {available.map((v) => (
+          <button key={v.id} type="button" style={addItem} onClick={() => onAdd(v.id)}>
+            {v.name}
+          </button>
         ))}
-        {people.length === 0 && (
-          <div style={{ padding: "0.5rem", color: "#999" }}>Brak wolontariuszy</div>
+        {available.length === 0 && (
+          <div style={{ padding: "0.5rem", color: "#999" }}>Brak dostępnych</div>
         )}
       </div>
     </div>
@@ -503,14 +585,42 @@ const listBox: React.CSSProperties = {
   overflowY: "auto",
 };
 
-const listItem: React.CSSProperties = {
-  display: "flex",
-  alignItems: "center",
-  gap: "0.5rem",
+const addItem: React.CSSProperties = {
+  display: "block",
+  width: "100%",
+  textAlign: "left",
   padding: "0.35rem 0.6rem",
+  border: "none",
   borderBottom: "1px solid #f0f0f0",
+  background: "transparent",
   cursor: "pointer",
-  margin: 0,
+};
+
+const memberChip: React.CSSProperties = {
+  display: "inline-flex",
+  alignItems: "center",
+  gap: "0.3rem",
+  background: "#f2f2f2",
+  border: "1px solid #ddd",
+  borderRadius: 14,
+  padding: "0.15rem 0.5rem",
+  fontSize: "0.85rem",
+};
+
+const driverChip: React.CSSProperties = {
+  ...memberChip,
+  background: "#fdf0d5",
+  border: "1px solid #e0b96b",
+  fontWeight: 600,
+};
+
+const driverToggle: React.CSSProperties = {
+  border: "none",
+  background: "transparent",
+  cursor: "pointer",
+  padding: 0,
+  fontSize: "0.85rem",
+  lineHeight: 1,
 };
 
 const removeChip: React.CSSProperties = {

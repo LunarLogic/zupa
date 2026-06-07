@@ -23,8 +23,10 @@ RSpec.describe "Admin trip builder", type: :system do
     # it leaves the pool and shows under the group
     within("#location-pool") { expect(page).not_to have_button("Miejsce Alfa") }
 
-    within(:xpath, "//*[strong[text()='Kierowcy']]") { find("label", text: "Ola Kierowca").click }
-    within(:xpath, "//*[strong[text()='Pomocnicy']]") { find("label", text: "Ela Pomocnik").click }
+    # add both volunteers to the group, then mark one as driver
+    click_button "Ola Kierowca"
+    click_button "Ela Pomocnik"
+    find("button[aria-label='Kierowca: Ola Kierowca']").click
 
     click_button "Utwórz wyjazd"
 
@@ -37,6 +39,19 @@ RSpec.describe "Admin trip builder", type: :system do
     expect(group.trip_destinations.map { |d| d.location.name }).to eq(["Miejsce Alfa"])
     expect(group.drivers.map(&:full_name)).to eq(["Ola Kierowca"])
     expect(group.volunteers.map(&:full_name)).to eq(["Ela Pomocnik"])
+  end
+
+  it "removes a volunteer from other groups' lists once assigned (cross-group dedupe)" do
+    visit "/admin/trip_builder"
+    within("#location-pool") { click_button "Miejsce Alfa" }
+
+    # assign Ola to Grupa 1
+    click_button "Ola Kierowca"
+
+    # open a second group — Ola is no longer offered anywhere, Ela still is
+    click_button "+ Dodaj grupę"
+    expect(page).not_to have_button("Ola Kierowca")
+    expect(page).to have_button("Ela Pomocnik")
   end
 
   it "restores an in-progress trip from localStorage after a reload" do
