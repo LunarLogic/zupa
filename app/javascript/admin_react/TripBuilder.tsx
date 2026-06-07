@@ -394,7 +394,7 @@ export default function TripBuilder({ data }: { data: Bootstrap }) {
                   )}
                 </div>
 
-                <strong style={{ display: "block", marginTop: "1.5rem" }}>Miejsca</strong>
+                <strong style={{ display: "block", marginTop: "1.15rem" }}>Miejsca</strong>
                 {group.locationIds.length === 0 ? (
                   <p style={{ color: "#999", margin: "0.25rem 0 0.75rem" }}>
                     Brak miejsc — kliknij lokację z puli po lewej.
