@@ -10,6 +10,9 @@ Trestle.resource(:volunteers) do
   table do
     column :last_name
     column :first_name
+    column :gender do |volunteer|
+      I18n.t("genders.#{volunteer.gender}", default: "") if volunteer.gender
+    end
     column :active
     actions
   end
@@ -17,6 +20,7 @@ Trestle.resource(:volunteers) do
   form do |_volunteer|
     text_field :first_name
     text_field :last_name
+    select :gender, [["Kobieta", "female"], ["Mężczyzna", "male"]], include_blank: true
     check_box :active
   end
 

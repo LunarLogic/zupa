@@ -361,8 +361,9 @@ export default function TripBuilder({ data }: { data: Bootstrap }) {
                   Σ {totals.people} os · {totals.sandwiches} kanapek
                 </p>
 
+                <strong>Miejsca</strong>
                 {group.locationIds.length === 0 ? (
-                  <p style={{ color: "#999", margin: "0 0 0.75rem" }}>
+                  <p style={{ color: "#999", margin: "0.25rem 0 0.75rem" }}>
                     Brak lokacji — kliknij lokację z puli po lewej.
                   </p>
                 ) : (
@@ -471,22 +472,25 @@ function VolunteerPicker({
         <div style={{ display: "flex", flexWrap: "wrap", gap: "0.4rem", margin: "0.5rem 0" }}>
           {memberIds.map((id) => {
             const isDriver = driverIds.includes(id);
-            const name = volunteersById.get(id)?.name ?? String(id);
+            const volunteer = volunteersById.get(id);
+            const name = volunteer?.name ?? String(id);
             return (
               <span key={id} style={isDriver ? driverChip : memberChip}>
+                <span aria-hidden="true">{personIcon(volunteer?.gender)}</span>
+                <span>{name}</span>
                 <button
                   type="button"
                   aria-label={`Kierowca: ${name}`}
                   title={isDriver ? "Kierowca — kliknij, by cofnąć" : "Oznacz jako kierowcę"}
                   onClick={() => onToggleDriver(id)}
-                  style={driverToggle}
+                  style={{
+                    ...driverToggle,
+                    filter: isDriver ? "none" : "grayscale(1)",
+                    opacity: isDriver ? 1 : 0.4,
+                  }}
                 >
                   🚗
                 </button>
-                <span>
-                  {name}
-                  {isDriver && " (kierowca)"}
-                </span>
                 <button
                   type="button"
                   aria-label={`Usuń: ${name}`}
@@ -500,26 +504,34 @@ function VolunteerPicker({
           })}
         </div>
       )}
-      <input
-        type="text"
-        className="form-control"
-        placeholder="Dodaj wolontariusza…"
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
-        style={{ margin: "0.25rem 0 0.5rem" }}
-      />
-      <div style={{ ...listBox, maxHeight: 150 }}>
-        {available.map((v) => (
-          <button key={v.id} type="button" style={addItem} onClick={() => onAdd(v.id)}>
-            {v.name}
-          </button>
-        ))}
-        {available.length === 0 && (
-          <div style={{ padding: "0.5rem", color: "#999" }}>Brak dostępnych</div>
-        )}
+      <div style={{ maxWidth: 360 }}>
+        <input
+          type="text"
+          className="form-control"
+          placeholder="Dodaj wolontariusza…"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          style={{ margin: "0.25rem 0 0.5rem" }}
+        />
+        <div style={{ ...listBox, maxHeight: 150 }}>
+          {available.map((v) => (
+            <button key={v.id} type="button" style={addItem} onClick={() => onAdd(v.id)}>
+              {v.name}
+            </button>
+          ))}
+          {available.length === 0 && (
+            <div style={{ padding: "0.5rem", color: "#999" }}>Brak dostępnych</div>
+          )}
+        </div>
       </div>
     </div>
   );
+}
+
+function personIcon(gender?: string | null): string {
+  if (gender === "female") return "👩";
+  if (gender === "male") return "👨";
+  return "🧑";
 }
 
 const card: React.CSSProperties = {

@@ -14,7 +14,7 @@
   end
 
   volunteers = Volunteer.active.order(:last_name, :first_name).map do |volunteer|
-    {id: volunteer.id, name: volunteer.full_name}
+    {id: volunteer.id, name: volunteer.full_name, gender: volunteer.gender}
   end
 
   admin_users = AdminUser.order(:email).map do |user|

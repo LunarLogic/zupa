@@ -19,6 +19,9 @@ pl:
   location_types:
     regular: Zwykłe
     estimated: Grupowe
+  genders:
+    female: Kobieta
+    male: Mężczyzna
   species:
     cat: Kot
     dog: Pies
@@ -246,6 +249,7 @@ pl:
       volunteer:
         first_name: Imię
         last_name: Nazwisko
+        gender: Płeć
         active: Aktywny
       app_setting:
         persons_per_thermos: Liczba osób na duży termos

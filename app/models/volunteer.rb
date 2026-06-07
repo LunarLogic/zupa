@@ -1,4 +1,6 @@
 class Volunteer < ApplicationRecord
+  enum gender: {female: "female", male: "male"}
+
   has_and_belongs_to_many :trip_groups, join_table: "trip_groups_volunteers"
   has_and_belongs_to_many :driving_groups, class_name: "TripGroup",
     join_table: "trip_groups_drivers", foreign_key: :volunteer_id,
