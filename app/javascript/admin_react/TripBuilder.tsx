@@ -298,7 +298,9 @@ export default function TripBuilder({ data }: { data: Bootstrap }) {
                   onClick={() => assignLocation(l.id)}
                 >
                   <span style={{ flex: 1, textAlign: "left" }}>{l.name}</span>
-                  <span style={{ color: "#666", fontSize: "0.8rem" }}>{l.person_count} os.</span>
+                  <span style={{ color: "#666", fontSize: "0.8rem" }}>
+                    {l.person_count} {peopleWord(l.person_count)}
+                  </span>
                   <RecencyBadge rank={l.recent_rank} />
                 </button>
               ))}
@@ -367,7 +369,16 @@ export default function TripBuilder({ data }: { data: Bootstrap }) {
                 >
                   <h3 style={{ ...heading, color: isActive ? color : "#aaa", marginBottom: 0 }}>
                     Grupa {index + 1}
-                    {isActive && <span style={activeTag}>aktywna</span>}
+                    <span
+                      style={{
+                        marginLeft: "0.6rem",
+                        fontSize: "0.85rem",
+                        fontWeight: "normal",
+                        color: "#666",
+                      }}
+                    >
+                      👤 {peopleTotal} {peopleWord(peopleTotal)}
+                    </span>
                   </h3>
                   {groups.length > 1 && (
                     <button
@@ -383,11 +394,7 @@ export default function TripBuilder({ data }: { data: Bootstrap }) {
                   )}
                 </div>
 
-                <p style={{ color: "#555", margin: "0.5rem 0 0.75rem" }}>
-                  Σ {peopleTotal} os
-                </p>
-
-                <strong>Miejsca</strong>
+                <strong style={{ display: "block", marginTop: "1.5rem" }}>Miejsca</strong>
                 {group.locationIds.length === 0 ? (
                   <p style={{ color: "#999", margin: "0.25rem 0 0.75rem" }}>
                     Brak miejsc — kliknij lokację z puli po lewej.
@@ -564,6 +571,14 @@ function locationTypeLabel(type?: string): string {
   return "";
 }
 
+function peopleWord(n: number): string {
+  if (n === 1) return "osoba";
+  const lastTwo = n % 100;
+  const last = n % 10;
+  if (last >= 2 && last <= 4 && !(lastTwo >= 12 && lastTwo <= 14)) return "osoby";
+  return "osób";
+}
+
 function speciesLabel(species: string): string {
   return (
     { cat: "kot", dog: "pies", rat: "szczur", bird: "ptak", other: "inny" }[species] ?? species
@@ -661,14 +676,4 @@ const badge: React.CSSProperties = {
   padding: "0.1rem 0.45rem",
   fontSize: "0.7rem",
   whiteSpace: "nowrap",
-};
-
-const activeTag: React.CSSProperties = {
-  marginLeft: "0.6rem",
-  fontSize: "0.7rem",
-  fontWeight: "normal",
-  background: "#eef4fb",
-  color: "#2c6cb0",
-  borderRadius: 10,
-  padding: "0.1rem 0.5rem",
 };
