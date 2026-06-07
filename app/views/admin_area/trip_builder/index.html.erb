@@ -31,9 +31,9 @@
   }
 %>
 
-<div class="main-content-area" style="max-width: 100%;">
-  <div class="main-content-container" style="max-width: 100%; width: 100%;">
-    <div id="trip-builder-root"></div>
+<div class="main-content-area">
+  <div class="main-content-container">
+    <div id="trip-builder-root" style="flex: 1; min-width: 0;"></div>
     <script type="application/json" id="trip-builder-data">
       <%= raw bootstrap.to_json %>
     </script>
