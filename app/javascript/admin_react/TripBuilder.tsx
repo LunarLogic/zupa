@@ -725,7 +725,6 @@ function Step3Groups({
           <LocationMap
             apiKey={mapsApiKey}
             locations={mapLocations}
-            activeColor={PALETTE[targetGroup % PALETTE.length]}
             colorFor={colorForLocation}
             onToggle={toggleLocationOnMap}
             height={320}
@@ -922,14 +921,12 @@ function markerIconUrl(color: string): string {
 function LocationMap({
   apiKey,
   locations,
-  activeColor,
   colorFor,
   onToggle,
   height = 480,
 }: {
   apiKey: string;
   locations: LocationOption[];
-  activeColor: string;
   colorFor: (id: number) => string;
   onToggle: (id: number) => void;
   height?: number;
@@ -949,11 +946,6 @@ function LocationMap({
 
   return (
     <div style={{ marginBottom: "1.25rem" }}>
-      <p style={{ color: "#888", fontSize: "0.85rem", margin: "0 0 0.5rem" }}>
-        Klikasz pinezkę → Grupa (aktywna):{" "}
-        <span style={{ color: activeColor, fontWeight: 600 }}>■</span>. Klik przypisanej pinezki
-        usuwa ją z grupy.
-      </p>
       <GoogleMap
         mapContainerStyle={{ width: "100%", height, borderRadius: 6 }}
         onLoad={fitToMarkers}
