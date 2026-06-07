@@ -690,6 +690,18 @@ function Step3Groups({
           alignSelf: "flex-start",
         }}
       >
+        <button
+          type="button"
+          style={{ ...toggleLink, alignSelf: "flex-end" }}
+          onClick={() => {
+            const next = !(showList && showVolunteers);
+            setShowList(next);
+            setShowVolunteers(next);
+          }}
+        >
+          {showList && showVolunteers ? "Ukryj wszystko" : "Pokaż wszystko"}
+        </button>
+
         <aside id="location-pool" style={poolPanel}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
             <h4 style={{ marginTop: 0 }}>Miejsca</h4>
@@ -800,6 +812,22 @@ function Step3Groups({
       </div>
 
       <div style={{ flex: 1, minWidth: 320 }}>
+        {groups.length > 1 && (
+          <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: "0.5rem" }}>
+            <button
+              type="button"
+              style={toggleLink}
+              onClick={() => {
+                const allCollapsed = groups.every((_, i) => collapsedGroups.includes(i));
+                setCollapsedGroups(allCollapsed ? [] : groups.map((_, i) => i));
+              }}
+            >
+              {groups.every((_, i) => collapsedGroups.includes(i))
+                ? "Rozwiń wszystkie"
+                : "Zwiń wszystkie"}
+            </button>
+          </div>
+        )}
         {groups.map((group, index) => {
           const color = PALETTE[index % PALETTE.length];
           const isActive = index === activeGroup;
@@ -832,7 +860,11 @@ function Step3Groups({
                       color: "#666",
                     }}
                   >
-                    👤 {peopleTotal} {peopleWord(peopleTotal)}
+                    <span title="Miejsca">📍 {group.locationIds.length}</span>
+                    {" · "}
+                    <span title="Osoby">👤 {peopleTotal}</span>
+                    {" · "}
+                    <span title="Wolontariusze">👥 {group.volunteerIds.length}</span>
                   </span>
                 </h3>
                 <span style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
