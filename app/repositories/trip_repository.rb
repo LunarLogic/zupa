@@ -14,6 +14,8 @@ class TripRepository
         volunteer_names: group_data.volunteers
       )
 
+      Trips::SyncGroupVolunteers.new.call(group: group, names: group_data.volunteers)
+
       group_data.destinations.each do |destination|
         location = location_repository.find_by_name_approximation(
           destination.value,
