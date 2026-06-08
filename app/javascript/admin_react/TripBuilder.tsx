@@ -350,9 +350,28 @@ export default function TripBuilder({ data }: { data: Bootstrap }) {
           preselected={preselectedLocationIds}
           onAdd={(id) => setPreselected((prev) => [...prev, id])}
           onRemove={removeFromPreselected}
-          onCopyRotation={() =>
-            setPreselected(data.rotationLocationIds.filter((id) => locationsById.has(id)))
-          }
+          onCopyRotation={() => {
+            // Copy the rotation trip's location set AND its group layout (which
+            // locations were grouped together). Volunteers/notes are week-specific
+            // and not copied. Filter to locations that still exist. Replaces state.
+            const valid = (ids: number[]) => ids.filter((id) => locationsById.has(id));
+            const layout = (data.rotationGroups ?? [])
+              .map((g) => valid(g.locationIds))
+              .filter((ids) => ids.length > 0);
+            if (layout.length > 0) {
+              setGroups(
+                layout.map((ids) => ({
+                  locationIds: ids,
+                  volunteerIds: [],
+                  notes: {},
+                  groupNote: "",
+                }))
+              );
+              setPreselected(Array.from(new Set(layout.flat())));
+            } else {
+              setPreselected(valid(data.rotationLocationIds));
+            }
+          }}
         />
       )}
 

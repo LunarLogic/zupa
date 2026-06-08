@@ -79,6 +79,7 @@
     createUrl: "/admin_area/trip_builder",
     mapsApiKey: ENV["REACT_APP_GOOGLE_MAPS_API_KEY"].to_s,
     rotationLocationIds: location_repository.second_to_last_trip_location_ids,
+    rotationGroups: (rotation_trip&.groups || []).map { |g| {locationIds: g.trip_destinations.map(&:location_id)} },
     rotationTripDate: rotation_trip&.date&.iso8601,
     existingTrip: existing_trip,
     updateUrl: (@edit_trip ? "/admin_area/trip_builder/#{@edit_trip.id}" : nil)

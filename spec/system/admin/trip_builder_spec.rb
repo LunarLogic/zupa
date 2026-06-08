@@ -51,6 +51,30 @@ RSpec.describe "Admin trip builder", type: :system do
     expect(group.volunteers.map(&:full_name)).to eq(["Ela Pomocnik"])
   end
 
+  it "copies the rotation trip's locations AND group layout (Step 1 button)" do
+    alfa = Location.find_by(name: "Miejsce Alfa")
+    beta = Location.find_by(name: "Miejsce Beta")
+    rotation = create(:trip, date: Date.new(2026, 5, 28), organiser: admin_user)
+    create(:trip, date: Date.new(2026, 6, 4), organiser: admin_user) # makes rotation the 2nd-most-recent
+    g1 = create(:trip_group, trip: rotation, number: 1, volunteer_names: ["x"])
+    create(:trip_destination, trip_group: g1, location: alfa, order: 1)
+    g2 = create(:trip_group, trip: rotation, number: 2, volunteer_names: ["y"])
+    create(:trip_destination, trip_group: g2, location: beta, order: 1)
+
+    visit "/admin/trip_builder"
+    find("button", text: "Kopiuj z wyjazdu sprzed 2 tyg.").click
+    expect(page).to have_content("Wybrane (2)")
+
+    click_button "Dalej", exact: false
+    click_button "Dalej", exact: false
+    click_button "Utwórz wyjazd"
+
+    expect(page).to have_current_path(%r{/admin/trips/\d+}, wait: 5)
+    created = Trip.find_by(source: "manual")
+    layout = created.groups.map { |g| g.trip_destinations.map { |d| d.location.name } }
+    expect(layout).to contain_exactly(["Miejsce Alfa"], ["Miejsce Beta"])
+  end
+
   it "hides locations visited on the last trip when toggled (Step 1)" do
     alfa = Location.find_by(name: "Miejsce Alfa")
     trip = create(:trip, organiser: admin_user, date: Date.current)

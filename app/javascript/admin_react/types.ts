@@ -46,6 +46,7 @@ export interface Bootstrap {
   createUrl: string;
   mapsApiKey: string;
   rotationLocationIds: number[];
+  rotationGroups: { locationIds: number[] }[];
   rotationTripDate: string | null;
   existingTrip: ExistingTrip | null;
   updateUrl: string | null;
