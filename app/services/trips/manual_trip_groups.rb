@@ -30,12 +30,17 @@ module Trips
       end
     end
 
-    # Volo-app access code for the trip, valid until the day after the trip.
-    # Replaces any existing code; blank clears it.
+    # Volo-app access code for the trip, valid from the day before until the day
+    # after the trip. Replaces any existing code; blank clears it.
     def apply_access_code(trip, code)
       trip.auth_code&.destroy!
       return if code.blank?
-      AuthCode.create!(trip: trip, value: code, expires_at: (trip.date + 1.day).end_of_day)
+      AuthCode.create!(
+        trip: trip,
+        value: code,
+        valid_from: (trip.date - 1.day).beginning_of_day,
+        expires_at: (trip.date + 1.day).end_of_day
+      )
     end
 
     def assign_volunteers(group, group_data)

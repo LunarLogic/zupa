@@ -45,6 +45,7 @@ RSpec.describe Trips::CreateManualTrip do
     code = result.value!.auth_code
     expect(code.value).to eq("zupa1234")
     expect(code.expires_at.to_date).to eq(Date.new(2026, 7, 2))
+    expect(code.valid_from.to_date).to eq(Date.new(2026, 6, 30)) # day before the trip
   end
 
   it "creates no access code when blank" do

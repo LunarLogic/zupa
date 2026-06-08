@@ -38,17 +38,26 @@ interface DraftState {
   groups: WizardGroup[];
 }
 
-function nextThursdayISO(): string {
-  const today = new Date();
-  const daysAhead = (4 - today.getDay() + 7) % 7 || 7; // 4 = Thursday
-  const target = new Date(today);
-  target.setDate(today.getDate() + daysAhead);
-  return target.toISOString().slice(0, 10);
+// Weekday trips are distributed on (0 = Sunday … 6 = Saturday). Change this one
+// constant if the distribution day ever moves off Thursday.
+const TRIP_WEEKDAY = 4;
+
+// ISO date (YYYY-MM-DD) of the next upcoming TRIP_WEEKDAY, used to prefill the
+// trip date. Built from LOCAL date parts — toISOString() renders the UTC day,
+// which is off by one in the evening/early morning for UTC+1/+2 (Poland).
+function nextTripDateISO(): string {
+  const target = new Date();
+  const daysAhead = (TRIP_WEEKDAY - target.getDay() + 7) % 7 || 7;
+  target.setDate(target.getDate() + daysAhead);
+  const y = target.getFullYear();
+  const m = String(target.getMonth() + 1).padStart(2, "0");
+  const d = String(target.getDate()).padStart(2, "0");
+  return `${y}-${m}-${d}`;
 }
 
 function defaultDraft(data: Bootstrap): DraftState {
   return {
-    date: nextThursdayISO(),
+    date: nextTripDateISO(),
     organiserId: data.currentUserId,
     step: 1,
     accessCode: "",
@@ -87,7 +96,7 @@ function sanitizeDraft(raw: string | null, data: Bootstrap): DraftState | null {
     });
 
     return {
-      date: parsed.date || nextThursdayISO(),
+      date: parsed.date || nextTripDateISO(),
       organiserId: organiserIds.has(parsed.organiserId as number)
         ? (parsed.organiserId as number)
         : data.currentUserId,
@@ -117,7 +126,7 @@ function overdueFirst(a: LocationOption, b: LocationOption): number {
 
 function editDraft(e: ExistingTrip, currentUserId: number): DraftState {
   return {
-    date: e.date ?? nextThursdayISO(),
+    date: e.date ?? nextTripDateISO(),
     organiserId: e.organiserId ?? currentUserId,
     step: 3,
     accessCode: e.accessCode ?? "",

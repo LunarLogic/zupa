@@ -3,7 +3,8 @@ module Auth
     def self.valid?(code, current_time = Time.zone.now)
       codes = AuthCode.where(value: code)
       codes.any? { |code|
-        code.expires_at.utc > current_time
+        (code.valid_from.nil? || code.valid_from.utc <= current_time) &&
+          code.expires_at.utc > current_time
       }
     end
   end
