@@ -35,6 +35,16 @@ RSpec.describe "Admin trip ownership (sheet vs wizard)", type: :system do
       expect(trip.groups.map(&:id)).to match_array(original_group_ids)
       expect(trip.source).to eq("manual")
     end
+
+    it "shows a validation error instead of crashing when a required field is blank" do
+      visit "/admin/trips/#{trip.id}"
+      page.execute_script("document.getElementById('trip_date').value = ''")
+      click_button "Zapisz Wyjazd"
+
+      # No 500 — redirects back, trip keeps its date (update rejected).
+      expect(page).to have_current_path(%r{/admin/trips/#{trip.id}}, wait: 5)
+      expect(trip.reload.date).to be_present
+    end
   end
 
   context "a sheet-managed trip" do

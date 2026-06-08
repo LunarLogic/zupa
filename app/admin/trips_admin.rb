@@ -425,6 +425,10 @@ Trestle.resource(:trips) do
 
       if result == true
         flash[:message] = flash_message("update.success", title: "", message: "")
+      elsif result == false
+        # Metadata-only branches (manual/past) return a boolean from #update;
+        # surface the model's validation errors instead of the sheet-only :not_found shape.
+        flash[:error] = trip.errors.full_messages.join(", ")
       else
         flash[:error] = error_message(result[:not_found]).html_safe
       end
