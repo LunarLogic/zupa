@@ -320,18 +320,15 @@ export default function TripBuilder({ data }: { data: Bootstrap }) {
               ))}
             </select>
           </label>
-          <label style={field}>
-            <span>Kod dostępu (aplikacja wolontariusza)</span>
+          <label style={{ ...field, position: "relative" }}>
+            <span>Kod dostępu</span>
             <input
               type="text"
               className="form-control"
-              placeholder="np. zupa1234 (min. 4 znaki)"
+              placeholder="np. ZupaLove (min. 8 znaków)"
               value={accessCode}
               onChange={(e) => setAccessCode(e.target.value)}
             />
-            <small style={{ color: "#888", marginTop: "0.2rem" }}>
-              Ważny od dnia przed wyjazdem do dnia po wyjeździe (−1 / +1 dzień).
-            </small>
           </label>
           <button
             type="button"
