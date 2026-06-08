@@ -8,7 +8,7 @@ Trestle.resource(:people) do
   end
 
   menu do
-    item :people, icon: "fa fa-user-friends", priority: 10, badge: Person.count, group: :trips
+    item :people, icon: "fa fa-user-friends", priority: 10, badge: Person.count, group: :baza
   end
 
   table do

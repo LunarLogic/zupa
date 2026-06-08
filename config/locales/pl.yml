@@ -77,12 +77,13 @@ pl:
         reports: Raporty
         visit_summaries: Relacje
         trips: Wyjazdy
-        trip_builder: Nowy wyjazd (kreator)
+        trip_builder: Kreator
         volunteers: Wolontariusze
         app_settings: Ustawienia
         books: Książki
         book_packages: Paczki książek
       groups:
+        baza: 🗂️ Baza
         library: 📚 Biblioteka
         configuration: ⚙️ Konfiguracja
         trips: 🚙 Wyjazdy

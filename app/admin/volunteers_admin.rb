@@ -1,6 +1,6 @@
 Trestle.resource(:volunteers) do
   menu do
-    item :volunteers, icon: "fa fa-user-friends", group: :trips, priority: 25
+    item :volunteers, icon: "fa fa-user-friends", group: :baza, priority: 25, badge: Volunteer.count
   end
 
   collection do
