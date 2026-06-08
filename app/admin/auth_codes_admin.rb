@@ -7,6 +7,7 @@ Trestle.resource(:auth_codes) do
   #
   table do
     column :value
+    column :valid_from, align: :center
     column :expires_at, align: :center
     column :created_at, align: :center
     actions
@@ -16,6 +17,7 @@ Trestle.resource(:auth_codes) do
   #
   form do |auth_code|
     text_field :value
+    datetime_field :valid_from
     datetime_field :expires_at
   end
 

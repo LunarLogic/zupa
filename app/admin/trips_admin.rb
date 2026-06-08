@@ -56,9 +56,10 @@ Trestle.resource(:trips) do
             "/admin/trips/#{trip.id}/refresh_snapshots",
             method: :patch, class: "btn btn-warning",
             data: {confirm: I18n.t("admin.trips.refresh_snapshots.confirm")})
-          buttons << link_to(wizard_label,
-            "/admin/trip_builder?trip_id=#{trip.id}",
-            class: "btn btn-primary", data: wizard_data)
+          buttons << link_to("/admin/trip_builder?trip_id=#{trip.id}",
+            class: "btn tb-magic", data: wizard_data) {
+            (icon("fa fa-magic") + " " + wizard_label).html_safe
+          }
         end
         buttons << content_tag(:button, I18n.t("admin.buttons.save", model_name: Trip.model_name.human),
           type: "submit", class: "btn btn-success")
@@ -71,6 +72,28 @@ Trestle.resource(:trips) do
             (icon("fa fa-trash") + " " + I18n.t("admin.buttons.delete", default: "Usuń %{model_name}", model_name: Trip.model_name.human)).html_safe
           }
         end
+
+        # ✨ shimmer on the wizard button — a sweeping highlight + soft glow.
+        concat content_tag(:style, <<~CSS.html_safe)
+          .tb-magic {
+            position: relative; overflow: hidden; border: none; color: #fff;
+            background: linear-gradient(135deg, #a55eea, #8854d0);
+            animation: tb-glow 2.8s ease-in-out infinite;
+          }
+          .tb-magic:hover, .tb-magic:focus {
+            color: #fff; background: linear-gradient(135deg, #b06fef, #9560e0);
+          }
+          .tb-magic::after {
+            content: ""; position: absolute; top: 0; left: -150%; width: 60%; height: 100%;
+            background: linear-gradient(120deg, transparent, rgba(255,255,255,0.65), transparent);
+            transform: skewX(-20deg); animation: tb-shimmer 2.8s ease-in-out infinite;
+          }
+          @keyframes tb-shimmer { 0% { left: -150%; } 55% { left: 150%; } 100% { left: 150%; } }
+          @keyframes tb-glow {
+            0%, 100% { box-shadow: 0 0 0 rgba(165, 94, 234, 0); }
+            55% { box-shadow: 0 0 14px rgba(165, 94, 234, 0.75); }
+          }
+        CSS
 
         concat content_tag(:div, safe_join(buttons),
           style: "margin-top: 1.5rem; display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center;")

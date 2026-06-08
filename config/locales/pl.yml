@@ -322,6 +322,7 @@ pl:
         password_confirmation: Potwierdź Hasło
       auth_code:
         value: Kod
+        valid_from: Ważny od
         expires_at: Ważny do
         created_at: Stworzony
       visit_summary:

@@ -329,6 +329,9 @@ export default function TripBuilder({ data }: { data: Bootstrap }) {
               value={accessCode}
               onChange={(e) => setAccessCode(e.target.value)}
             />
+            <small style={{ color: "#888", marginTop: "0.2rem" }}>
+              Ważny od dnia przed wyjazdem do dnia po wyjeździe (−1 / +1 dzień).
+            </small>
           </label>
           <button
             type="button"
