@@ -10,7 +10,7 @@ module Trips
 
       Array(names).each do |raw|
         is_driver = raw.include?("*")
-        cleaned = raw.delete("*").strip
+        cleaned = clean_name(raw)
         next if cleaned.empty?
 
         volunteer = find_or_create(cleaned)
@@ -22,6 +22,16 @@ module Trips
     end
 
     private
+
+    # Strip non-name markers admins write into the volunteer cell: the "*" driver
+    # flag and "ZUPOWÓZ" (the cell means "this group takes the zupa car", not a
+    # person). Also drops the dangling connectors left behind ("+", ",", " i ").
+    def clean_name(raw)
+      cleaned = raw.delete("*")
+      cleaned = cleaned.gsub(/zupow[oóOÓ]z/i, " ") # car marker, with/without diacritic
+      cleaned = cleaned.tr(",+", " ").squeeze(" ").strip
+      cleaned.sub(/\s+i\z/i, "").strip # trailing "... i" connector
+    end
 
     def find_or_create(name)
       tokens = name.split(/\s+/)
