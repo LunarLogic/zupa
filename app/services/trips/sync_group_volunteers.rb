@@ -28,8 +28,18 @@ module Trips
       first = tokens.first
       last = (tokens.length > 1) ? tokens[1..].join(" ") : "n/a"
 
-      Volunteer.where("LOWER(first_name) = ? AND LOWER(last_name) = ?", first.downcase, last.downcase).first ||
+      existing(first, last) ||
         Volunteer.create!(first_name: first, last_name: last, active: true, gender: guess_gender(first))
+    rescue ActiveRecord::RecordInvalid
+      # Race / case-normalisation edge: a matching volunteer already exists.
+      existing(first, last) || raise
+    end
+
+    # Case-insensitive match using SQL LOWER on both sides, mirroring the
+    # uniqueness validation (Ruby#downcase disagrees with SQL LOWER on some
+    # diacritics, which would let the find miss but the validation still reject).
+    def existing(first, last)
+      Volunteer.where("LOWER(first_name) = LOWER(?) AND LOWER(last_name) = LOWER(?)", first, last).first
     end
 
     def guess_gender(first_name)

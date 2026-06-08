@@ -24,6 +24,16 @@ RSpec.describe Trips::SyncGroupVolunteers do
     expect(Volunteer.find_by(first_name: "Anna").gender).to eq("female")
   end
 
+  it "is idempotent across re-parses (no duplicates, no validation error)" do
+    names = ["Jan Kowalski*", "Ela", "Łukasz Mazur"]
+    described_class.new.call(group: group, names: names)
+
+    other_group = create(:trip_group, trip: create(:trip), volunteer_names: nil)
+    expect {
+      described_class.new.call(group: other_group, names: names)
+    }.not_to change(Volunteer, :count)
+  end
+
   it "reuses existing volunteers (case-insensitive) without changing their gender" do
     existing = create(:volunteer, first_name: "Ela", last_name: "n/a", gender: "male")
 
