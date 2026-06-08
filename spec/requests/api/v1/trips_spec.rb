@@ -49,7 +49,7 @@ RSpec.describe "Trips", :requires_auth, type: :request do
           expect(first_trip["person_count"]).to eq trip.person_count
           expect(first_trip["groups"].first["id"]).to eq trip_group.id
           expect(first_trip["groups"].first["number"]).to eq trip_group.number
-          expect(first_trip["groups"].first["volunteers"]).to eq trip_group.volunteers
+          expect(first_trip["groups"].first["volunteers"]).to eq trip_group.all_volunteer_names
           expect(first_trip["groups"].first["person_count"]).to eq trip_group.person_count
           expect(first_trip["groups"].first["destination_count"]).to eq trip_group.destination_count
           expect(first_trip["groups"].first["animal_count"]).to eq 1
@@ -135,7 +135,7 @@ RSpec.describe "Trips", :requires_auth, type: :request do
           expect(first_trip["person_count"]).to eq trip.person_count
           expect(first_trip["groups"].first["id"]).to eq trip_group.id
           expect(first_trip["groups"].first["number"]).to eq trip_group.number
-          expect(first_trip["groups"].first["volunteers"]).to eq trip_group.volunteers
+          expect(first_trip["groups"].first["volunteers"]).to eq trip_group.all_volunteer_names
           expect(first_trip["groups"].first["person_count"]).to eq trip_group.person_count
           expect(first_trip["groups"].first["destination_count"]).to eq trip_group.destination_count
 

@@ -34,19 +34,87 @@ Trestle.resource(:trips) do
     tab :trip do
       check_box :active
       date_field :date, disabled: trip.past_date?
-      url_field :source_spreadsheet_url, disabled: trip.past_date?
+      # The spreadsheet only owns sheet-managed trips; hide the URL on wizard-managed ones.
+      if trip.new_record? || trip.sheet?
+        url_field :source_spreadsheet_url, disabled: trip.past_date?
+      end
       select :admin_user_id, AdminUser.all,
         selected: trip.admin_user_id || current_user.id, disabled: trip.past_date?
 
-      unless trip.new_record? || trip.past_date?
-        concat content_tag(:div, class: "form-group", style: "margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid #eee;") {
-          content_tag(:p, I18n.t("admin.trips.refresh_snapshots.description"), style: "color: #666;") +
-            link_to(I18n.t("admin.trips.refresh_snapshots.button"),
-              "/admin/trips/#{trip.id}/refresh_snapshots",
-              method: :patch,
-              class: "btn btn-warning",
-              data: {confirm: I18n.t("admin.trips.refresh_snapshots.confirm")})
-        }
+      # Action row + info box render only for persisted trips; new trips keep the
+      # default Trestle top-toolbar save. The whole row lives inside the <form>,
+      # so the Save submit and the (rails-ujs) refresh/delete links sit together
+      # on the white card. The top toolbar is suppressed by the edit/show view
+      # overrides in app/views/admin/trips/.
+      if trip.persisted?
+        wizard_label = trip.sheet? ? I18n.t("admin.trips.switch_to_wizard.button") : I18n.t("admin.trips.edit_in_wizard.button")
+        wizard_data = trip.sheet? ? {confirm: I18n.t("admin.trips.switch_to_wizard.confirm")} : {}
+
+        buttons = []
+        unless trip.past_date?
+          buttons << link_to(I18n.t("admin.trips.refresh_snapshots.button"),
+            "/admin/trips/#{trip.id}/refresh_snapshots",
+            method: :patch, class: "btn btn-warning",
+            data: {confirm: I18n.t("admin.trips.refresh_snapshots.confirm")})
+          buttons << link_to("/admin/trip_builder?trip_id=#{trip.id}",
+            class: "btn tb-magic", data: wizard_data) {
+            (icon("fa fa-magic") + " " + wizard_label).html_safe
+          }
+        end
+        buttons << content_tag(:button, I18n.t("admin.buttons.save", model_name: Trip.model_name.human),
+          type: "submit", class: "btn btn-success")
+
+        unless trip.past_date?
+          # Separator + smaller, set-apart destroy action.
+          buttons << content_tag(:span, "", style: "align-self: stretch; border-left: 1px solid #ddd; margin: 0 0.25rem;")
+          buttons << link_to("/admin/trips/#{trip.id}", method: :delete, class: "btn btn-danger btn-sm",
+            data: {confirm: I18n.t("admin.buttons.delete_confirm", default: "Czy na pewno usunąć ten wyjazd?")}) {
+            (icon("fa fa-trash") + " " + I18n.t("admin.buttons.delete", default: "Usuń %{model_name}", model_name: Trip.model_name.human)).html_safe
+          }
+        end
+
+        # ✨ shimmer on the wizard button — a sweeping highlight + soft glow.
+        concat content_tag(:style, <<~CSS.html_safe)
+          .tb-magic {
+            position: relative; overflow: hidden; border: none; color: #fff;
+            background: linear-gradient(135deg, #a55eea, #8854d0);
+            animation: tb-glow 2.8s ease-in-out infinite;
+          }
+          .tb-magic:hover, .tb-magic:focus {
+            color: #fff; background: linear-gradient(135deg, #b06fef, #9560e0);
+          }
+          .tb-magic::after {
+            content: ""; position: absolute; top: 0; left: -150%; width: 60%; height: 100%;
+            background: linear-gradient(120deg, transparent, rgba(255,255,255,0.65), transparent);
+            transform: skewX(-20deg); animation: tb-shimmer 2.8s ease-in-out infinite;
+          }
+          @keyframes tb-shimmer { 0% { left: -150%; } 55% { left: 150%; } 100% { left: 150%; } }
+          @keyframes tb-glow {
+            0%, 100% { box-shadow: 0 0 0 rgba(165, 94, 234, 0); }
+            55% { box-shadow: 0 0 14px rgba(165, 94, 234, 0.75); }
+          }
+        CSS
+
+        concat content_tag(:div, safe_join(buttons),
+          style: "margin-top: 1.5rem; display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center;")
+
+        # Info box: what the data-changing buttons do.
+        save_info = if trip.past_date?
+          I18n.t("admin.trips.save_info.past")
+        elsif trip.sheet?
+          I18n.t("admin.trips.save_info.sheet")
+        else
+          I18n.t("admin.trips.save_info.manual")
+        end
+        edit_info = trip.sheet? ? I18n.t("admin.trips.edit_info.sheet") : I18n.t("admin.trips.edit_info.manual")
+        info_lines = []
+        unless trip.past_date?
+          info_lines << content_tag(:p, (content_tag(:strong, I18n.t("admin.trips.refresh_snapshots.button") + ": ") + I18n.t("admin.trips.refresh_snapshots.description")).html_safe, style: "margin: 0 0 0.25rem;")
+          info_lines << content_tag(:p, (content_tag(:strong, wizard_label + ": ") + edit_info).html_safe, style: "margin: 0 0 0.25rem;")
+        end
+        info_lines << content_tag(:p, (content_tag(:strong, I18n.t("admin.buttons.save", model_name: Trip.model_name.human) + ": ") + save_info).html_safe, style: "margin: 0;")
+        concat content_tag(:div, safe_join(info_lines),
+          class: "well", style: "margin-top: 1rem; padding: 0.75rem 1rem; background: #f7f7f7; border: 1px solid #eee; border-radius: 4px; color: #666;")
       end
     end
 
@@ -312,7 +380,7 @@ Trestle.resource(:trips) do
                   class: "table table-striped", style: "width: 100%;")
             end
 
-            content_tag(:h3, "GR #{group.number}: #{Array(group.volunteers).join(", ")}", style: "margin-top: 2rem;") +
+            content_tag(:h3, "GR #{group.number}: #{group.all_volunteer_names.join(", ")}", style: "margin-top: 2rem;") +
               safe_join(destination_tables)
           end
 
@@ -347,12 +415,20 @@ Trestle.resource(:trips) do
       trip = Trip.find(params[(:id)])
       result = if trip.past_date?
         trip.update(active: trip_params[:active])
+      elsif trip.manual?
+        # Wizard-managed: save metadata only, never re-parse a spreadsheet.
+        trip.update(trip_params.except(:source_spreadsheet_url))
       else
+        # Sheet-managed: re-parse + rebuild from the spreadsheet.
         Trips::UpdateTrip.new.call(id: params[:id], params: trip_params)
       end
 
       if result == true
         flash[:message] = flash_message("update.success", title: "", message: "")
+      elsif result == false
+        # Metadata-only branches (manual/past) return a boolean from #update;
+        # surface the model's validation errors instead of the sheet-only :not_found shape.
+        flash[:error] = trip.errors.full_messages.join(", ")
       else
         flash[:error] = error_message(result[:not_found]).html_safe
       end

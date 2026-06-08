@@ -1,6 +1,6 @@
 Trestle.resource(:animals) do
   menu do
-    item :animals, icon: "fa fa-paw", priority: 11, badge: Animal.count, group: :trips
+    item :animals, icon: "fa fa-paw", priority: 11, badge: Animal.count, group: :baza
   end
 
   # Customize the table columns shown on the index view.

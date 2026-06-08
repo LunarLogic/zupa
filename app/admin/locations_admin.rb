@@ -8,7 +8,7 @@ Trestle.resource(:locations) do
   end
 
   menu do
-    item :locations, icon: "fa fa-map-marker", priority: 5, badge: Location.count, group: :trips
+    item :locations, icon: "fa fa-map-marker", priority: 5, badge: Location.count, group: :baza
   end
 
   table do

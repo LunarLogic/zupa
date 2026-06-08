@@ -13,7 +13,7 @@ RSpec.describe "Admin trip snapshot", type: :system do
 
   let(:trip) do
     t = create(:trip, date: "2025-09-10", organiser: admin_user)
-    g = create(:trip_group, trip: t, number: 1, volunteers: ["Anna"])
+    g = create(:trip_group, trip: t, number: 1, volunteer_names: ["Anna"])
     create(:trip_destination, trip_group: g, location: location)
     t
   end

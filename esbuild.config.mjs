@@ -56,6 +56,21 @@ const adminBundleConfig = {
   define,
 };
 
+const tripBuilderBundleConfig = {
+  entryPoints: ["trip_builder.tsx"],
+  bundle: true,
+  sourcemap: "linked",
+  outdir: path.join(process.cwd(), "app/assets/builds"),
+  absWorkingDir: path.join(process.cwd(), "app/javascript/admin_react"),
+  minify: isProduction,
+  loader: {
+    ".png": "dataurl",
+    ".svg": "dataurl",
+  },
+  watch: isDevelopment,
+  define,
+};
+
 build(bundleConfig)
   .then(() => {
     console.log("Build completed successfully");
@@ -66,6 +81,15 @@ build(bundleConfig)
   });
 
 build(adminBundleConfig)
+  .then(() => {
+    console.log("Build completed successfully");
+  })
+  .catch((error) => {
+    console.error(`Build failed with error: ${error.message}`);
+    process.exit(1);
+  });
+
+build(tripBuilderBundleConfig)
   .then(() => {
     console.log("Build completed successfully");
   })

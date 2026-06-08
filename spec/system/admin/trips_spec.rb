@@ -17,7 +17,7 @@ RSpec.describe "Admin trips preparations", type: :system do
 
   let(:trip) do
     create(:trip, date: "2025-12-01", organiser: admin_user, preparation_template: default_template).tap do |t|
-      create(:trip_group, trip: t, number: 1, volunteers: ["Anna", "Bartek"])
+      create(:trip_group, trip: t, number: 1, volunteer_names: ["Anna", "Bartek"])
     end
   end
 
@@ -129,8 +129,8 @@ RSpec.describe "Admin trips preparations", type: :system do
   describe "Books tab" do
     let(:trip_with_books) do
       create(:trip, date: "2025-10-10", organiser: admin_user).tap do |t|
-        g1 = create(:trip_group, trip: t, number: 1, volunteers: ["Anna"])
-        g2 = create(:trip_group, trip: t, number: 2, volunteers: ["Bartek"])
+        g1 = create(:trip_group, trip: t, number: 1, volunteer_names: ["Anna"])
+        g2 = create(:trip_group, trip: t, number: 2, volunteer_names: ["Bartek"])
         loc_a = create(:location, name: "Lokacja A")
         loc_b = create(:location, name: "Lokacja B")
         loc_c = create(:location, name: "Lokacja C")
@@ -190,7 +190,7 @@ RSpec.describe "Admin trips preparations", type: :system do
 
     it "shows empty message and hides print button when no preferences anywhere" do
       empty_trip = create(:trip, date: "2025-10-11", organiser: admin_user).tap do |t|
-        g = create(:trip_group, trip: t, number: 1, volunteers: ["Ola"])
+        g = create(:trip_group, trip: t, number: 1, volunteer_names: ["Ola"])
         loc = create(:location, name: "Bez książek")
         create(:person, location: loc, book_preferences: nil)
         create(:trip_destination, trip_group: g, location: loc)
@@ -205,8 +205,8 @@ RSpec.describe "Admin trips preparations", type: :system do
 
     it "omits groups that have no people with preferences" do
       partial_trip = create(:trip, date: "2025-10-12", organiser: admin_user).tap do |t|
-        g1 = create(:trip_group, trip: t, number: 1, volunteers: ["Kasia"])
-        g2 = create(:trip_group, trip: t, number: 2, volunteers: ["Marek"])
+        g1 = create(:trip_group, trip: t, number: 1, volunteer_names: ["Kasia"])
+        g2 = create(:trip_group, trip: t, number: 2, volunteer_names: ["Marek"])
         loc1 = create(:location, name: "Z książkami")
         loc2 = create(:location, name: "Bez")
         create(:person, location: loc1, first_name: "Czyta", last_name: "Książki",

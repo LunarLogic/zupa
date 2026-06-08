@@ -1,6 +1,6 @@
 Trestle.resource(:preparation_templates) do
   menu do
-    item :preparation_templates, icon: "fa fa-file-alt", label: "Szablony przygotowań", priority: 21, group: :trips
+    item :preparation_templates, icon: "fa fa-file-alt", label: "Szablony przygotowań", priority: 22, group: :trips, badge: PreparationTemplate.count
   end
 
   collection do

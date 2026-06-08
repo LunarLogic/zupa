@@ -19,6 +19,10 @@ pl:
   location_types:
     regular: Zwykłe
     estimated: Grupowe
+  genders:
+    female: Kobieta
+    male: Mężczyzna
+    non_binary: Niebinarna
   species:
     cat: Kot
     dog: Pies
@@ -73,15 +77,21 @@ pl:
         reports: Raporty
         visit_summaries: Relacje
         trips: Wyjazdy
+        trip_builder: Kreator
+        volunteers: Wolontariusze
         app_settings: Ustawienia
         books: Książki
         book_packages: Paczki książek
       groups:
+        baza: 🗂️ Baza
         library: 📚 Biblioteka
         configuration: ⚙️ Konfiguracja
         trips: 🚙 Wyjazdy
         content: 📰 Treści
         wardrobe: 🧥 Magazyn Ciepła
+    volunteers:
+      errors:
+        cannot_delete_assigned: Nie można usunąć wolontariusza przypisanego do wyjazdu.
     error_messages:
       phone_length_error: Numer telefonu musi mieć 9 cyfr
       empty_package: "Paczka nie może być pusta"
@@ -128,10 +138,22 @@ pl:
           preferences: Preferencje książkowe
       refresh_snapshots:
         button: Odśwież dane wyjazdu
-        description: "Pobierze aktualne dane osób, paczek i miejsc z bazy. Liczby i preferencje na wyjeździe zostaną nadpisane bieżącymi wartościami."
+        description: "Pobiera aktualne liczby, dane osób i miejsc z bazy."
         confirm: "Nadpisać zapisane dane wyjazdu aktualnymi z bazy?"
         success: Dane wyjazdu odświeżone z bazy.
         past_trip_error: Nie można odświeżyć wyjazdu z przeszłości.
+      save_info:
+        sheet: "Wczytuje i nadpisuje grupy i miejsca z Tabelki Wyjazdowej."
+        manual: "Zapisuje podstawowe dane wyjazdu (datę, organizatora, status)."
+        past: "Zapisuje status wyjazdu (wyjazd z przeszłości — pozostałe pola są zablokowane)."
+      edit_info:
+        sheet: "Otwiera wyjazd w kreatorze do ręcznej edycji i odpina go od Tabelki Wyjazdowej."
+        manual: "Otwiera wyjazd w kreatorze do ręcznej edycji."
+      switch_to_wizard:
+        button: Edytuj w kreatorze
+        confirm: "Czy chcesz edytować ten wyjazd w kreatorze? Po przełączeniu na kreator wyjazd zostanie odpięty od arkusza."
+      edit_in_wizard:
+        button: Edytuj w kreatorze
     preparation_templates:
       label: Szablony przygotowań
       columns:
@@ -238,6 +260,11 @@ pl:
         sparkling_water: Woda gazowana (szt.)
         still_water: Woda niegazowana (szt.)
         book_preferences: Preferencje książkowe
+      volunteer:
+        first_name: Imię
+        last_name: Nazwisko
+        gender: Płeć
+        active: Aktywny
       app_setting:
         persons_per_thermos: Liczba osób na duży termos
         soups_per_person: Zup na osobę
@@ -295,6 +322,7 @@ pl:
         password_confirmation: Potwierdź Hasło
       auth_code:
         value: Kod
+        valid_from: Ważny od
         expires_at: Ważny do
         created_at: Stworzony
       visit_summary:
@@ -390,6 +418,9 @@ pl:
       trip:
         one: Wyjazd
         other: Wyjazdy
+      volunteer:
+        one: Wolontariusz
+        other: Wolontariusze
       preparation_template:
         one: Szablon
         other: Szablony

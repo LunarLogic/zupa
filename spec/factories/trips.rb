@@ -12,5 +12,10 @@ FactoryBot.define do
     trait :historical do
       active { false }
     end
+
+    trait :manual do
+      source { "manual" }
+      source_spreadsheet_url { nil }
+    end
   end
 end

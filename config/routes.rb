@@ -68,6 +68,7 @@ Rails.application.routes.draw do
         patch :deliver
       end
     end
+    resources :trip_builder, only: %i[create update]
   end
   get "*path", to: "components#index", constraints: ->(req) { !req.path.start_with?("/rails/") }
   root "components#index"
