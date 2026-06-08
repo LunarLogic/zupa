@@ -1,0 +1,10 @@
+<%# Overrides Trestle's resource show view to suppress the page-header Save/Delete %>
+<%# toolbar. The action buttons are rendered inside the form (see trips_admin.rb). %>
+<% title = admin.t("titles.edit", default: "Editing %{model_name}") %>
+
+<% content_for(:title, title) %>
+<% breadcrumb(title) unless admin.singular? %>
+
+<%= trestle_form_for instance, url: admin.actions.include?(:update) ? admin.instance_path(instance, action: :update) : "#", method: :patch do |f| %>
+  <%= render partial: "form", layout: dialog_request? ? "dialog" : "layout" %>
+<% end %>

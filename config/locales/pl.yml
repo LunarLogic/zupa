@@ -138,10 +138,22 @@ pl:
           preferences: Preferencje książkowe
       refresh_snapshots:
         button: Odśwież dane wyjazdu
-        description: "Pobierze aktualne dane osób, paczek i miejsc z bazy. Liczby i preferencje na wyjeździe zostaną nadpisane bieżącymi wartościami."
+        description: "Pobiera aktualne liczby, dane osób i miejsc z bazy."
         confirm: "Nadpisać zapisane dane wyjazdu aktualnymi z bazy?"
         success: Dane wyjazdu odświeżone z bazy.
         past_trip_error: Nie można odświeżyć wyjazdu z przeszłości.
+      save_info:
+        sheet: "Wczytuje i nadpisuje grupy i miejsca z Tabelki Wyjazdowej."
+        manual: "Zapisuje podstawowe dane wyjazdu (datę, organizatora, status)."
+        past: "Zapisuje status wyjazdu (wyjazd z przeszłości — pozostałe pola są zablokowane)."
+      edit_info:
+        sheet: "Otwiera wyjazd w kreatorze do ręcznej edycji i odpina go od Tabelki Wyjazdowej."
+        manual: "Otwiera wyjazd w kreatorze do ręcznej edycji."
+      switch_to_wizard:
+        button: Edytuj w kreatorze
+        confirm: "Czy chcesz edytować ten wyjazd w kreatorze? Po przełączeniu na kreator wyjazd zostanie odpięty od arkusza."
+      edit_in_wizard:
+        button: Edytuj w kreatorze
     preparation_templates:
       label: Szablony przygotowań
       columns:
