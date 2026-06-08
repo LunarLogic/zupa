@@ -67,13 +67,16 @@ RSpec.describe Trips::UpdateManualTrip do
     expect(result).to be_failure
   end
 
-  it "rejects a sheet trip" do
-    sheet_trip = create(:trip, organiser: admin, date: Date.new(2026, 7, 1))
+  it "converts a sheet trip to a manual trip" do
+    sheet_trip = create(:trip, organiser: admin, date: Date.new(2026, 7, 1), source: "sheet")
 
     result = described_class.new.call(
       trip: sheet_trip, date: Date.new(2026, 7, 8), organiser: admin,
       groups: [{location_ids: [loc_b.id]}]
     )
-    expect(result).to be_failure
+
+    expect(result).to be_success
+    expect(sheet_trip.reload.source).to eq("manual")
+    expect(sheet_trip.groups.first.trip_destinations.map(&:location)).to eq([loc_b])
   end
 end

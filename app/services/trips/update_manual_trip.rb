@@ -7,14 +7,14 @@ module Trips
     include ManualTripGroups
 
     def call(trip:, date:, organiser:, groups:, access_code: nil)
-      return Failure(["Można edytować tylko wyjazdy utworzone ręcznie"]) unless trip.manual?
       return Failure(["Nie można edytować przeszłego wyjazdu"]) if trip.past_date?
 
       errors = base_errors(date: date, organiser: organiser, groups: groups)
       return Failure(errors) if errors.any?
 
       ActiveRecord::Base.transaction do
-        trip.update!(date: date, organiser: organiser)
+        # Editing in the wizard converts the trip to a structured manual trip.
+        trip.update!(date: date, organiser: organiser, source: "manual")
         trip.groups.destroy_all
         build_groups(trip, groups)
         apply_access_code(trip, access_code)

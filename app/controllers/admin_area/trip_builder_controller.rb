@@ -13,7 +13,7 @@ module AdminArea
     end
 
     def update
-      trip = Trip.manual.find(params[:id])
+      trip = Trip.find(params[:id])
       result = Trips::UpdateManualTrip.new.call(
         trip: trip,
         date: parse_date(params[:date]),

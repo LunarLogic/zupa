@@ -49,7 +49,7 @@ Trestle.resource(:trips) do
         }
       end
 
-      if trip.persisted? && trip.manual? && !trip.past_date?
+      if trip.persisted? && !trip.past_date?
         concat content_tag(:div, class: "form-group", style: "margin-top: 1rem;") {
           link_to("Edytuj w kreatorze", "/admin/trip_builder?trip_id=#{trip.id}", class: "btn btn-primary")
         }
