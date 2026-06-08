@@ -797,7 +797,7 @@ function Step3Groups({
                 </button>
               ))}
               {locationPool.length === 0 && (
-                <div style={{ padding: "0.6rem", color: "#999" }}>Wszystko przypisane</div>
+                <div style={{ padding: "0.6rem", color: "#999" }}>Wszystkie miejsca są przypisane.</div>
               )}
             </div>
           )}
@@ -860,7 +860,7 @@ function Step3Groups({
                   );
                 })}
                 {volunteerPool.length === 0 && (
-                  <div style={{ padding: "0.6rem", color: "#999" }}>Wszyscy przypisani</div>
+                  <div style={{ padding: "0.6rem", color: "#999" }}>Wszyscy wolontariusze są przypisani.</div>
                 )}
               </div>
             </>
