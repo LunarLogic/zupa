@@ -1,6 +1,6 @@
 Trestle.admin(:trip_builder) do
   menu do
-    item :trip_builder, icon: "fa fa-magic", group: :testy, priority: 21,
+    item :trip_builder, icon: "fa fa-magic", group: :testy, priority: 900,
       badge: "BETA", badge_class: "warning",
       if: -> { Flipper.enabled?(:trip_builder, current_user) }
   end

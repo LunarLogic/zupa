@@ -1,6 +1,6 @@
 Trestle.resource(:volunteers) do
   menu do
-    item :volunteers, icon: "fa fa-user-friends", group: :testy, priority: 25,
+    item :volunteers, icon: "fa fa-user-friends", group: :testy, priority: 901,
       badge: "BETA", badge_class: "warning",
       if: -> { Flipper.enabled?(:trip_builder, current_user) }
   end
