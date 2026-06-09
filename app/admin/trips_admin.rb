@@ -49,6 +49,8 @@ Trestle.resource(:trips) do
       if trip.persisted?
         wizard_label = trip.sheet? ? I18n.t("admin.trips.switch_to_wizard.button") : I18n.t("admin.trips.edit_in_wizard.button")
         wizard_data = trip.sheet? ? {confirm: I18n.t("admin.trips.switch_to_wizard.confirm")} : {}
+        # Wizard editing is behind the :trip_builder flag, per logged-in user.
+        show_wizard = !trip.past_date? && Flipper.enabled?(:trip_builder, current_user)
 
         buttons = []
         unless trip.past_date?
@@ -56,6 +58,8 @@ Trestle.resource(:trips) do
             "/admin/trips/#{trip.id}/refresh_snapshots",
             method: :patch, class: "btn btn-warning",
             data: {confirm: I18n.t("admin.trips.refresh_snapshots.confirm")})
+        end
+        if show_wizard
           buttons << link_to("/admin/trip_builder?trip_id=#{trip.id}",
             class: "btn tb-magic", data: wizard_data) {
             (icon("fa fa-magic") + " " + wizard_label).html_safe
@@ -110,6 +114,8 @@ Trestle.resource(:trips) do
         info_lines = []
         unless trip.past_date?
           info_lines << content_tag(:p, (content_tag(:strong, I18n.t("admin.trips.refresh_snapshots.button") + ": ") + I18n.t("admin.trips.refresh_snapshots.description")).html_safe, style: "margin: 0 0 0.25rem;")
+        end
+        if show_wizard
           info_lines << content_tag(:p, (content_tag(:strong, wizard_label + ": ") + edit_info).html_safe, style: "margin: 0 0 0.25rem;")
         end
         info_lines << content_tag(:p, (content_tag(:strong, I18n.t("admin.buttons.save", model_name: Trip.model_name.human) + ": ") + save_info).html_safe, style: "margin: 0;")

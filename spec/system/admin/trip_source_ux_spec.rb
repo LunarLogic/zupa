@@ -4,7 +4,10 @@ RSpec.describe "Admin trip ownership (sheet vs wizard)", type: :system do
   let(:admin_user) { create(:admin_user, password: "password123", password_confirmation: "password123") }
   let(:location) { create(:location, name: "Schronisko") }
 
-  before { admin_login(admin_user) }
+  before do
+    admin_login(admin_user)
+    Flipper.enable(:trip_builder)
+  end
 
   context "a wizard-managed trip" do
     let(:trip) do

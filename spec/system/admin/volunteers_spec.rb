@@ -3,7 +3,10 @@ require "rails_helper"
 RSpec.describe "Admin volunteers", type: :system do
   let(:admin_user) { create(:admin_user, password: "password123", password_confirmation: "password123") }
 
-  before { admin_login(admin_user) }
+  before do
+    admin_login(admin_user)
+    Flipper.enable(:trip_builder)
+  end
 
   it "creates a volunteer" do
     visit "/admin/volunteers/new"

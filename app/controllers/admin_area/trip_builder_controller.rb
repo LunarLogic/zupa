@@ -1,5 +1,7 @@
 module AdminArea
   class TripBuilderController < AdminArea::ApplicationController
+    before_action :require_trip_builder_flag
+
     def create
       organiser = AdminUser.find_by(id: params[:admin_user_id]) || @current_user
       result = Trips::CreateManualTrip.new.call(
@@ -26,6 +28,11 @@ module AdminArea
     end
 
     private
+
+    def require_trip_builder_flag
+      return if Flipper.enabled?(:trip_builder, @current_user)
+      render json: {error: "unauthorized"}, status: :unauthorized
+    end
 
     def render_result(result, status:)
       if result.success?

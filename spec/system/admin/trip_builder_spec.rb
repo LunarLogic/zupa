@@ -9,6 +9,7 @@ RSpec.describe "Admin trip builder", type: :system do
     create(:volunteer, first_name: "Ola", last_name: "Kierowca")
     create(:volunteer, first_name: "Ela", last_name: "Pomocnik")
     admin_login(admin_user)
+    Flipper.enable(:trip_builder)
   end
 
   it "walks the 3-step wizard and creates a manual trip" do

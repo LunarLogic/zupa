@@ -89,6 +89,8 @@ pl:
         trips: 🚙 Wyjazdy
         content: 📰 Treści
         wardrobe: 🧥 Magazyn Ciepła
+        testy: 🧪 Testy
+    feature_unavailable: Ta funkcja jest dostępna tylko dla wybranych użytkowników.
     volunteers:
       errors:
         cannot_delete_assigned: Nie można usunąć wolontariusza przypisanego do wyjazdu.
@@ -145,13 +147,13 @@ pl:
       save_info:
         sheet: "Wczytuje i nadpisuje grupy i miejsca z Tabelki Wyjazdowej."
         manual: "Zapisuje podstawowe dane wyjazdu (datę, organizatora, status)."
-        past: "Zapisuje status wyjazdu (wyjazd z przeszłości — pozostałe pola są zablokowane)."
+        past: "Zapisuje tylko status (aktywny/nieaktywny) wyjazdu."
       edit_info:
         sheet: "Otwiera wyjazd w kreatorze do ręcznej edycji i odpina go od Tabelki Wyjazdowej."
         manual: "Otwiera wyjazd w kreatorze do ręcznej edycji."
       switch_to_wizard:
         button: Edytuj w kreatorze
-        confirm: "Czy chcesz edytować ten wyjazd w kreatorze? Po przełączeniu na kreator wyjazd zostanie odpięty od arkusza."
+        confirm: "Czy chcesz edytować ten wyjazd w kreatorze? Po przełączeniu na kreator wyjazd zostanie odpięty od Tabelki Wyjazdowej."
       edit_in_wizard:
         button: Edytuj w kreatorze
     preparation_templates:

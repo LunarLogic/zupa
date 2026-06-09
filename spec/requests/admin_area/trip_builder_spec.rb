@@ -13,7 +13,18 @@ RSpec.describe "AdminArea::TripBuilder", type: :request do
     end
   end
 
-  before { stub_current_user }
+  before do
+    stub_current_user
+    Flipper.enable(:trip_builder)
+  end
+
+  describe "feature flag gating" do
+    it "rejects the request when :trip_builder is off for the user" do
+      Flipper.disable(:trip_builder)
+      post "/admin_area/trip_builder", params: {date: "2026-07-01", groups: []}, as: :json
+      expect(response).to have_http_status(:unauthorized)
+    end
+  end
 
   describe "POST /admin_area/trip_builder" do
     it "creates a manual trip and returns a redirect target" do
