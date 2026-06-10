@@ -412,7 +412,7 @@ Trestle.resource(:trips) do
       end
 
       redirect_to "/admin/trips"
-    rescue Trips::SpreadsheetAccessError => e
+    rescue Trips::SpreadsheetAccessError, Trips::EmptyTripDataError => e
       flash[:error] = e.message
       redirect_to "/admin/trips"
     end
@@ -440,7 +440,7 @@ Trestle.resource(:trips) do
       end
 
       redirect_to "/admin/trips/#{params[:id]}"
-    rescue Trips::SpreadsheetAccessError => e
+    rescue Trips::SpreadsheetAccessError, Trips::EmptyTripDataError => e
       flash[:error] = e.message
       redirect_to "/admin/trips/#{params[:id]}"
     end
