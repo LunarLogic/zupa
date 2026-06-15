@@ -134,6 +134,7 @@ pl:
         empty: Żadna osoba nie ma zapisanych preferencji książkowych.
         print: Drukuj książki
         print_title: Książki
+        whole_location: Całe miejsce
         columns:
           location: Miejsce
           person: Osoba
@@ -192,6 +193,8 @@ pl:
     locations:
       titles:
         index: Miejsca
+      hints:
+        book_preferences: "Preferencje książkowe dla miejsc grupowych (czytelnicy bez własnych kart). Trafiają do zakładki Książki i wydruku dla Mobilnej Biblioteki."
       validations:
         regular_no_estimate: "— zwykłe miejsce nie może mieć szacowanej liczby osób"
         has_people: "— nie można zmienić na szacowane, miejsce ma przypisane osoby"
@@ -301,6 +304,7 @@ pl:
         name: Nazwa
         region: Region
         info: Informacje
+        book_preferences: Preferencje książkowe (miejsce grupowe)
         latitude: szerokość geograficzna
         longitude: długość geograficzna
         status: Status

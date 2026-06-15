@@ -1,6 +1,10 @@
 import { Translations } from "../types/Translations";
 
 export const pl: Translations = {
+  common: {
+    error: "Coś poszło nie tak",
+    networkError: "Problem z połączeniem. Spróbuj ponownie.",
+  },
   callModal: {
     callPerson: "Zadzwoń do osoby",
     hideNumberPrompt: "Możesz ukryć swój numer przed osobą, do której dzwonisz.",

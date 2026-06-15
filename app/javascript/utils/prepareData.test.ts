@@ -58,6 +58,27 @@ describe("buildTripCardSections", () => {
     expect(result.combinedHtml).toBe("<strong>Książki:</strong>\nPomir: Fantastyka");
   });
 
+  it("appends group-location book preferences after per-person lines", () => {
+    const result = buildTripCardSections(
+      [person({ firstName: "Pomir", bookPreferences: "Fantastyka" })],
+      "",
+      "Reportaże dla całej grupy"
+    );
+    expect(result.combinedHtml).toBe(
+      "<strong>Książki:</strong>\nPomir: Fantastyka\nReportaże dla całej grupy"
+    );
+  });
+
+  it("renders group-location book preferences when there are no people", () => {
+    const result = buildTripCardSections([], "", "Poezja i kryminały");
+    expect(result.combinedHtml).toBe("<strong>Książki:</strong>\nPoezja i kryminały");
+  });
+
+  it("escapes HTML in group-location book preferences", () => {
+    const result = buildTripCardSections([], "", "a & b");
+    expect(result.combinedHtml).toBe("<strong>Książki:</strong>\na &amp; b");
+  });
+
   it("escapes HTML in firstName and bookPreferences", () => {
     const result = buildTripCardSections(
       [person({ firstName: "<b>x</b>", bookPreferences: "a & b" })],

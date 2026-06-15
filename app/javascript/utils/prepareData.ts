@@ -159,7 +159,8 @@ export interface TripCardSections {
 
 export const buildTripCardSections = (
   people: Person[],
-  additionalInfo: string
+  additionalInfo: string,
+  bookPreferences?: string | null
 ): TripCardSections => {
   const waterLines = people
     .map(personWaterLine)
@@ -168,6 +169,12 @@ export const buildTripCardSections = (
   const bookLines = people
     .filter(hasBookPreferences)
     .map((person) => `${person.firstName}: ${person.bookPreferences}`);
+
+  // Group (estimated) locations carry one free-text wish for the whole place
+  // (no per-person cards). Append it after any per-person lines.
+  if (bookPreferences) {
+    bookLines.push(bookPreferences);
+  }
 
   const sections: string[] = [];
   if (additionalInfo) {

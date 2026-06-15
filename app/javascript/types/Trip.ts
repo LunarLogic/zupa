@@ -26,6 +26,7 @@ export type TripGroupLocation = TripNeeds &
     name: string;
     personCount: number;
     additionalInfo: string;
+    bookPreferences?: string | null;
     people: Person[];
   };
 

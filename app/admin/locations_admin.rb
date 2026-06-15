@@ -57,6 +57,7 @@ Trestle.resource(:locations) do
       number_field :estimated_person_count, min: 0
 
       text_area :info
+      text_area :book_preferences, hint: I18n.t("admin.locations.hints.book_preferences")
       text_field :latitude
       text_field :longitude
     end

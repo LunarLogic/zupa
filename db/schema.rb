@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2026_06_08_120100) do
+ActiveRecord::Schema[7.0].define(version: 2026_06_15_120000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -201,6 +201,7 @@ ActiveRecord::Schema[7.0].define(version: 2026_06_08_120100) do
     t.enum "status", default: "active", null: false, enum_type: "location_status_type"
     t.enum "location_type", default: "regular", null: false, enum_type: "location_type"
     t.integer "estimated_person_count", default: 0, null: false
+    t.text "book_preferences"
     t.index ["region_id"], name: "index_locations_on_region_id"
   end
 
