@@ -39,7 +39,7 @@ module Trips
         chocolates: epc * settings.chocolates_per_person,
         waters: epc * (settings.sparkling_water_per_person + settings.still_water_per_person),
         provisions: 0,
-        books: 0,
+        books: trip_destination.location.book_preferences.present? ? 1 : 0,
         person_count: epc,
         package_count: 0
       )

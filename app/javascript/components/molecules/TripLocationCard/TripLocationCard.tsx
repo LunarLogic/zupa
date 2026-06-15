@@ -17,6 +17,7 @@ type TripLocationCardProps = {
   needs: TripNeeds;
   needsCount: TripNeedsCount;
   additionalInfo: string;
+  bookPreferences?: string | null;
 };
 
 const TripLocationCard: FC<TripLocationCardProps> = ({
@@ -26,6 +27,7 @@ const TripLocationCard: FC<TripLocationCardProps> = ({
   needs,
   needsCount,
   additionalInfo,
+  bookPreferences,
 }) => {
   const navigate = useNavigate();
 
@@ -39,7 +41,8 @@ const TripLocationCard: FC<TripLocationCardProps> = ({
 
   const { combinedHtml, previewHtml, needsToggle } = buildTripCardSections(
     people,
-    additionalInfo
+    additionalInfo,
+    bookPreferences
   );
   const showCollapsible = combinedHtml.length > 0;
 

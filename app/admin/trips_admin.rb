@@ -337,7 +337,7 @@ Trestle.resource(:trips) do
                 chocolates: epc * settings.chocolates_per_person,
                 waters: epc * (settings.sparkling_water_per_person + settings.still_water_per_person),
                 provisions: 0,
-                books: 0,
+                books: location.book_preferences.present? ? 1 : 0,
                 package_count: 0,
                 animal_count: location.active_animals.size
               }

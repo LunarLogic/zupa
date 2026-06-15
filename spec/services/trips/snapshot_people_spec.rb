@@ -92,6 +92,15 @@ RSpec.describe Trips::SnapshotPeople do
       expect(trip_destination).to have_attributes(soups: 0, provisions: 0, books: 0)
     end
 
+    it "writes books: 1 when the group location has book preferences" do
+      location.update!(book_preferences: "Kryminały dla całej grupy")
+
+      described_class.new.call(trip_destination: trip_destination)
+
+      trip_destination.reload
+      expect(trip_destination.books).to eq 1
+    end
+
     it "multiplies estimated_person_count by AppSetting defaults for sandwiches/chocolates/waters" do
       described_class.new.call(trip_destination: trip_destination)
 

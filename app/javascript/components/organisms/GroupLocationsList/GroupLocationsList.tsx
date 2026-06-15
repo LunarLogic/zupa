@@ -24,6 +24,7 @@ const GroupLocationsList: FC<GroupLocationsListProps> = ({ locations }) => {
             needs={needs}
             needsCount={needsCount}
             additionalInfo={location.additionalInfo}
+            bookPreferences={location.bookPreferences}
             key={location.locationId}
           />
         );

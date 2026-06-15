@@ -28,6 +28,11 @@ RSpec.describe "Trips", :requires_auth, type: :request do
           FactoryBot.create(:trip_destination, trip_group: trip_group, location: first_location, order: 1)
           FactoryBot.create(:person, :inactive, location: location)
 
+          group_location = FactoryBot.create(:location, name: "Group Location",
+            location_type: "estimated", estimated_person_count: 8,
+            book_preferences: "Reportaże i poezja")
+          FactoryBot.create(:trip_destination, trip_group: trip_group, location: group_location, order: 3)
+
           submit_request(example.metadata)
         end
 
@@ -73,6 +78,7 @@ RSpec.describe "Trips", :requires_auth, type: :request do
           expect(location_json["animal_count"]).to eq 1
           expect(location_json["chocolate_count"]).to eq 1
           expect(location_json["additional_info"]).to eq "text"
+          expect(location_json).to have_key("book_preferences")
           expect(location_json["has_sandwiches"]).to be_truthy
           expect(location_json["has_soups"]).to be_truthy
           expect(location_json["has_provisions"]).to be_truthy
@@ -95,7 +101,17 @@ RSpec.describe "Trips", :requires_auth, type: :request do
             destination["name"]
           end
 
-          expect(ordered_names).to eq ["First Location", "Second Location"]
+          expect(ordered_names).to eq ["First Location", "Second Location", "Group Location"]
+        end
+
+        it "exposes book preferences and marks books for group (estimated) locations" do
+          trip = JSON.parse(response.body).first
+          group_location_json = trip["groups"].first["destinations"].find { |d| d["name"] == "Group Location" }
+
+          expect(group_location_json["book_preferences"]).to eq "Reportaże i poezja"
+          expect(group_location_json["has_books"]).to be_truthy
+          expect(group_location_json["book_count"]).to eq 1
+          expect(group_location_json["people"]).to be_empty
         end
 
         after do |example|
