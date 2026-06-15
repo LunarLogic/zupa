@@ -1,4 +1,8 @@
 export interface Translations {
+  common: {
+    error: string;
+    networkError: string;
+  };
   callModal: {
     callPerson: string;
     hideNumberPrompt: string;
