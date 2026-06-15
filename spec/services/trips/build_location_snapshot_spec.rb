@@ -18,6 +18,7 @@ describe Trips::BuildLocationSnapshot do
       longitude: 1.2,
       latitude: 3.5,
       info: "about location",
+      book_preferences: "Kryminały i poezja",
       active_people: people,
       active_animals: animals
     )
@@ -29,6 +30,7 @@ describe Trips::BuildLocationSnapshot do
       longitude: BigDecimal("1.2"),
       latitude: BigDecimal("3.5"),
       info: "about location",
+      book_preferences: "Kryminały i poezja",
       active_people_ids: [1, 2],
       active_animals_ids: [1, 2]
     })

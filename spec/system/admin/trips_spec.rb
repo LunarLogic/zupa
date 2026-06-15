@@ -203,6 +203,35 @@ RSpec.describe "Admin trips preparations", type: :system do
       expect(page).not_to have_button("Drukuj książki")
     end
 
+    it "shows the riding crew next to each group number" do
+      visit "/admin/trips/#{trip_with_books.id}"
+      click_link "Książki"
+
+      within("#books-content") do
+        expect(page).to have_css("h3", text: "GR 1 — Anna")
+        expect(page).to have_css("h3", text: "GR 2 — Bartek")
+      end
+    end
+
+    it "shows book preferences from group (estimated) locations that have no person cards" do
+      group_trip = create(:trip, date: "2025-10-13", organiser: admin_user).tap do |t|
+        g = create(:trip_group, trip: t, number: 1, volunteer_names: ["Ola"])
+        loc = create(:location, name: "Miejsce grupowe", location_type: "estimated",
+          estimated_person_count: 8, book_preferences: "Reportaże i kryminały")
+        create(:trip_destination, trip_group: g, location: loc)
+      end
+
+      visit "/admin/trips/#{group_trip.id}"
+      click_link "Książki"
+
+      within("#books-content") do
+        expect(page).to have_css("h3", text: "GR 1 — Ola")
+        expect(page).to have_content("Miejsce grupowe")
+        expect(page).to have_content("Całe miejsce")
+        expect(page).to have_content("Reportaże i kryminały")
+      end
+    end
+
     it "omits groups that have no people with preferences" do
       partial_trip = create(:trip, date: "2025-10-12", organiser: admin_user).tap do |t|
         g1 = create(:trip_group, trip: t, number: 1, volunteer_names: ["Kasia"])

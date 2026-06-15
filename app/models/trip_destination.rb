@@ -19,6 +19,12 @@ class TripDestination < ApplicationRecord
     location_snapshot&.dig("name") || location.name
   end
 
+  # Free-text book wishes for group (estimated) locations, whose readers have no
+  # individual Person cards. Snapshotted with the location; falls back to live.
+  def book_preferences
+    location_snapshot&.dig("book_preferences") || location.book_preferences
+  end
+
   def longitude
     location_snapshot&.dig("longitude") || location.longitude
   end

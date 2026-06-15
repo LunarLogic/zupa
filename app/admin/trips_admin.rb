@@ -162,9 +162,16 @@ Trestle.resource(:trips) do
         container do |c|
           groups_with_rows = trip.groups.map do |group|
             rows = group.trip_destinations.flat_map do |td|
-              td.trip_destination_people
+              person_rows = td.trip_destination_people
                 .where.not(book_preferences: [nil, ""])
                 .map { |p| {location: td.name, person: p, preferences: p.book_preferences} }
+              # Group (estimated) locations have no Person cards; their readers'
+              # book wishes live as one free-text blob on the location itself.
+              if td.book_preferences.present?
+                person_rows + [{location: td.name, person: nil, preferences: td.book_preferences}]
+              else
+                person_rows
+              end
             end
             [TripGroupDecorator.new(group), rows]
           end.reject { |_g, rows| rows.empty? }
@@ -187,16 +194,23 @@ Trestle.resource(:trips) do
                 body = content_tag(:tbody) do
                   safe_join(rows.map { |r|
                     content_tag(:tr) do
+                      person_cell = if r[:person]
+                        admin_link_to(r[:person].first_name, r[:person], admin: :people)
+                      else
+                        content_tag(:em, I18n.t("admin.trips.ksiazki.whole_location"))
+                      end
                       safe_join([
                         content_tag(:td, r[:location]),
-                        content_tag(:td, admin_link_to(r[:person].first_name, r[:person], admin: :people)),
+                        content_tag(:td, person_cell),
                         content_tag(:td, simple_format(r[:preferences]))
                       ])
                     end
                   })
                 end
 
-                content_tag(:h3, group.name, style: "margin-top: 1.5rem;") +
+                crew = group.all_volunteer_names
+                heading = crew.any? ? "#{group.name} — #{crew.join(", ")}" : group.name
+                content_tag(:h3, heading, style: "margin-top: 1.5rem;") +
                   content_tag(:table, header + body, class: "table table-striped", style: "width: 100%;")
               }
 

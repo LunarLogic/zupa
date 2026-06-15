@@ -8,6 +8,7 @@ module Trips
         longitude: location.longitude,
         latitude: location.latitude,
         info: location.info,
+        book_preferences: location.book_preferences,
         active_people_ids: location.active_people.pluck(:id),
         active_animals_ids: location.active_animals.pluck(:id)
       }
