@@ -22,7 +22,11 @@ RSpec.describe "Admin trips preparations", type: :system do
   end
 
   let(:trip_without_template) do
-    create(:trip, date: "2025-11-15", organiser: admin_user, preparation_template: nil)
+    # A default exists, so new trips auto-attach it; clear it afterwards to
+    # represent a trip an admin has explicitly left without a template.
+    create(:trip, date: "2025-11-15", organiser: admin_user).tap do |t|
+      t.update!(preparation_template: nil)
+    end
   end
 
   before do
