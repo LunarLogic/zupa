@@ -12,6 +12,8 @@ class Trip < ApplicationRecord
 
   validates :date, :organiser, presence: true
 
+  before_create :assign_default_preparation_template
+
   def effective_preparations_html
     preparations_html || preparation_template&.content_html
   end
@@ -38,5 +40,11 @@ class Trip < ApplicationRecord
 
   def organiser_name
     organiser.full_name
+  end
+
+  private
+
+  def assign_default_preparation_template
+    self.preparation_template_id ||= PreparationTemplate.default_template.pick(:id)
   end
 end
