@@ -13,6 +13,14 @@ Trestle.resource(:auth_codes) do
     actions
   end
 
+  # Prefill "valid from" with the current time on the new-code form so admins
+  # don't type it by hand (a manually entered time was the source of the
+  # timezone-offset bug). A submitted value is kept; edits use find_instance,
+  # so existing codes are untouched.
+  build_instance do |attributes, _params|
+    AuthCode.new(attributes).tap { |code| code.valid_from ||= Time.zone.now }
+  end
+
   # Customize the form fields shown on the new/edit views.
   #
   form do |auth_code|
